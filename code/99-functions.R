@@ -25,3 +25,25 @@ extract_facets_cnv = function(target_dir, target_path) {
   write.table(facets_CNV, target_path, sep = "\t", quote = FALSE, row.names = F)
   rm(list = ls())
 }
+
+
+# FUN: visualize drake plan quickly ---------------------------------------
+
+vis_plan = function(plan,
+                    file = character(0),
+                    selfcontained = FALSE,
+                    digits = 1,
+                    targets_only = FALSE,
+                    font_size = 15,
+                    main = NULL, ...) {
+  config = drake_config(plan)
+  vis_drake_graph(config,
+                  file = file,
+                  selfcontained = selfcontained,
+                  digits = digits,
+                  targets_only = targets_only,
+                  font_size = font_size,
+                  main = main, ...)
+}
+
+

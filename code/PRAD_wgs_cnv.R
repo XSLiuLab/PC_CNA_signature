@@ -1,7 +1,6 @@
 library(sigminer)
 library(NMF)
 library(data.table)
-library(stringr)
 
 # Detecting copy number signatures ----------------------------------------
 
