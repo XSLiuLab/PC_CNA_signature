@@ -1,7 +1,7 @@
-name: "prad_signature"
+name: "Signature Analysis"
 output_dir: ../docs
 navbar:
-  title: "prad_signature"
+  title: "Prostate Cancer Signature Analysis"
   left:
   - text: Home
     href: index.html
