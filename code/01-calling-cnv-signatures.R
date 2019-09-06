@@ -31,13 +31,13 @@ boxplot(cp_wes@summary.per.sample$cna_burden)
 
 # Prepare data and estimate rank -------------------------------------------
 
-ncores = 8
+ncores = 16
 
 #pre_wes = sig_prepare(cp_wes, cores = ncores)
 plan_prepare = drake_plan(
   pre_wes = sig_prepare(cp_wes, cores = ncores),
   est_wes = sig_estimate(pre_wes$nmf_matrix,
-                         range = 2:12, nrun = 30, cores = ncores, use_random = TRUE,
+                         range = 2:20, nrun = 100, cores = ncores, use_random = TRUE,
                          save_plots = TRUE, plot_basename = "output/plots/plot_estimate/wes",
                          verbose = TRUE),
   pre_wgs = sig_prepare(cp_wgs, reference_components = pre_wes$components, cores = ncores)
@@ -47,8 +47,28 @@ vis_plan(plan_prepare)
 make(plan_prepare, lock_envir = FALSE)
 
 loadd(pre_wes, pre_wgs)
+#loadd(est_wes)
 
-sigs = sig_extract(pre_wes$nmf_matrix, n_sig = 6, nrun = 30, cores = 4)
+rank_sury = rbind(est_wes$survey)
+
+par(mar = c(5, 5, 2, 6))
+plot(rank_sury$rank, rank_sury$cophenetic, type = "b", ann = FALSE)
+mtext("Stability (cophenetic)", side = 2, line = 3)
+mtext("Number of signature", side = 1, line = 3)
+par(new = TRUE)
+plot(x = rank_sury$rank, y = rank_sury$rss, type = "b", col = "red", ann = FALSE, axes = FALSE)
+mtext("Error (RSS)", side = 4, line = 3, las = 0, col = "red")
+axis(4)
+# select 5 or 6
+
+# Choose best signature number
+sigs5 = sig_extract(pre_wes$nmf_matrix, n_sig = 5, nrun = 100, cores = ncores)
+sigs6 = sig_extract(pre_wes$nmf_matrix, n_sig = 6, nrun = 100, cores = ncores)
+
+draw_cn_features(pre_wes$features)
+params = draw_cn_components(pre_wes$features, pre_wes$components)
+draw_sig_profile(sigs5$nmfObj, params = params$parameters, y_expand = 3)
+draw_sig_profile(sigs6$nmfObj, params = params$parameters, y_expand = 3)
 
 draw_cn_features(cn.pre$features)
 draw_cn_components(cn.pre$features, cn.pre$components)
