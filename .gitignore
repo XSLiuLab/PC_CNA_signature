@@ -10,3 +10,4 @@ analysis/*html
 analysis/*_cache
 analysis/site_libs
 raw_data/
+output/BayesNMF/
