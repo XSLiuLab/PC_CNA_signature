@@ -53,14 +53,24 @@ sig.prob = sig_auto_extract(pre_wes.prob$nmf_matrix, result_prefix = "BayesNMF_P
                             destdir = "output/signature", cores = 10)
 sig.count = sig_auto_extract(pre_wes.count$nmf_matrix, result_prefix = "BayesNMF_Count",
                              destdir = "output/signature", cores = 10)
+# BayesNMF will get more signatures and sparse results and
+# it is hard to explain in this project
 
-# est_wes = sig_estimate(pre_wes$nmf_matrix,
-#                        range = 2:15, nrun = 100, cores = ncores, use_random = TRUE,
-#                        save_plots = TRUE, plot_basename = "output/plots/plot_estimate/wes",
-#                        verbose = TRUE),
-# loadd(est_wes)
+est_wes.prob = sig_estimate(pre_wes.prob$nmf_matrix,
+                       range = 2:10, nrun = 50, cores = ncores, use_random = TRUE,
+                       save_plots = TRUE, plot_basename = "output/plots/plot_estimate/wes_prob",
+                       verbose = TRUE)
+est_wes.count = sig_estimate(pre_wes.count$nmf_matrix,
+                            range = 2:10, nrun = 50, cores = ncores, use_random = TRUE,
+                            save_plots = TRUE, plot_basename = "output/plots/plot_estimate/wes_count",
+                            verbose = TRUE)
 
-rank_sury = rbind(est_wes$survey)
+save(est_wes.prob, file = "output/est_wes.prob.RData")
+save(est_wes.count, file = "output/est_wes.count.RData")
+
+
+rank_sury = rbind(est_wes.count$survey)
+rank_sury = rbind(est_wes.prob$survey)
 
 par(mar = c(5, 5, 2, 6))
 plot(rank_sury$rank, rank_sury$cophenetic, type = "b", ann = FALSE)
@@ -70,25 +80,28 @@ par(new = TRUE)
 plot(x = rank_sury$rank, y = rank_sury$rss, type = "b", col = "red", ann = FALSE, axes = FALSE)
 mtext("Error (RSS)", side = 4, line = 3, las = 0, col = "red")
 axis(4)
-# select 6 or 8
-
-# Choose best signature number
-sigs = sig_extract(pre_wes$nmf_matrix, n_sig = 8, nrun = 100, cores = ncores)
-
-draw_cn_features(pre_wes$features)
-draw_cn_components(pre_wes$features, pre_wgs$components)
-
-params = draw_cn_components(pre_wes$features, pre_wes$components)
-draw_sig_profile(sigs$nmfObj, params = params$parameters, y_expand = 3)
 
 
+# Use NMF instead of bayesian NMF
+sig.prob2 = sig_extract(pre_wes.prob$nmf_matrix, n_sig = 5, nrun = 50, cores = ncores)
+sig.count2 = sig_extract(pre_wes.count$nmf_matrix, n_sig = 5, nrun = 50, cores = ncores)
 
-estimate = sig_estimate(cn.pre$nmf_matrix,
-                        )
-sigs = sig_extract(cn.pre$nmf_matrix, n_sig = 4, nrun = 100, cores = 4)
-h_data = draw_cn_components(cn.pre$features, cn.pre$components)
+saveRDS(sig.prob2, file = "output/NMF_copynumber_signature.prob.rds")
+saveRDS(sig.count2, file = "output/NMF_copynumber_signature.count.rds")
 
-cairo_pdf("wgs/plot_sig/cn_signature.pdf", height = 5)
-draw_sig_profile(sigs$nmfObj, params = h_data$parameters, y_expand = 2.5, sig_names = paste0("Sig", 1:4))
-dev.off()
-cowplot::ggsave2("wgs/plot_sig/cn_signature.pdf")
+
+# Normalise by Row
+show_sig_profile(sig.prob2, params = pre_wes.prob$parameters, y_expand = 1.5)
+show_sig_profile(sig.count2, params = pre_wes.count$parameters, y_expand = 1.5)
+
+# Normalise by Column
+show_sig_profile(sig.prob2, params = pre_wes.prob$parameters, y_expand = 1.5, normalize = "column")
+show_sig_profile(sig.count2, params = pre_wes.count$parameters, y_expand = 1.5, normalize = "column")
+
+
+
+
+# cairo_pdf("wgs/plot_sig/cn_signature.pdf", height = 5)
+# draw_sig_profile(sigs$nmfObj, params = h_data$parameters, y_expand = 2.5, sig_names = paste0("Sig", 1:4))
+# dev.off()
+# cowplot::ggsave2("wgs/plot_sig/cn_signature.pdf")
