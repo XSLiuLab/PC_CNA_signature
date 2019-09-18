@@ -12,3 +12,5 @@ analysis/site_libs
 raw_data/
 output/BayesNMF/
 output/pre_wes*
+output/est_wes*
+output/signature/
