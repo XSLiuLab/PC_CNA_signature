@@ -44,6 +44,11 @@ system.time(
 save(CNV.prob, file = "output/CNV.prob.RData")
 save(CNV.count, file = "output/CNV.count.RData")
 
+show_cn_features(CNV.prob$features)
+show_cn_features(CNV.prob$features, log_segsize = F)
+show_cn_components(CNV.prob$parameters)
+show_cn_components(CNV.prob$parameters, show_weights = FALSE, log_segsize = F)
+
 # Auto-extract
 Sig.Bayesian.prob = sig_auto_extract(CNV.prob$nmf_matrix, result_prefix = "BayesNMF_Prob", nrun = 100,
                                      destdir = "output/signature", cores = 16)
