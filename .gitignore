@@ -13,3 +13,4 @@ raw_data/
 output/BayesNMF/
 output/signature/
 output/CNV*
+.drake/
