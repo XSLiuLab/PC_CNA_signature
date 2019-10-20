@@ -141,3 +141,36 @@ phs000554 = full_join(phs000554_T %>%
   mutate_at(vars(starts_with("Survival")), as.integer)
 
 saveRDS(phs000554, file = "data/Tidy_Clinical/phs000554.rds")
+
+# ====== phs000909 =======
+phs000909 = res_list$phs000909  # 这里面有部分全数字的编号，不知道CNV结果中有没有这些样本？
+phs000909_T = read_excel("data/TIdy_Clinical_Excel/phs000909.xlsx")
+saveRDS(phs000909_T, file = "data/Tidy_Clinical/phs000909.rds")
+
+# ====== phs000915 =======
+phs000915 = res_list$phs000915
+phs000915_T = read_excel("data/TIdy_Clinical_Excel/phs000915.xlsx")
+all(phs000915$SUBJECT_ID %in% phs000915_T$`cBio_SU2C ID`)
+which(phs000915$SUBJECT_ID %in% phs000915_T$`cBio_SU2C ID`) %>% length()
+
+phs000915 = full_join(
+  phs000915_T %>%
+    mutate(`cBio_SU2C ID` = as.character(`cBio_SU2C ID`)),
+  phs000915 %>%
+    select(SUBJECT_ID) %>%
+    unique(),
+  by = c("cBio_SU2C ID" = "SUBJECT_ID")
+) %>%
+  filter(!is.na(`cBio_SU2C ID`))
+# 这个数据集文献只有 150 个样本，dbGap 结果显示为 146 个，
+# 能够匹配的是 100 多点，
+# 但 Nat.Gen 2018 文章却显示有 287 个
+# 需要认真关注下
+saveRDS(phs000915, file = "data/Tidy_Clinical/phs000915.rds")
+
+# ====== phs001141 =======
+phs001141 = res_list$phs001141
+
+phs001141 %<>%
+  filter(IS_TUMOR != "normal", !is.na(SUBJECT_ID))
+saveRDS(phs001141, file = "data/Tidy_Clinical/phs001141.rds")
