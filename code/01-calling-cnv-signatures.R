@@ -21,6 +21,8 @@ library(data.table)
 CNV = read_copynumber("data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL150.tsv", genome_build = "hg38",
                       complement = FALSE, verbose = TRUE)
 
+CNV@summary.per.sample$sample[startsWith(CNV@summary.per.sample$sample, prefix = "447")]
+
 hist(CNV@data$segVal, breaks = 20)
 
 # Check distribution
