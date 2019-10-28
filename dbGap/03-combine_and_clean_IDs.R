@@ -101,7 +101,7 @@ phs000554_T = phs000554 %>%
          PriorTreatment = `Prior Treatment`) %>%
   mutate(Fusion = case_when(
     grepl("ERG+", Fusion) ~ "ERG",
-    grepl("ETV1+", Fusion) ~ "ERG",  # here ERG means ETS family, change it to ETV latter
+    grepl("ETV1+", Fusion) ~ "ERG",  # here ERG means ETS family, change it to ETS latter
     grepl("No ETS", Fusion) ~ "Negative",
     grepl("RAF1+", Fusion) ~ "RAF",
     grepl("SPINK1+", Fusion) ~ "SPINK1"
@@ -140,7 +140,6 @@ save(phs000447_T, phs000554_T, phs000909_T, phs000915_T, phs001141_T, file = "da
 # Merge data --------------------------------------------------------------
 
 # Merge all phenotype data from dbGap
-
 dbGap_data =
   list(
     phs000447 = filter(clean_maps, gap_accession=="phs000447") %>%
@@ -205,3 +204,84 @@ nrow(zz)
 nrow(unique(zz))
 table(clean_maps$gap_accession)
 table(zz$Study)
+zz1 = filter(clean_maps, gap_accession == "phs000447")
+zz2 = filter(zz, Study == "phs000447")
+setdiff(zz1$subject_id, zz2$subject_id)
+
+dupIDs = zz2$subject_id[which(duplicated(zz2 %>% select(Study, subject_id)))]
+dupIDs
+zz2 %>% filter(subject_id %in% dupIDs)
+
+# Remove duplicated records
+dbGap = zz %>%
+  filter(!subject_id %in% dupIDs) %>%
+  bind_rows(filter(zz, subject_id %in% dupIDs) %>% slice(seq(1, 12, 2)))
+
+
+
+# Clean TCGA clinical dataset ---------------------------------------------
+
+library(UCSCXenaTools)
+xe = XenaGenerate(subset = XenaDatasets == 'TCGA-PRAD.GDC_phenotype.tsv')
+xq = xe %>%
+  XenaQuery() %>%
+  XenaDownload(destdir = "data/Xena")
+TCGA_PRAD = XenaPrepare(xq)
+TCGA_PRAD = TCGA_PRAD %>%
+  select(c("submitter_id.samples", "age_at_initial_pathologic_diagnosis", "submitter_id",
+           "psa_value", "pathologic_T", "gleason_score", "sample_type.samples")) %>%
+  rename(subject_id = submitter_id.samples,
+         PatientID = submitter_id,
+         sample_type = sample_type.samples,
+         Age = age_at_initial_pathologic_diagnosis,
+         Stage = pathologic_T,
+         PSA = psa_value,
+         GleasonScore = gleason_score) %>%
+  mutate(subject_id = substr(subject_id, 1, 15),
+         GleasonScore = as.integer(GleasonScore)) %>%
+  filter(!sample_type %in% "Solid Tissue Normal") %>%
+  mutate(sample_type = ifelse(sample_type == "Primary Tumor", "Primary", sample_type)) %>%
+  unique()
+table(TCGA_PRAD$sample_type)
+
+TCGA_PAIRED_IDs = read_tsv("dbGap/paired_sample.txt", col_names = FALSE)
+colnames(TCGA_PAIRED_IDs) = c("tumor_Run", "normal_Run")
+TCGA_PAIRED_IDs = TCGA_PAIRED_IDs %>% mutate(subject_id = tumor_Run)
+
+TCGA_PRAD = TCGA_PRAD %>%
+  left_join(NatGen_clincal %>%
+              filter(Data.Source == "TCGA") %>%
+              select(Tumor_Sample_Barcode, Fusion), by = c("PatientID"="Tumor_Sample_Barcode")) %>%
+  mutate(Fusion = ifelse(grepl("FUSION", Fusion), "ETS", NA_character_),
+         Study = "TCGA",
+         PSA = as.numeric(PSA)) %>%
+  left_join(TCGA_PAIRED_IDs)
+
+# Naming strategy from Huimin
+CNV_IDs = mapping_df %>% select(gap_accession,subject_id,tumor_Run,normal_Run) %>%
+  group_by(gap_accession, subject_id) %>% mutate(rank = row_number()) %>% ungroup() %>%
+  mutate(rank = rank - 1) %>%
+  separate(gap_accession,into = c("gap_accession","accseion"), sep = 6) %>%
+  unite(subject_id,accseion,subject_id,sep = "-") %>%
+  mutate(subject_id = ifelse(rank==0, subject_id, paste0(subject_id, "-", rank))) %>%
+  select(subject_id,tumor_Run,normal_Run) %>%
+  rename(CNV_ID = subject_id)
+
+PRAD_CLINICAL = bind_rows(dbGap, TCGA_PRAD)
+PRAD_CLINICAL = PRAD_CLINICAL %>%
+  mutate(Stage = case_when(
+    startsWith(Stage, "T2") ~ "T2",
+    startsWith(Stage, "T3") ~ "T3",
+    startsWith(Stage, "T4") ~ "T4",
+    TRUE ~ NA_character_
+  )) %>%
+  left_join(CNV_IDs, by = c("tumor_Run"="tumor_Run", "normal_Run"="normal_Run")) %>%
+  mutate_cond(Study == "TCGA",
+              CNV_ID = ifelse(PatientID %in% CNV@summary.per.sample$sample,
+                              PatientID, NA_character_)) %>%
+  mutate_cond(subject_id == "TCGA-V1-A9O5-06", CNV_ID = NA_character_)
+saveRDS(PRAD_CLINICAL, file = "data/PRAD_CLINICAL.rds")
+
+# Check
+PRAD_CLINICAL %>% select(Study, subject_id) %>% duplicated() %>% which()
+
