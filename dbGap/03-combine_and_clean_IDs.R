@@ -5,6 +5,7 @@
 # 3) clinical data from Nat.Gen 2018 (1013 samples)
 library(tidyverse)
 library(sigminer)
+library(readxl)
 
 # 1)
 CNV = read_copynumber("data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL150.tsv", genome_build = "hg38",
@@ -257,6 +258,18 @@ TCGA_PRAD = TCGA_PRAD %>%
          PSA = as.numeric(PSA)) %>%
   left_join(TCGA_PAIRED_IDs)
 
+# We found PSA value from GDC hub of UCSC Xena is wrong
+# Thus we remove it and use PSA value from TCGA2015 paper
+# Also I note phs000554 has different PSA unit (no unit info from paper or dbGap)
+TCGA2015_cli = read_excel("data/TCGA2015_cli.xlsx") %>%
+  rename(PSA = PSA_preop) %>%
+  mutate(PSA = as.numeric(PSA)) %>%
+  select(SAMPLE_ID, PSA)
+
+TCGA_PRAD = TCGA_PRAD %>%
+  select(-PSA) %>%
+  left_join(TCGA2015_cli, by=c('subject_id'='SAMPLE_ID'))
+
 # Naming strategy from Huimin
 CNV_IDs = mapping_df %>% select(gap_accession,subject_id,tumor_Run,normal_Run) %>%
   group_by(gap_accession, subject_id) %>% mutate(rank = row_number()) %>% ungroup() %>%
@@ -279,9 +292,10 @@ PRAD_CLINICAL = PRAD_CLINICAL %>%
   mutate_cond(Study == "TCGA",
               CNV_ID = ifelse(PatientID %in% CNV@summary.per.sample$sample,
                               PatientID, NA_character_)) %>%
-  mutate_cond(subject_id == "TCGA-V1-A9O5-06", CNV_ID = NA_character_)
+  mutate_cond(subject_id == "TCGA-V1-A9O5-06", CNV_ID = NA_character_) # remove duplicated ID
+
 saveRDS(PRAD_CLINICAL, file = "data/PRAD_CLINICAL.rds")
 
-# Check
-PRAD_CLINICAL %>% select(Study, subject_id) %>% duplicated() %>% which()
-
+TCGA_PRAD %>% pull(PSA) %>% summary()
+filter(PRAD_CLINICAL, Study=="TCGA") %>% pull(PSA) %>% summary()
+PRAD_CLINICAL %>% filter(!is.na(PSA)) %>% pull(Study) %>% unique()
