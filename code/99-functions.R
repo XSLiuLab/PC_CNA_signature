@@ -49,6 +49,53 @@ extract_facets_cnv = function(target_dir, target_path) {
   rm(list = ls())
 }
 
+extract_facets_purity_and_ploidy = function(target_dir, target_path) {
+  SAMPLE = dir(target_dir, pattern = ".Rdata") %>%
+    str_remove(".Rdata")
+
+  all_sample <- rbind()
+  for (sample in SAMPLE){
+    sample_RData <- file.path(target_dir, paste(sample, ".Rdata", sep = ""))
+    load(sample_RData)
+    df = data.frame(
+      sample = sample,
+      purity = round(as.numeric(fit$purity), 2),
+      ploidy = round(as.numeric(fit$ploidy), 2),
+      stringsAsFactors = FALSE)
+    all_sample <- rbind(all_sample, df)
+    warnings = paste("processing ",sample,sep = "")
+    message(warnings)
+  }
+
+  colnames(all_sample) <- c("sample", "purity", "ploidy")
+  write.table(all_sample, target_path, sep = "\t", quote = FALSE, row.names = F)
+  rm(list = ls())
+}
+
+facets_to_GISTIC2 = function(target_dir, target_path) {
+  SAMPLE = dir(target_dir, pattern = ".Rdata") %>%
+    str_remove(".Rdata")
+
+  cols <- c("chrom","start","end","num.mark","tcn.em")
+  all_sample <- rbind()
+  for (sample in SAMPLE){
+    sample_RData <- file.path(target_dir, paste(sample, ".Rdata", sep = ""))
+    load(sample_RData)
+    df <- fit$cncf[cols]
+    df["sample"] <- sample
+    all_sample <- rbind(all_sample, df)
+    warnings = paste("processing ",sample,sep = "")
+    message(warnings)
+  }
+
+  colnames(all_sample) <- c("chrom","loc.start","loc.end", "num.mark", "seg.mean","ID")
+  facets_CNV <- all_sample %>% dplyr::select(ID, dplyr::everything())
+  facets_CNV$seg.mean = ifelse(facets_CNV$seg.mean!=0,
+                               log2(facets_CNV$seg.mean) - 1, -11) # set a default minimum seg.mean for which copy number equals 0
+  # -11 comes from PRAD 1000 study minumum seg.mean
+  write.table(facets_CNV, target_path, sep = "\t", quote = FALSE, row.names = F)
+  rm(list = ls())
+}
 
 # FUN: visualize drake plan quickly ---------------------------------------
 

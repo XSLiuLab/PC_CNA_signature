@@ -20,6 +20,7 @@ library(data.table)
 
 CNV = read_copynumber("data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL150.tsv", genome_build = "hg38",
                       complement = FALSE, verbose = TRUE)
+save(CNV, file="data/PRAD_CNV.RData")
 
 CNV@summary.per.sample$sample[startsWith(CNV@summary.per.sample$sample, prefix = "447")]
 
