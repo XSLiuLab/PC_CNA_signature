@@ -20,7 +20,7 @@ load(file = "output/CNV.count.RData")
 # show_sig_profile(CNV.Sig.count, params = CNV.count$parameters, y_expand = 1.5, normalize = 'column')
 
 
-GroupInfo = get_groups(CNV.Sig, method = 'consensus', match_consensus = TRUE)
+GroupInfo = get_groups(CNV.Sig)
 CNVInfo = CNV@summary.per.sample
 ExposureInfo = get_sig_exposure(CNV.Sig)
 
@@ -28,7 +28,7 @@ MergeInfo = Info %>%
   left_join(CNVInfo, by = c('CNV_ID'='sample')) %>%
   left_join(GroupInfo, by = c('CNV_ID' = 'sample')) %>%
   left_join(ExposureInfo, by = c('CNV_ID' = 'sample')) %>%
-  select(Study, sample_type, PatientID:Sig5) %>%
+  select(Study, sample_type, PatientID:Sig6) %>%
   mutate(Stage = factor(Stage, ordered = TRUE),
          Fusion = ifelse(Fusion=='Negative', 'No', 'Yes'),
          sample_type = ifelse(sample_type == "Unknown", NA_character_, sample_type),
@@ -39,14 +39,14 @@ MergeInfo = Info %>%
 
 summary(MergeInfo)
 
-cols_to_sigs = paste0('Sig',1:5)
+cols_to_sigs = paste0('Sig',1:6)
 cols_to_features = c('IsMetastatic', 'HasFusion', 'Age', 'Stage', 'GleasonScore', 'n_of_cnv', 'n_of_amp', 'n_of_del', 'cna_burden', 'purity', 'ploidy')
 feature_type = c(rep('ca', 2), rep('co', 9))
 
 asso_data = get_sig_feature_association(MergeInfo,
                                         cols_to_sigs = cols_to_sigs,
                                         cols_to_features = cols_to_features,
-                                        method_co = "pearson",
+                                        method_co = "spearman",
                                         type = feature_type, verbose = TRUE)
 # Take a check
 cor(MergeInfo$Sig2, MergeInfo$Sig1, use = 'pairwise.complete.obs', method = 'spearman')
@@ -62,7 +62,7 @@ corrplot::corrplot(asso_data$corr_co$measure,
 )
 
 
-#
+# Select sample with most signature exposure and see their profile
 
 Comp_df = CNV.prob$nmf_matrix %>%
   as.data.frame() %>%
@@ -70,21 +70,23 @@ Comp_df = CNV.prob$nmf_matrix %>%
   as_tibble()
 
 MergeInfo %>%
-  select(CNV_ID, group, enrich_sig, Sig1:Sig5) %>%
-  filter(enrich_sig == 'Sig2') %>%
-  arrange(desc(Sig2)) %>%
+  select(CNV_ID, group, enrich_sig, Sig1:Sig6) %>%
+  filter(enrich_sig == 'Sig5') %>%
+  arrange(desc(Sig5)) %>%
   left_join(Comp_df %>% select(sample, starts_with("bpchrarm")), by = c("CNV_ID"="sample"))
 
-o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/141-44.pdf")
+o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/TCGA-EJ-A46B.pdf")
 
 MergeInfo %>%
-  select(CNV_ID, group, enrich_sig, Sig1:Sig5) %>%
-  filter(enrich_sig == 'Sig2') %>%
-  arrange(desc(Sig2)) %>%
+  select(CNV_ID, group, enrich_sig, Sig1:Sig6) %>%
+  filter(enrich_sig == 'Sig5') %>%
+  arrange(desc(Sig5)) %>%
   left_join(Comp_df %>% select(sample, starts_with("bpchrarm")), by = c("CNV_ID"="sample")) %>%
   arrange(desc(bpchrarm2))
 
+o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/915-6115124.pdf")
 o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/909-21020.pdf")
-o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/554-32.pdf")
+o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/554-4.pdf")
 o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/TCGA-EJ-5515.pdf")
-o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/TCGA-ZG-A9L5.pdf")
+o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/915-5115076.pdf")
+

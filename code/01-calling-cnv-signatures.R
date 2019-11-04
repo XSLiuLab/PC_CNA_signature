@@ -17,8 +17,11 @@ library(data.table)
 # vis_plan(plan_read, font_size = 15)
 # make(plan_read, jobs = 2, parallelism = "future")
 
-
-CNV = read_copynumber("data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL150.tsv", genome_build = "hg38",
+CNV = data.table::fread("data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL150.tsv")
+# Remove Chromosome X
+CNV = CNV[Chromosome != 23]
+table(CNV$Chromosome)
+CNV = read_copynumber(CNV, genome_build = "hg38",
                       complement = FALSE, verbose = TRUE)
 save(CNV, file="data/PRAD_CNV.RData")
 
@@ -77,8 +80,8 @@ show_rank_survey(CNV_EST.prob)
 show_rank_survey(CNV_EST.count)
 
 # Use NMF instead of bayesian NMF
-Sig.CNV.prob = sig_extract(CNV.prob$nmf_matrix, n_sig = 5, nrun = 100, cores = ncores)
-Sig.CNV.count = sig_extract(CNV.count$nmf_matrix, n_sig = 5, nrun = 100, cores = ncores)
+Sig.CNV.prob = sig_extract(CNV.prob$nmf_matrix, n_sig = 6, nrun = 100, cores = ncores)
+Sig.CNV.count = sig_extract(CNV.count$nmf_matrix, n_sig = 6, nrun = 100, cores = ncores)
 
 saveRDS(Sig.CNV.prob, file = "output/NMF_copynumber_signature.prob.rds")
 saveRDS(Sig.CNV.count, file = "output/NMF_copynumber_signature.count.rds")
