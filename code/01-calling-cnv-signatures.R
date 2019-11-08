@@ -18,8 +18,12 @@ library(data.table)
 # make(plan_read, jobs = 2, parallelism = "future")
 
 CNV = data.table::fread("data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL150.tsv")
-# Remove Chromosome X
+CNV_X = CNV[Chromosome == 23]
 CNV = CNV[Chromosome != 23]
+# Double the copy number of X due to all samples are male
+CNV_X$modal_cn = 2 * CNV_X$modal_cn
+CNV = rbind(CNV, CNV_X)
+
 table(CNV$Chromosome)
 CNV = read_copynumber(CNV, genome_build = "hg38",
                       complement = FALSE, verbose = TRUE)
@@ -37,7 +41,7 @@ boxplot(CNV@summary.per.sample$cna_burden)
 
 
 # Prepare data and estimate rank -------------------------------------------
-ncores = 16
+ncores = 12
 
 system.time(
   CNV.prob <- derive(CNV, cores = ncores, nrep = 3)
@@ -70,7 +74,7 @@ CNV_EST.prob = sig_estimate(CNV.prob$nmf_matrix,
                        verbose = TRUE)
 CNV_EST.count = sig_estimate(CNV.count$nmf_matrix,
                             range = 2:10, nrun = 50, cores = ncores, use_random = TRUE,
-                            save_plots = FALSE,
+                            save_plots = FALSE ,pConstant = 0.001,
                             verbose = TRUE)
 
 save(CNV_EST.prob, file = "output/CNV_EST.prob.RData")
@@ -81,7 +85,7 @@ show_rank_survey(CNV_EST.count)
 
 # Use NMF instead of bayesian NMF
 Sig.CNV.prob = sig_extract(CNV.prob$nmf_matrix, n_sig = 6, nrun = 100, cores = ncores)
-Sig.CNV.count = sig_extract(CNV.count$nmf_matrix, n_sig = 6, nrun = 100, cores = ncores)
+Sig.CNV.count = sig_extract(CNV.count$nmf_matrix, n_sig = 6, nrun = 100, cores = ncores, pConstant = 0.001)
 
 saveRDS(Sig.CNV.prob, file = "output/NMF_copynumber_signature.prob.rds")
 saveRDS(Sig.CNV.count, file = "output/NMF_copynumber_signature.count.rds")

@@ -14,10 +14,10 @@ CNV.Sig = readRDS("output/NMF_copynumber_signature.prob.rds")
 load(file = "output/CNV.prob.RData")
 load(file = "output/CNV.count.RData")
 #
-# show_sig_profile(CNV.Sig, params = CNV.prob$parameters, y_expand = 1.5)
-# show_sig_profile(CNV.Sig, params = CNV.prob$parameters, y_expand = 1.5, normalize = 'column')
-# show_sig_profile(CNV.Sig.count, params = CNV.count$parameters, y_expand = 1.5)
-# show_sig_profile(CNV.Sig.count, params = CNV.count$parameters, y_expand = 1.5, normalize = 'column')
+show_sig_profile(CNV.Sig, params = CNV.prob$parameters, y_expand = 1.5)
+show_sig_profile(CNV.Sig, params = CNV.prob$parameters, y_expand = 1.5, normalize = 'column')
+show_sig_profile(CNV.Sig.count, params = CNV.count$parameters, y_expand = 1.5)
+show_sig_profile(CNV.Sig.count, params = CNV.count$parameters, y_expand = 1.5, normalize = 'column')
 
 
 GroupInfo = get_groups(CNV.Sig)
@@ -69,24 +69,67 @@ Comp_df = CNV.prob$nmf_matrix %>%
   tibble::rownames_to_column("sample") %>%
   as_tibble()
 
+# Sig 5 enrich
+show_cn_profile(data = CNV, chrs = paste0("chr", 1:22), nrow = 3, ncol = 2, show_title = T,
+                samples = MergeInfo %>%
+                  select(CNV_ID, group, enrich_sig, Sig1:Sig6) %>%
+                  filter(enrich_sig == 'Sig5') %>%
+                  arrange(desc(Sig5)) %>%
+                  left_join(Comp_df %>% select(sample, starts_with("bpchrarm")), by = c("CNV_ID"="sample")) %>%
+                  slice(1:6) %>% pull(CNV_ID))
+
+# Sig5 enrich and bpchrarm2 high
+show_cn_profile(data = CNV, chrs = paste0("chr", 1:22), nrow = 3, ncol = 2, show_title = T,
+                samples =MergeInfo %>%
+                  select(CNV_ID, group, enrich_sig, Sig1:Sig6) %>%
+                  filter(enrich_sig == 'Sig5') %>%
+                  arrange(desc(Sig5)) %>%
+                  left_join(Comp_df %>% select(sample, starts_with("bpchrarm")), by = c("CNV_ID"="sample")) %>%
+                  arrange(desc(bpchrarm2)) %>%
+                  slice(1:6) %>% pull(CNV_ID))
+
+
+# Sig 1 enrich
+show_cn_profile(data = CNV, chrs = paste0("chr", 1:22), nrow = 3, ncol = 2, show_title = T,
+                samples = MergeInfo %>%
+                  select(CNV_ID, group, enrich_sig, Sig1:Sig6) %>%
+                  filter(enrich_sig == 'Sig1') %>%
+                  arrange(desc(Sig1)) %>%
+                  slice(1:6) %>% pull(CNV_ID))
+
+# Sig 2 enrich
+show_cn_profile(data = CNV, chrs = paste0("chr", 1:22), nrow = 3, ncol = 2, show_title = T,
+                samples = MergeInfo %>%
+                  select(CNV_ID, group, enrich_sig, Sig1:Sig6) %>%
+                  filter(enrich_sig == 'Sig2') %>%
+                  arrange(desc(Sig2)) %>%
+                  slice(1:6) %>% pull(CNV_ID))
+
+# Sig 3 enrich
+show_cn_profile(data = CNV, chrs = paste0("chr", 1:22), nrow = 3, ncol = 2, show_title = T,
+                samples = MergeInfo %>%
+                  select(CNV_ID, group, enrich_sig, Sig1:Sig6) %>%
+                  filter(enrich_sig == 'Sig3') %>%
+                  arrange(desc(Sig3)) %>%
+                  slice(1:6) %>% pull(CNV_ID))
+
 MergeInfo %>%
   select(CNV_ID, group, enrich_sig, Sig1:Sig6) %>%
-  filter(enrich_sig == 'Sig5') %>%
-  arrange(desc(Sig5)) %>%
-  left_join(Comp_df %>% select(sample, starts_with("bpchrarm")), by = c("CNV_ID"="sample"))
+  filter(enrich_sig == 'Sig3') %>%
+  arrange(desc(Sig3))
 
-o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/TCGA-EJ-A46B.pdf")
+# Sig 4 enrich
+show_cn_profile(data = CNV, chrs = paste0("chr", 1:22), nrow = 3, ncol = 2, show_title = T,
+                samples = MergeInfo %>%
+                  select(CNV_ID, group, enrich_sig, Sig1:Sig6) %>%
+                  filter(enrich_sig == 'Sig4') %>%
+                  arrange(desc(Sig4)) %>%
+                  slice(1:6) %>% pull(CNV_ID))
 
-MergeInfo %>%
-  select(CNV_ID, group, enrich_sig, Sig1:Sig6) %>%
-  filter(enrich_sig == 'Sig5') %>%
-  arrange(desc(Sig5)) %>%
-  left_join(Comp_df %>% select(sample, starts_with("bpchrarm")), by = c("CNV_ID"="sample")) %>%
-  arrange(desc(bpchrarm2))
-
-o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/915-6115124.pdf")
-o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/909-21020.pdf")
-o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/554-4.pdf")
-o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/TCGA-EJ-5515.pdf")
-o("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/915-5115076.pdf")
-
+# Sig 6 enrich
+show_cn_profile(data = CNV, chrs = paste0("chr", 1:22), nrow = 3, ncol = 2, show_title = T,
+                samples = MergeInfo %>%
+                  select(CNV_ID, group, enrich_sig, Sig1:Sig6) %>%
+                  filter(enrich_sig == 'Sig6') %>%
+                  arrange(desc(Sig6)) %>%
+                  slice(1:6) %>% pull(CNV_ID))
