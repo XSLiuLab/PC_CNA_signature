@@ -15,3 +15,5 @@ output/signature/
 output/CNV*
 .drake/
 NIHMS938028-supplement-4.txt
+data/PRAD_Maf.RData
+output/Maf_Est.RData
