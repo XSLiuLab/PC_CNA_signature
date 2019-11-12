@@ -14,7 +14,7 @@ save(Maf, file="data/PRAD_Maf.RData")
 ncores = 12
 
 system.time(
-  Maf.Pre <- derive(Maf, cores = ncores, ref_genome = "BSgenome.Hsapiens.UCSC.hg38",
+  Maf.Pre <- sig_derive(Maf, cores = ncores, ref_genome = "BSgenome.Hsapiens.UCSC.hg38",
                     useSyn = TRUE)
 )
 

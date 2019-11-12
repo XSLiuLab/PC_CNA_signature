@@ -1,8 +1,10 @@
 # Integrate all informaiton to sample level
 library(tidyverse)
 library(sigminer)
+library(maftools)
 
 load("data/PRAD_CNV.RData")
+load("data/PRAD_Maf.RData")
 Info = readRDS("data/PRAD_CLINICAL.rds")
 PurityInfo = read_tsv("data/PRAD_Purity_and_Ploidy_CVAL150.tsv")
 

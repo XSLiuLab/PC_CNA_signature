@@ -44,11 +44,11 @@ boxplot(CNV@summary.per.sample$cna_burden)
 ncores = 12
 
 system.time(
-  CNV.prob <- derive(CNV, cores = ncores, nrep = 3)
+  CNV.prob <- sig_derive(CNV, cores = ncores, nrep = 3)
 )
 
 system.time(
-  CNV.count <- derive(CNV, type = "count", cores = ncores, nrep = 3)
+  CNV.count <- sig_derive(CNV, type = "count", cores = ncores, nrep = 3)
 )
 
 save(CNV.prob, file = "output/CNV.prob.RData")
