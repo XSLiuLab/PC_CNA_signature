@@ -50,6 +50,7 @@ DriverDF = map_df(genesToBarcodes(Maf, genes = driver_genes), function(x) {
 }) %>%
   count(sample) %>%
   rename(n_driver = n)
+data.table::setDT(DriverDF)
 
 TitvInfo = titv(maf = Maf, plot = FALSE, useSyn = TRUE)$TiTv.fractions
 MathInfo = inferHeterogeneity(Maf, TitvInfo$Tumor_Sample_Barcode, useSyn = TRUE)
@@ -72,11 +73,32 @@ colnames(CNVGroupInfo) = c("sample", "cnv_group", "cnv_weight", "cnv_enrich_sig"
 CNVInfo
 colnames(CNVExposureInfo) = c("sample", paste0("CNV_Sig", 1:6))
 colnames(TMBInfo) = c("sample", "total_mutation")
+TMBInfo[, sample:=as.character(sample)][, sample:=ifelse(startsWith(sample, "TCGA"),
+                         substr(sample, 1, 15),
+                         sample)]
+DriverDF[, sample:=as.character(sample)][, sample:=ifelse(startsWith(sample, "TCGA"),
+                                                          substr(sample, 1, 15),
+                                                          sample)]
 colnames(SNVGroupInfo) = c("sample", "snv_group", "snv_weight", "snv_enrich_sig")
+SNVGroupInfo[, sample:=as.character(sample)][, sample:=ifelse(startsWith(sample, "TCGA"),
+                                                              substr(sample, 1, 15),
+                                                              sample)]
 colnames(SNVExposureInfo) = c("sample", paste0("SNV_Sig", 1:3))
+SNVExposureInfo[, sample:=as.character(sample)][, sample:=ifelse(startsWith(sample, "TCGA"),
+                                                                 substr(sample, 1, 15),
+                                                                 sample)]
 colnames(TitvInfo) = c("sample", "Ti_fraction", "Tv_fraction")
+TitvInfo[, sample:=as.character(sample)][, sample:=ifelse(startsWith(sample, "TCGA"),
+                                                          substr(sample, 1, 15),
+                                                          sample)]
 colnames(MathDF) = c("sample", "MATH")
+MathDF[, sample:=as.character(sample)][, sample:=ifelse(startsWith(sample, "TCGA"),
+                                                  substr(sample, 1, 15),
+                                                  sample)]
 colnames(ClusterDF) = c("sample", "cluster")
+ClusterDF[, sample:=as.character(sample)][, sample:=ifelse(startsWith(sample, "TCGA"),
+                                                           substr(sample, 1, 15),
+                                                           sample)]
 
 MergeInfo = Info %>%
   left_join(CNVInfo, by = c('CNV_ID'='sample')) %>%
@@ -104,3 +126,10 @@ MergeInfo = Info %>%
 summary(MergeInfo)
 
 save(MergeInfo, file = "data/PRAD_Merge_Info.RData")
+
+
+
+# Show signature exposure -------------------------------------------------
+
+show_sig_exposure(CNV.Sig, rm_space = TRUE)
+show_sig_exposure(SNV.Sig, rm_space = TRUE)

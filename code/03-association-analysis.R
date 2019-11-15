@@ -1,3 +1,7 @@
+library(tidyverse)
+library(sigminer)
+
+load(file = "data/PRAD_Merge_Info.RData")
 # Analyze association between signature and other features
 
 cols_to_sigs = c(paste0('CNV_Sig',1:6), paste0('SNV_Sig',1:3))
@@ -34,14 +38,33 @@ library(corrr)
 res.cor = correlate(
   MergeInfo[, cols] %>%
     dplyr::mutate_if(is.ordered, as.numeric)
-) %>%
-  dplyr::mutate_if(is.numeric, dplyr::coalesce, 0)
+)
+# %>%
+#   dplyr::mutate_if(is.numeric, dplyr::coalesce, 0)
 
+# Talk this with package author
+res.cor %>%
+  network_plot(min_cor = 0.2, colours = rev(c("indianred2", "white", "skyblue1")))
 # Remove variable causing plot failure
-res.cor[-19, -20] %>%
+res.cor[c(-18, -21), c(-19, -22)] %>%
   network_plot(min_cor = 0.2, colours = rev(c("indianred2", "white", "skyblue1")))
 
+
+# test_data = res.cor
+# test_data$rowname = paste0("f", 1:24)
+# colnames(test_data)[-1] = paste0("f", 1:24)
+# #test_data[,-1] = test_data[, -1] * 0.999
+# network_plot(test_data, min_cor = 0.2, colours = rev(c("indianred2", "white", "skyblue1")))
+# tt %>%
+#   network_plot(min_cor = 0.2, colours = rev(c("indianred2", "white", "skyblue1")))
+# # Remove variable causing plot failure
+# test_data[c(-18, -21), c(-19, -22)] %>%
+#   network_plot(min_cor = 0.2, colours = rev(c("indianred2", "white", "skyblue1")))
+
+
+
 # Select sample with most signature exposure and see their profile
+load(file = "output/CNV.prob.RData")
 
 Comp_df = CNV.prob$nmf_matrix %>%
   as.data.frame() %>%
@@ -107,3 +130,51 @@ show_cn_profile(data = CNV, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol =
                   filter(cnv_enrich_sig == 'Sig6') %>%
                   arrange(desc(CNV_Sig6)) %>%
                   slice(1:6) %>% pull(CNV_ID))
+
+
+# Show sig group comparison -----------------------------------------------
+
+feature_type2 = feature_type
+feature_type2[4] = "ca"
+groups.cmp = get_group_comparison(MergeInfo, col_group = "cnv_enrich_sig",
+                                  cols_to_compare = cols_to_features,
+                                  type = feature_type2, verbose = TRUE)
+p.cmps = show_group_comparison(group_comparison = groups.cmp,
+                               xlab = NA,
+                               method = "anova",
+                               legend_position_ca = "right",
+                               hjust = 1,
+                               text_angle_x = 60)
+p.cmps$co_comb
+p.cmps$ca_comb
+
+# For mutational signatures
+groups.cmp.mt = get_group_comparison(MergeInfo, col_group = "snv_enrich_sig",
+                                  cols_to_compare = cols_to_features,
+                                  type = feature_type2, verbose = TRUE)
+p.cmps.mt = show_group_comparison(group_comparison = groups.cmp.mt,
+                               xlab = NA,
+                               method = "anova",
+                               legend_position_ca = "right",
+                               hjust = 1,
+                               text_angle_x = 60)
+p.cmps.mt$co_comb
+p.cmps.mt$ca_comb
+
+
+# Show signature group maps -----------------------------------------------
+
+show_group_mapping(MergeInfo,
+                   sig_col = "cnv_enrich_sig",
+                   map_cols = c("GleasonScore"),
+                   include_sig = TRUE)
+
+show_group_mapping(MergeInfo[cnv_enrich_sig %in% paste0("Sig", 1:6)],
+                   sig_col = "cnv_enrich_sig",
+                   map_cols = c("snv_enrich_sig","sample_type", "GleasonScore", "Stage"),
+                   include_sig = TRUE)
+
+show_group_mapping(MergeInfo[cnv_enrich_sig %in% paste0("Sig", 1:6)],
+                   sig_col = "cnv_enrich_sig",
+                   map_cols = c("sample_type", "snv_enrich_sig"),
+                   include_sig = TRUE)
