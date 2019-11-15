@@ -6,17 +6,6 @@ library(data.table)
 
 # Reading data ------------------------------------------------------------
 
-# plan_read = drake_plan(
-#   seg_wes = rbind(fread(file_in("data/CNV_from_TCGA_WES.tsv")),
-#                   fread(file_in("data/CNV_from_dbGap_except_TCGA_WES.tsv"))),
-#   cp_wes = read_copynumber(input = seg_wes, genome_build = "hg38", complement = FALSE, verbose = TRUE),
-#   seg_wgs = fread(file_in("data/CNV_from_TCGA_WGS.tsv")),
-#   cp_wgs = read_copynumber(input = seg_wgs, genome_build = "hg19", complement = FALSE, verbose = TRUE)
-# )
-#
-# vis_plan(plan_read, font_size = 15)
-# make(plan_read, jobs = 2, parallelism = "future")
-
 CNV = data.table::fread("data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL150.tsv")
 CNV_X = CNV[Chromosome == 23]
 CNV = CNV[Chromosome != 23]
@@ -90,7 +79,7 @@ Sig.CNV.count = sig_extract(CNV.count$nmf_matrix, n_sig = 6, nrun = 100, cores =
 saveRDS(Sig.CNV.prob, file = "output/NMF_copynumber_signature.prob.rds")
 saveRDS(Sig.CNV.count, file = "output/NMF_copynumber_signature.count.rds")
 
-
+# Take a look
 # Normalise by Row
 show_sig_profile(Sig.CNV.prob, params = CNV.prob$parameters, y_expand = 1.5)
 show_sig_profile(Sig.CNV.count, params = CNV.count$parameters, y_expand = 1.5)
