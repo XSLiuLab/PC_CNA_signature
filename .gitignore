@@ -17,3 +17,4 @@ output/CNV*
 NIHMS938028-supplement-4.txt
 data/PRAD_Maf.RData
 output/Maf_Est.RData
+data/hg38.gtf.gz

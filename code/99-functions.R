@@ -44,7 +44,7 @@ extract_facets_cnv = function(target_dir, target_path) {
   }
 
   colnames(all_sample) <- c("Chromosome","Start.bp","End.bp","modal_cn","minor_cn","sample")
-  facets_CNV <- all_sample %>% select(Chromosome, Start.bp,End.bp,modal_cn,sample)
+  facets_CNV <- all_sample %>% dplyr::select(Chromosome, Start.bp,End.bp,modal_cn,sample)
   write.table(facets_CNV, target_path, sep = "\t", quote = FALSE, row.names = F)
   rm(list = ls())
 }

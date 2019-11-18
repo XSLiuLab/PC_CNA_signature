@@ -148,6 +148,9 @@ cat(SpeInfo$tumor_Run, SpeInfo$normal_Run)
 
 SpeCNV = CNV@data[sample %in% special_samples][segVal != 2]
 readr::write_csv(SpeCNV, path="data/CNV_for_sig3_top_enrich.csv")
+
+CVAL300 = data.table::fread("data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL300.tsv")
+CVAL300[sample %in% special_samples][modal_cn != 2]
 # Show sig group comparison -----------------------------------------------
 
 feature_type2 = feature_type

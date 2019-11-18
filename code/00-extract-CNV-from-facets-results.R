@@ -8,6 +8,9 @@ source("code/99-functions.R")
 extract_facets_cnv("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/",
                    target_path = "data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL150.tsv")
 
+extract_facets_cnv("/public/data/facet_300/facetdata_300/",
+                   target_path = "data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL300.tsv")
+
 #extract_facets_cnv("raw_data/facets_results/wgs/", target_path = "data/CNV_from_TCGA_WGS.tsv")
 #extract_facets_cnv("raw_data/facets_results/wes/", target_path = "data/CNV_from_TCGA_WES.tsv")
 
