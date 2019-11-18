@@ -63,8 +63,9 @@ res.cor[c(-18, -21), c(-19, -22)] %>%
 
 
 
-# Select sample with most signature exposure and see their profile
+# Select sample with most signature exposure and see their profile ---------
 load(file = "output/CNV.prob.RData")
+load("data/PRAD_CNV.RData")
 
 Comp_df = CNV.prob$nmf_matrix %>%
   as.data.frame() %>%
@@ -132,6 +133,21 @@ show_cn_profile(data = CNV, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol =
                   slice(1:6) %>% pull(CNV_ID))
 
 
+# Sig 3 is very strange, extract the samples and check their bam files
+special_samples = MergeInfo %>%
+  select(CNV_ID, cnv_group, cnv_enrich_sig, CNV_Sig1:CNV_Sig6) %>%
+  filter(cnv_enrich_sig == 'Sig3') %>%
+  arrange(desc(CNV_Sig3)) %>%
+  slice(1:6) %>% pull(CNV_ID)
+
+Info = readRDS("data/PRAD_CLINICAL.rds")
+SpeInfo = Info %>%
+  filter(CNV_ID %in% special_samples) %>%
+  select(CNV_ID, tumor_Run, normal_Run)
+cat(SpeInfo$tumor_Run, SpeInfo$normal_Run)
+
+SpeCNV = CNV@data[sample %in% special_samples][segVal != 2]
+readr::write_csv(SpeCNV, path="data/CNV_for_sig3_top_enrich.csv")
 # Show sig group comparison -----------------------------------------------
 
 feature_type2 = feature_type
