@@ -1,0 +1,12 @@
+#PBS -N R
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=50:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate R
+for i in /public/home/liuxs/ncbi/dbGaP-16533/copy/Rdata/re150/pbs_150/*pbs
+do
+    Rscript $i
+done

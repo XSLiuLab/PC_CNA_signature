@@ -1,0 +1,31 @@
+#PBS -N <sample>_snp_pileup
+#PBS -l walltime=10:00:00  # Set maximum running time
+#PBS -l nodes=1:ppn=1       # Set the number of node and CPU per node
+#PBS -S /bin/bash            # Set shell
+#PBS -j oe                   # Output std/sterr to the same file
+#PBS -q normal_8             # Set queue name
+
+cd /public/home/liuxs/anaconda3/envs/R/lib/R/library/facets/extcode
+source activate R
+
+# <sample1>=tumorbam
+# <sample2>=normalbam
+
+path1="/public/home/liuxs/ncbi/dbGaP-16533/copy/out"
+path2="/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/bqsrbam"
+path3="/public/home/liuxs/ncbi/dbGaP-21926/dnaseq/BQSR/bqsrbam"
+
+name=<sample1>
+
+if [ -e /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/bqsrbam/$name.sorted.marked.BQSR.bam ]; 
+ then 
+  ./snp-pileup -g -q15 -Q20 -P100 -r25,0 /public/home/liuxs/biodata/reference/genome/hg38/snpvcf/common_all_20180418.vcf.gz\
+  ${path1}/<sample>.out.gz \
+  ${path2}/<sample2>.sorted.marked.BQSR.bam \
+  ${path2}/<sample1>.sorted.marked.BQSR.bam
+ else
+  ./snp-pileup -g -q15 -Q20 -P100 -r25,0 /public/home/liuxs/biodata/reference/genome/hg38/snpvcf/common_all_20180418.vcf.gz\
+ ${path1}/<sample>.out.gz \
+ ${path3}/<sample2>.sorted.marked.BQSR.bam  \
+ ${path3}/<sample1>.sorted.marked.BQSR.bam 
+fi
