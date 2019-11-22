@@ -2,6 +2,7 @@ library(sigminer)
 #library(drake)
 library(NMF)
 library(data.table)
+library(dtplyr)
 
 
 # Reading data ------------------------------------------------------------
@@ -12,6 +13,17 @@ CNV = CNV[Chromosome != 23]
 # Double the copy number of X due to all samples are male
 CNV_X$modal_cn = 2 * CNV_X$modal_cn
 CNV = rbind(CNV, CNV_X)
+
+# Check number of segment for samples
+CNV %>%
+  lazy_dt() %>%
+  group_by(sample) %>%
+  summarize(n_chr = length(unique(Chromosome))) %>%
+  arrange(n_chr) %>%
+  data.table::as.data.table()
+# find 141-10 only have segments in chr1
+# remove it
+CNV = CNV[!sample %in% "141-10"]
 
 table(CNV$Chromosome)
 CNV = read_copynumber(CNV, genome_build = "hg38",

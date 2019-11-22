@@ -72,7 +72,7 @@ extract_facets_purity_and_ploidy = function(target_dir, target_path) {
   rm(list = ls())
 }
 
-facets_to_GISTIC2 = function(target_dir, target_path, rm_X=TRUE) {
+facets_to_GISTIC2 = function(target_dir, target_path, rm_X=TRUE, rm_samps = NULL) {
   SAMPLE = dir(target_dir, pattern = ".Rdata") %>%
     str_remove(".Rdata")
 
@@ -98,6 +98,10 @@ facets_to_GISTIC2 = function(target_dir, target_path, rm_X=TRUE) {
   # 1 copy will be treated as deletions
   if (rm_X) {
     facets_CNV = subset(facets_CNV, chrom != 23)
+  }
+
+  if (!is.null(rm_samps)) {
+    facets_CNV = subset(facets_CNV, !ID %in% rm_samps)
   }
 
   write.table(facets_CNV, target_path, sep = "\t", quote = FALSE, row.names = F)

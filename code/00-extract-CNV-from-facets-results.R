@@ -23,4 +23,5 @@ extract_facets_purity_and_ploidy("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CV
 # Transform data to GISTIC input
 # and store as .seg file
 facets_to_GISTIC2("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/",
-                  target_path = 'data/PRAD_CNA_hg38.seg')
+                  target_path = 'data/PRAD_CNA_hg38.seg',
+                  rm_samps = "141-10")
