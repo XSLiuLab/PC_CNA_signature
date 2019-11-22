@@ -18,3 +18,16 @@ data = seg %>%
     dplyr::filter(ID %in% samps)
 
 readr::write_tsv(data, "data/PRAD_CNA_hg38_for_sig3.seg")
+
+# The GISTIC2 results for samples above is chaos
+# So we try to focus on Sig3 dominant samples
+groups = get_groups(CNV.Sig)
+samps2 = groups %>% 
+    lazy_dt() %>% 
+    dplyr::filter(enrich_sig == "Sig3") %>% 
+    dplyr::pull(sample)
+
+data2 = seg %>% 
+    dplyr::filter(ID %in% samps2)
+
+readr::write_tsv(data2, "data/PRAD_CNA_hg38_for_sig3_dominant.seg")

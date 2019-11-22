@@ -72,7 +72,7 @@ extract_facets_purity_and_ploidy = function(target_dir, target_path) {
   rm(list = ls())
 }
 
-facets_to_GISTIC2 = function(target_dir, target_path) {
+facets_to_GISTIC2 = function(target_dir, target_path, rm_X=TRUE) {
   SAMPLE = dir(target_dir, pattern = ".Rdata") %>%
     str_remove(".Rdata")
 
@@ -93,6 +93,13 @@ facets_to_GISTIC2 = function(target_dir, target_path) {
   facets_CNV$seg.mean = ifelse(facets_CNV$seg.mean!=0,
                                log2(facets_CNV$seg.mean) - 1, -11) # set a default minimum seg.mean for which copy number equals 0
   # -11 comes from PRAD 1000 study minumum seg.mean
+  
+  # Remove chr23 (chrX) due to patients are male
+  # 1 copy will be treated as deletions
+  if (rm_X) {
+    facets_CNV = subset(facets_CNV, chrom != 23)
+  }
+
   write.table(facets_CNV, target_path, sep = "\t", quote = FALSE, row.names = F)
   rm(list = ls())
 }

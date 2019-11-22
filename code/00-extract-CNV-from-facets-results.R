@@ -20,5 +20,7 @@ extract_facets_cnv("/public/data/facet_300/facetdata_300/",
 extract_facets_purity_and_ploidy("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/",
                                  target_path = 'data/PRAD_Purity_and_Ploidy_CVAL150.tsv')
 
+# Transform data to GISTIC input
+# and store as .seg file
 facets_to_GISTIC2("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/",
                   target_path = 'data/PRAD_CNA_hg38.seg')
