@@ -26,3 +26,10 @@ system(
 system(
   "bedtools merge -i data/hg38_exon_non_merged.sorted.bed > data/hg38_exon.bed"
 )
+
+exon_bed = data.table::fread("data/hg38_exon.bed", header = FALSE)
+exon_bed[, len:=V3-V2]
+sum(exon_bed$len) / 1e6
+
+# Seems not right
+# Use data from https://twistbioscience.com/ngs_bed
