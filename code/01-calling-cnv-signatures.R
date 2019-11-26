@@ -3,6 +3,7 @@ library(sigminer)
 library(NMF)
 library(data.table)
 library(dtplyr)
+library(tidyverse)
 
 
 # Reading data ------------------------------------------------------------
@@ -24,11 +25,18 @@ CNV %>%
 # find 141-10 only have segments in chr1
 # remove it
 CNV = CNV[!sample %in% "141-10"]
+CNV_rmX = CNV[Chromosome != 23]
 
 table(CNV$Chromosome)
+table(CNV_rmX$Chromosome)
+
 CNV = read_copynumber(CNV, genome_build = "hg38",
                       complement = FALSE, verbose = TRUE)
 save(CNV, file="data/PRAD_CNV.RData")
+
+CNV_rmX = read_copynumber(CNV_rmX, genome_build = "hg38",
+                      complement = FALSE, verbose = TRUE)
+save(CNV_rmX, file="data/PRAD_CNV_rmX.RData")
 
 CNV@summary.per.sample$sample[startsWith(CNV@summary.per.sample$sample, prefix = "447")]
 
@@ -41,7 +49,9 @@ show_cn_distribution(CNV, mode = "cd", fill = TRUE)
 boxplot(CNV@summary.per.sample$cna_burden)
 
 
-# Prepare data and estimate rank -------------------------------------------
+# For X included -------------------------------------------
+
+# Prepare data
 ncores = 12
 
 system.time(
@@ -105,3 +115,50 @@ show_sig_profile(Sig.CNV.count, params = CNV.count$parameters, y_expand = 1.5, n
 # draw_sig_profile(sigs$nmfObj, params = h_data$parameters, y_expand = 2.5, sig_names = paste0("Sig", 1:4))
 # dev.off()
 # cowplot::ggsave2("wgs/plot_sig/cn_signature.pdf")
+
+
+# For X removed -----------------------------------------------------------
+
+ncores = 12
+
+system.time(
+  CNV_rmX.prob <- sig_derive(CNV_rmX, cores = ncores, nrep = 3)
+)
+
+system.time(
+  CNV_rmX.count <- sig_derive(CNV_rmX, type = "count", cores = ncores, nrep = 3)
+)
+
+save(CNV_rmX.prob, file = "output/CNV_rmX.prob.RData")
+save(CNV_rmX.count, file = "output/CNV_rmX.count.RData")
+
+# Auto-extract
+Sig.Bayesian.rmX.prob = sig_auto_extract(CNV_rmX.prob$nmf_matrix, result_prefix = "BayesNMF_rmX_Prob", nrun = 100,
+                                     destdir = "output/signature", cores = 16)
+Sig.Bayesian.rmX.count = sig_auto_extract(CNV_rmX.count$nmf_matrix, result_prefix = "BayesNMF_rmX_Count", nrun = 100,
+                                      destdir = "output/signature", cores = 16)
+
+# BayesNMF will get more signatures and sparse results and
+# it is hard to explain in this project
+
+CNV_rmX_EST.prob = sig_estimate(CNV_rmX.prob$nmf_matrix,
+                            range = 2:10, nrun = 50, cores = ncores, use_random = TRUE,
+                            save_plots = FALSE,
+                            verbose = TRUE)
+CNV_rmX_EST.count = sig_estimate(CNV_rmX.count$nmf_matrix,
+                             range = 2:10, nrun = 50, cores = ncores, use_random = TRUE,
+                             save_plots = FALSE ,pConstant = 0.001,
+                             verbose = TRUE)
+
+save(CNV_rmX_EST.prob, file = "output/CNV_EST.prob.RData")
+save(CNV_rmX_EST.count, file = "output/CNV_EST.count.RData")
+
+show_rank_survey(CNV_rmX_EST.prob)
+show_rank_survey(CNV_rmX_EST.count)
+
+# Use NMF instead of bayesian NMF
+Sig.CNV_rmX.prob = sig_extract(CNV_rmX.prob$nmf_matrix, n_sig = 6, nrun = 100, cores = ncores)
+Sig.CNV_rmX.count = sig_extract(CNV_rmX.count$nmf_matrix, n_sig = 6, nrun = 100, cores = ncores, pConstant = 0.001)
+
+saveRDS(Sig.CNV_rmX.prob, file = "output/NMF_copynumber_signature_rmX.prob.rds")
+saveRDS(Sig.CNV_rmX.count, file = "output/NMF_copynumber_signature_rmX.count.rds")
