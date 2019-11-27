@@ -2,8 +2,6 @@
 
 pbs_dir='/public/home/wangshx/wangshx/PRAD_Sig/pbs'
 
-# Test
-loon upload deep_del_calling_pbs/*.pbs $pbs_dir -v
-loon pbssub $pbs_dir \
-    --remote -v \
-    --workdir $pbs_dir
+# Deploy task directory to remote HPC
+# The first argument must end with '/'
+loon pbsdeploy deep_del_calling_pbs/ $pbs_dir -v

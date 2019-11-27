@@ -28,7 +28,7 @@ Sig.Bayesian.Comb = sig_auto_extract(Mat, result_prefix = "BayesNMF_Comb", nrun 
 
 # Extract by hand
 Comb_Est = sig_estimate(Mat,
-                       range = 2:10, nrun = 100, cores = ncores, use_random = TRUE,
+                       range = 5:20, nrun = 100, cores = ncores, use_random = TRUE,
                        save_plots = FALSE,
                        verbose = TRUE)
 
