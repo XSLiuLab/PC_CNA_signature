@@ -21,10 +21,13 @@ mkdir -p $sseqz_dir
 #normal=<normal>
 
 sequenza-utils bam2seqz -n <normal> -t <tumor> \
-	--fasta $ref_file -gc $gc_file \
-	-o $seqz_dir/"<sample>.seqz.gz"
+    --fasta $ref_file -gc $gc_file \
+    -o $seqz_dir/"<sample>.seqz.gz"
 
 sequenza-utils seqz_binning --seqz $seqz_dir/"<sample>.seqz.gz" \
-	-w 50 -o $sseqz_dir/"<sample>.small.seqz.gz"
+    -w 50 -o $sseqz_dir/"<sample>.small.seqz.gz"
 
-
+# Only keep chr1-22,X,Y
+zcat $sseqz_dir/"<sample>.small.seqz.gz" | \
+    awk '/^chromosome|chr[12]?[0-9XY]\t/{print}' | \
+    gzip > $sseqz_dir/"<sample>.small_filter.seqz.gz"

@@ -30,13 +30,13 @@ Sig.Bayesian.Comb = sig_auto_extract(Mat, result_prefix = "BayesNMF_Comb", nrun 
 Comb_Est = sig_estimate(Mat,
                        range = 5:20, nrun = 100, cores = ncores, use_random = TRUE,
                        save_plots = FALSE,
-                       verbose = TRUE)
+                       verbose = TRUE, pConstant = 0.001)
 
 save(Comb_Est, file = "output/Comb_Est.RData")
 
 show_rank_survey(Comb_Est)
 # Select best signature number
-Sig.Comb= sig_extract(Mat, n_sig = 3, nrun = 100, cores = ncores)
+Sig.Comb= sig_extract(Mat, n_sig = 10, nrun = 100, cores = ncores, pConstant = 0.001)
 saveRDS(Sig.Comb, file = "output/NMF_comb_signature.rds")
 
 

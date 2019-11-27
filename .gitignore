@@ -21,3 +21,4 @@ data/hg38.gtf.gz
 data/hg38_exon_non*
 *.pbs
 deep_del_result/
+Comb_Est.RData

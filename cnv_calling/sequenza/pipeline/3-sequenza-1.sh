@@ -9,6 +9,6 @@ source activate R_36
 
 out_dir=/public/home/wangshx/wangshx/PRAD_Sig
 sseqz_dir=$out_dir"/small-seqz"
-res_dir=$out_dir"/seqz_result"
+res_dir=$out_dir"/seqz_wes_result"
 
-Rscript $out_dir"/3-sequenza.R" <sample> $sseqz_dir/"<sample>.small.seqz.gz" $res_dir
+Rscript $out_dir"/3-sequenza.R" <sample> $sseqz_dir/"<sample>.small_filter.seqz.gz" $res_dir
