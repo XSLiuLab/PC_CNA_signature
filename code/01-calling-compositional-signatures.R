@@ -39,4 +39,5 @@ show_rank_survey(Comb_Est)
 Sig.Comb= sig_extract(Mat, n_sig = 10, nrun = 100, cores = ncores, pConstant = 0.001)
 saveRDS(Sig.Comb, file = "output/NMF_comb_signature.rds")
 
-
+Sig.Comb = readRDS(file = "output/NMF_comb_signature.rds")
+show_sig_profile(Sig.Comb)
