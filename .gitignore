@@ -22,3 +22,5 @@ data/hg38_exon_non*
 *.pbs
 deep_del_result/
 Comb_Est.RData
+seqz_wes_result/
+seqz_error_input/

@@ -1,11 +1,59 @@
 ---
-title: "Home"
-site: workflowr::wflow_site
+title: "Prostate Cancer Variation Signature Analysis Report"
+author: ["Shixiang Wang", "Huimin Li", "Minfang Song", "Xuan Wang", "Xue-Song Liu (Corresponding author)"]
+date: "`r Sys.Date()`"
 output:
-  workflowr::wflow_html:
-    toc: false
-editor_options:
-  chunk_output_type: console
+  rmdformats::readthedown:
+    highlight: kate
+    self_contained: true
+    mathjax: true
+#    thumbnails: true
+    lightbox: true
+    gallery: true
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "../docs") })
+bibliography: ref.bib
+link-citations: yes
 ---
 
-Welcome to my research website.
+Contact Prof. Xue-Song Liu: <liuxs@shanghaitech.edu.cn>
+
+This report is written to help user understand what and how we did in this project. 
+Please read the formal manuscript **TBD** for more details.
+
+> This document is compiled from an Rmarkdown file which contains all code or description necessary to (auto-)reproduce the analysis for the accompanying project. Each section below describes a different component of the analysis and all numbers and figures are generated directly from the underlying data on compilation.
+
+# Variation Summary
+
+```{r, child="01-variation-summary.Rmd"}
+
+```
+
+# Signature Profile
+
+```{r, child="02-signature-profile.Rmd"}
+
+```
+
+# Association Analysis
+
+```{r, child="03-association-analysis.Rmd"}
+
+```
+
+# Survival Analysis
+
+```{r, child="04-survival-analysis.Rmd"}
+
+```
+
+
+# Supplementary Analysis and Visualization
+
+```{r, child="99-supp.Rmd"}
+
+```
+
+
+# Reference
+
