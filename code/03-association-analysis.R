@@ -27,9 +27,11 @@ corrplot::corrplot(asso_data$corr_co$measure,
 )
 
 
-show_sig_feature_corrplot(asso_tidy, features_list = c("IsMetastatic", "HasFusion"))
 
 
+show_sig_feature_corrplot(asso_tidy %>% dplyr::filter(p < 0.05), feature_list = c("IsMetastatic", "HasFusion"))
+show_sig_feature_corrplot(asso_tidy %>% dplyr::filter(p < 0.05))
+show_sig_feature_corrplot(asso_tidy)
 
 # Show correlation network ------------------------------------------------
 

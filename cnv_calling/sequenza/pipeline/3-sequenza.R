@@ -11,7 +11,6 @@ out_dir = args[3]
 test = sequenza.extract(input_file, assembly = "hg38")
 
 CP = sequenza.fit(test, female = FALSE)
-#CP = sequenza.fit(test,segment.filter = 5e6, N.ratio.filter = 80, N.BAF.filter = 50) 
 
 sequenza.results(
     sequenza.extract = test,
