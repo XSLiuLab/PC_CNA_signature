@@ -128,8 +128,8 @@ load("output/EST.facets.W.all.RData")
 load("output/EST.seqz.M.RData")
 load("output/EST.facets.M.RData")
 
-show_sig_number_survey(EST.seqz.W)
-show_sig_number_survey(EST.facets.W)
+# show_sig_number_survey(EST.seqz.W)
+# show_sig_number_survey(EST.facets.W)
 
 show_sig_number_survey(EST.seqz.W.all)
 EST.seqz.W.all$survey_plot
@@ -140,6 +140,76 @@ show_sig_number_survey(EST.seqz.M)
 show_sig_number_survey(EST.facets.M)
 
 show_sig_number_survey(EST.facets.M.ref.seqz)
+
 # Extract copy number signatures ------------------------------------------
+
+load(file = "output/CNV.seqz.derive.W.RData")
+load(file = "output/CNV.facets.derive.W.RData")
+load(file = "output/CNV.seqz.derive.M.RData")
+load(file = "output/CNV.facets.derive.M.RData")
+load(file = "output/CNV.facets.derive.M.ref.seqz.RData")
+
+Sig.CNV.seqz.W = sig_extract(CNV.seqz.derive.W$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
+Sig.CNV.facets.W = sig_extract(CNV.facets.derive.W$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores, pConstant = 1e-9)
+Sig.CNV.seqz.M = sig_extract(CNV.seqz.derive.M$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
+Sig.CNV.facets.M = sig_extract(CNV.facets.derive.M$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
+Sig.CNV.facets.M.ref.seqz = sig_extract(CNV.facets.derive.M.ref.seqz$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
+
+save(Sig.CNV.seqz.W, file = "output/Sig.CNV.seqz.W.RData")
+save(Sig.CNV.facets.W, file = "output/Sig.CNV.facets.W.RData")
+save(Sig.CNV.seqz.M, file = "output/Sig.CNV.seqz.M.RData")
+save(Sig.CNV.facets.M, file = "output/Sig.CNV.facets.M.RData")
+save(Sig.CNV.facets.M.ref.seqz, file = "output/Sig.CNV.facets.M.ref.seqz.RData")
+
+
+show_sig_profile(Sig.CNV.seqz.W, method = "W", normalize = "feature", x_label_angle = 90)
+show_sig_profile(Sig.CNV.seqz.M, method = "M", normalize = "column",
+                 params = CNV.seqz.derive.M$parameters,y_expand = 1.5,
+                 set_gradient_color = TRUE,
+                 x_label_angle = 90)
+
+show_sig_profile(Sig.CNV.facets.M, method = "M", normalize = "column",
+                 params = CNV.facets.derive.M$parameters,y_expand = 1.5,
+                 set_gradient_color = TRUE,
+                 x_label_angle = 90)
+
+# Some checks and analysis ------------------------------------------------
+
+get_sig_similarity(Sig.CNV.seqz.W, Sig.CNV.facets.W, normalize = "feature")
+show_sig_exposure(Sig.CNV.seqz.W, rm_space = T)
+
+cnv_group = get_groups(Sig.CNV.seqz.W)
+cnv_expo = get_sig_exposure(Sig.CNV.seqz.W)
+
+df = dplyr::left_join(cnv_group, cnv_expo)
+
+load(file = "output/CNV.seqz.RData")
+
+show_cn_profile(data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 1, show_title = T,
+                samples = df %>%
+                  filter(enrich_sig == 'Sig2') %>%
+                  arrange(desc(Sig2)) %>%
+                  slice(1:3) %>% pull(sample))
+
+show_cn_profile(data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 1, show_title = T,
+                samples = df %>%
+                  filter(enrich_sig == 'Sig4') %>%
+                  arrange(desc(Sig4)) %>%
+                  slice(1:3) %>% pull(sample))
+
+show_cn_profile(data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 1, show_title = T,
+                samples = df %>%
+                  filter(enrich_sig == 'Sig6') %>%
+                  arrange(desc(Sig6)) %>%
+                  slice(1:3) %>% pull(sample))
+
+show_cn_profile(data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 2, show_title = T,
+                samples = df %>%
+                  filter(enrich_sig == 'Sig6') %>%
+                  left_join(as.data.frame(CNV.seqz.derive.W$nmf_matrix) %>%
+                              tibble::rownames_to_column("sample") %>%
+                              select(sample, `BPArm[2]`)) %>%
+                  arrange(desc(`BPArm[2]`)) %>%
+                  slice(1:6) %>% pull(sample))
 
 
