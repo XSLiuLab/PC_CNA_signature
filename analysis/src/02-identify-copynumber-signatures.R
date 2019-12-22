@@ -30,7 +30,7 @@ save(CNV.seqz, file = "output/CNV.seqz.RData")
 
 # Derive copy number features ---------------------------------------------
 
-ncores = 12
+ncores = 20
 
 
 ##
@@ -163,6 +163,9 @@ save(Sig.CNV.facets.M.ref.seqz, file = "output/Sig.CNV.facets.M.ref.seqz.RData")
 
 
 show_sig_profile(Sig.CNV.seqz.W, method = "W", normalize = "feature", x_label_angle = 90)
+show_sig_profile(Sig.CNV.facets.W, method = "W", normalize = "feature", x_label_angle = 90)
+
+
 show_sig_profile(Sig.CNV.seqz.M, method = "M", normalize = "column",
                  params = CNV.seqz.derive.M$parameters,y_expand = 1.5,
                  set_gradient_color = TRUE,
