@@ -7,7 +7,7 @@
 #
 # phs000554 should also be used in survival analysis
 
-library(UCSCXenaTools)  # >= 1.2.10
+library(UCSCXenaTools) # >= 1.2.10
 library(tidyverse)
 library(dtplyr)
 library(data.table)
@@ -15,17 +15,17 @@ library(data.table)
 
 # TCGA --------------------------------------------------------------------
 
-x_query = XenaData %>%
+x_query <- XenaData %>%
   XenaGenerate(subset = XenaHostNames == "tcgaHub") %>%
   XenaFilter(filterDatasets = "PRAD") %>%
   XenaFilter(filterDatasets = "clinical|survival") %>%
   XenaQuery()
-x_download = x_query %>%
+x_download <- x_query %>%
   XenaDownload(destdir = "data/UCSCXena", trans_slash = TRUE)
 
 
-tcga_prad_cli = XenaPrepare(x_download)
-tcga_prad_surv = tcga_prad_cli$survival__PRAD_survival.txt.gz %>%
+tcga_prad_cli <- XenaPrepare(x_download)
+tcga_prad_surv <- tcga_prad_cli$survival__PRAD_survival.txt.gz %>%
   dplyr::select(-`_PATIENT`, -Redaction) %>%
   dplyr::mutate(Study = "TCGA")
 
@@ -34,24 +34,26 @@ tcga_prad_surv = tcga_prad_cli$survival__PRAD_survival.txt.gz %>%
 
 # phs000554 ---------------------------------------------------------------
 
-PRAD_cli = readRDS(file = "data/PRAD_CLINICAL.rds")
-phs000554 = readRDS("data/Tidy_Clinical/phs000554.rds")
+PRAD_cli <- readRDS(file = "data/PRAD_CLINICAL.rds")
+phs000554 <- readRDS("data/Tidy_Clinical/phs000554.rds")
 
-phs000554_surv = phs000554 %>%
-  dplyr::rename(OS.time=`Survival from diagnosis (mo)`) %>%
+phs000554_surv <- phs000554 %>%
+  dplyr::rename(OS.time = `Survival from diagnosis (mo)`) %>%
   dplyr::filter(!is.na(OS.time)) %>%
   dplyr::select(SampleName, OS.time) %>%
-  dplyr::rename(sample=SampleName) %>%
-  dplyr::mutate(sample=ifelse(sample=="WA43-44 (bladder)", "WA43", sample)) %>%
-  dplyr::mutate(OS = 1L) %>%  # No dead status reported, so assume they are dead due to their metastatic status
-  dplyr::mutate(Study = "phs000554",
-                OS.time = OS.time * 30L)
+  dplyr::rename(sample = SampleName) %>%
+  dplyr::mutate(sample = ifelse(sample == "WA43-44 (bladder)", "WA43", sample)) %>%
+  dplyr::mutate(OS = 1L) %>% # No dead status reported, so assume they are dead due to their metastatic status
+  dplyr::mutate(
+    Study = "phs000554",
+    OS.time = OS.time * 30L
+  )
 
 
 
 # Merge -------------------------------------------------------------------
 
-prad_surv = dplyr::bind_rows(tcga_prad_surv, phs000554_surv)
+prad_surv <- dplyr::bind_rows(tcga_prad_surv, phs000554_surv)
 saveRDS(prad_surv, file = "data/PRAD_Survival.rds")
 
 

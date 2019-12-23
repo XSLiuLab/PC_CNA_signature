@@ -11,26 +11,28 @@ options(sigminer.sex = "male", sigminer.copynumber.max = 20L)
 # Generate CopyNumber object ----------------------------------------------
 # Note: we used two name system for FACETS and Sequenza data
 
-CNV.facets = read_copynumber("data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL150.tsv",
-                             genome_build = "hg38",
-                             complement = FALSE, verbose = TRUE)
+CNV.facets <- read_copynumber("data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL150.tsv",
+  genome_build = "hg38",
+  complement = FALSE, verbose = TRUE
+)
 # find 141-10 only have segments in chr1
-CNV.facets = subset(CNV.facets, subset = !sample %in% "141-10")
+CNV.facets <- subset(CNV.facets, subset = !sample %in% "141-10")
 
 save(CNV.facets, file = "output/CNV.facets.RData")
 
-CNV.seqz = read_copynumber("data/CNV_from_sequenza.tsv",
-                             genome_build = "hg38",
-                             complement = FALSE, verbose = TRUE)
+CNV.seqz <- read_copynumber("data/CNV_from_sequenza.tsv",
+  genome_build = "hg38",
+  complement = FALSE, verbose = TRUE
+)
 
 # remove WCMC160-SRR3146971 with only one CNV
-CNV.seqz = subset(CNV.seqz, subset = !sample %in% "WCMC160-SRR3146971")
+CNV.seqz <- subset(CNV.seqz, subset = !sample %in% "WCMC160-SRR3146971")
 save(CNV.seqz, file = "output/CNV.seqz.RData")
 
 
 # Derive copy number features ---------------------------------------------
 
-ncores = 20
+ncores <- 20
 
 
 ##
@@ -61,63 +63,72 @@ system.time(
 save(CNV.facets.derive.M, file = "output/CNV.facets.derive.M.RData")
 
 # Use components from sequenza as reference
-CNV.facets.derive.M.ref.seqz <- sig_derive(CNV.facets, method = "M",
-                                           reference_components = CNV.seqz.derive.M$components,
-                                           cores = ncores)
+CNV.facets.derive.M.ref.seqz <- sig_derive(CNV.facets,
+  method = "M",
+  reference_components = CNV.seqz.derive.M$components,
+  cores = ncores
+)
 
 save(CNV.facets.derive.M.ref.seqz, file = "output/CNV.facets.derive.M.ref.seqz.RData")
 
 
 
 # Estimate number of copy number signatures -------------------------------
-ncores = 20
+ncores <- 20
 
-EST.seqz.W = sig_estimate(CNV.seqz.derive.W$nmf_matrix[, 1:50],
-                          range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
-                          save_plots = FALSE,
-                          verbose = TRUE)
+EST.seqz.W <- sig_estimate(CNV.seqz.derive.W$nmf_matrix[, 1:50],
+  range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
+  save_plots = FALSE,
+  verbose = TRUE
+)
 save(EST.seqz.W, file = "output/EST.seqz.W.RData")
 
 #
-EST.seqz.W.all = sig_estimate(CNV.seqz.derive.W$nmf_matrix,
-                          range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
-                          save_plots = FALSE,
-                          verbose = TRUE)
+EST.seqz.W.all <- sig_estimate(CNV.seqz.derive.W$nmf_matrix,
+  range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
+  save_plots = FALSE,
+  verbose = TRUE
+)
 save(EST.seqz.W.all, file = "output/EST.seqz.W.all.RData")
 
 #
-EST.facets.W = sig_estimate(CNV.facets.derive.W$nmf_matrix[, 1:50],
-                          range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
-                          save_plots = FALSE, pConstant = 1e-9,
-                          verbose = TRUE)
+EST.facets.W <- sig_estimate(CNV.facets.derive.W$nmf_matrix[, 1:50],
+  range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
+  save_plots = FALSE, pConstant = 1e-9,
+  verbose = TRUE
+)
 save(EST.facets.W, file = "output/EST.facets.W.RData")
 
 #
-EST.facets.W.all = sig_estimate(CNV.facets.derive.W$nmf_matrix,
-                            range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
-                            save_plots = FALSE, pConstant = 1e-9,
-                            verbose = TRUE)
+EST.facets.W.all <- sig_estimate(CNV.facets.derive.W$nmf_matrix,
+  range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
+  save_plots = FALSE, pConstant = 1e-9,
+  verbose = TRUE
+)
 save(EST.facets.W.all, file = "output/EST.facets.W.all.RData")
 
 #
-EST.seqz.M = sig_estimate(CNV.seqz.derive.M$nmf_matrix,
-                          range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
-                          save_plots = FALSE,
-                          verbose = TRUE)
+EST.seqz.M <- sig_estimate(CNV.seqz.derive.M$nmf_matrix,
+  range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
+  save_plots = FALSE,
+  verbose = TRUE
+)
 save(EST.seqz.M, file = "output/EST.seqz.M.RData")
 
 #
-EST.facets.M = sig_estimate(CNV.facets.derive.M$nmf_matrix,
-                            range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
-                            save_plots = FALSE,
-                            verbose = TRUE)
+EST.facets.M <- sig_estimate(CNV.facets.derive.M$nmf_matrix,
+  range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
+  save_plots = FALSE,
+  verbose = TRUE
+)
 save(EST.facets.M, file = "output/EST.facets.M.RData")
 
 #
-EST.facets.M.ref.seqz = sig_estimate(CNV.facets.derive.M.ref.seqz$nmf_matrix,
-                                     range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
-                                     save_plots = FALSE,
-                                     verbose = TRUE)
+EST.facets.M.ref.seqz <- sig_estimate(CNV.facets.derive.M.ref.seqz$nmf_matrix,
+  range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
+  save_plots = FALSE,
+  verbose = TRUE
+)
 save(EST.facets.M.ref.seqz, file = "output/EST.facets.M.ref.seqz.RData")
 
 
@@ -149,11 +160,11 @@ load(file = "output/CNV.seqz.derive.M.RData")
 load(file = "output/CNV.facets.derive.M.RData")
 load(file = "output/CNV.facets.derive.M.ref.seqz.RData")
 
-Sig.CNV.seqz.W = sig_extract(CNV.seqz.derive.W$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
-Sig.CNV.facets.W = sig_extract(CNV.facets.derive.W$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores, pConstant = 1e-9)
-Sig.CNV.seqz.M = sig_extract(CNV.seqz.derive.M$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
-Sig.CNV.facets.M = sig_extract(CNV.facets.derive.M$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
-Sig.CNV.facets.M.ref.seqz = sig_extract(CNV.facets.derive.M.ref.seqz$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
+Sig.CNV.seqz.W <- sig_extract(CNV.seqz.derive.W$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
+Sig.CNV.facets.W <- sig_extract(CNV.facets.derive.W$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores, pConstant = 1e-9)
+Sig.CNV.seqz.M <- sig_extract(CNV.seqz.derive.M$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
+Sig.CNV.facets.M <- sig_extract(CNV.facets.derive.M$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
+Sig.CNV.facets.M.ref.seqz <- sig_extract(CNV.facets.derive.M.ref.seqz$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
 
 save(Sig.CNV.seqz.W, file = "output/Sig.CNV.seqz.W.RData")
 save(Sig.CNV.facets.W, file = "output/Sig.CNV.facets.W.RData")
@@ -166,53 +177,63 @@ show_sig_profile(Sig.CNV.seqz.W, method = "W", normalize = "feature", x_label_an
 show_sig_profile(Sig.CNV.facets.W, method = "W", normalize = "feature", x_label_angle = 90)
 
 
-show_sig_profile(Sig.CNV.seqz.M, method = "M", normalize = "column",
-                 params = CNV.seqz.derive.M$parameters,y_expand = 1.5,
-                 set_gradient_color = TRUE,
-                 x_label_angle = 90)
+show_sig_profile(Sig.CNV.seqz.M,
+  method = "M", normalize = "column",
+  params = CNV.seqz.derive.M$parameters, y_expand = 1.5,
+  set_gradient_color = TRUE,
+  x_label_angle = 90
+)
 
-show_sig_profile(Sig.CNV.facets.M, method = "M", normalize = "column",
-                 params = CNV.facets.derive.M$parameters,y_expand = 1.5,
-                 set_gradient_color = TRUE,
-                 x_label_angle = 90)
+show_sig_profile(Sig.CNV.facets.M,
+  method = "M", normalize = "column",
+  params = CNV.facets.derive.M$parameters, y_expand = 1.5,
+  set_gradient_color = TRUE,
+  x_label_angle = 90
+)
 
 # Some checks and analysis ------------------------------------------------
 
 get_sig_similarity(Sig.CNV.seqz.W, Sig.CNV.facets.W, normalize = "feature")
 show_sig_exposure(Sig.CNV.seqz.W, rm_space = T)
 
-cnv_group = get_groups(Sig.CNV.seqz.W)
-cnv_expo = get_sig_exposure(Sig.CNV.seqz.W)
+cnv_group <- get_groups(Sig.CNV.seqz.W)
+cnv_expo <- get_sig_exposure(Sig.CNV.seqz.W)
 
-df = dplyr::left_join(cnv_group, cnv_expo)
+df <- dplyr::left_join(cnv_group, cnv_expo)
 
 load(file = "output/CNV.seqz.RData")
 
-show_cn_profile(data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 1, show_title = T,
-                samples = df %>%
-                  filter(enrich_sig == 'Sig2') %>%
-                  arrange(desc(Sig2)) %>%
-                  slice(1:3) %>% pull(sample))
+show_cn_profile(
+  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 1, show_title = T,
+  samples = df %>%
+    filter(enrich_sig == "Sig2") %>%
+    arrange(desc(Sig2)) %>%
+    slice(1:3) %>% pull(sample)
+)
 
-show_cn_profile(data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 1, show_title = T,
-                samples = df %>%
-                  filter(enrich_sig == 'Sig4') %>%
-                  arrange(desc(Sig4)) %>%
-                  slice(1:3) %>% pull(sample))
+show_cn_profile(
+  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 1, show_title = T,
+  samples = df %>%
+    filter(enrich_sig == "Sig4") %>%
+    arrange(desc(Sig4)) %>%
+    slice(1:3) %>% pull(sample)
+)
 
-show_cn_profile(data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 1, show_title = T,
-                samples = df %>%
-                  filter(enrich_sig == 'Sig6') %>%
-                  arrange(desc(Sig6)) %>%
-                  slice(1:3) %>% pull(sample))
+show_cn_profile(
+  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 1, show_title = T,
+  samples = df %>%
+    filter(enrich_sig == "Sig6") %>%
+    arrange(desc(Sig6)) %>%
+    slice(1:3) %>% pull(sample)
+)
 
-show_cn_profile(data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 2, show_title = T,
-                samples = df %>%
-                  filter(enrich_sig == 'Sig6') %>%
-                  left_join(as.data.frame(CNV.seqz.derive.W$nmf_matrix) %>%
-                              tibble::rownames_to_column("sample") %>%
-                              select(sample, `BPArm[2]`)) %>%
-                  arrange(desc(`BPArm[2]`)) %>%
-                  slice(1:6) %>% pull(sample))
-
-
+show_cn_profile(
+  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 2, show_title = T,
+  samples = df %>%
+    filter(enrich_sig == "Sig6") %>%
+    left_join(as.data.frame(CNV.seqz.derive.W$nmf_matrix) %>%
+      tibble::rownames_to_column("sample") %>%
+      select(sample, `BPArm[2]`)) %>%
+    arrange(desc(`BPArm[2]`)) %>%
+    slice(1:6) %>% pull(sample)
+)

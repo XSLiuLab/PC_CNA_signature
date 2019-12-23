@@ -8,19 +8,21 @@ library(sigminer)
 library(readxl)
 
 # 1)
-CNV = read_copynumber("data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL150.tsv", genome_build = "hg38",
-                      complement = FALSE, verbose = TRUE)
-FACETS_SAMPLES = CNV@summary.per.sample$sample
+CNV <- read_copynumber("data/CNV_from_dbGAP_PLUS_TCGA_WES_CVAL150.tsv",
+  genome_build = "hg38",
+  complement = FALSE, verbose = TRUE
+)
+FACETS_SAMPLES <- CNV@summary.per.sample$sample
 load("dbGap/mapping_df.RData")
 
 # 2)
-phs000447 = readRDS("data/Tidy_Clinical/phs000447.rds")
-phs000554 = readRDS("data/Tidy_Clinical/phs000554.rds")
-phs000909 = readRDS("data/Tidy_Clinical/phs000909.rds")
-phs000915 = readRDS("data/Tidy_Clinical/phs000915.rds")
-phs001141 = readRDS("data/Tidy_Clinical/phs001141.rds")
+phs000447 <- readRDS("data/Tidy_Clinical/phs000447.rds")
+phs000554 <- readRDS("data/Tidy_Clinical/phs000554.rds")
+phs000909 <- readRDS("data/Tidy_Clinical/phs000909.rds")
+phs000915 <- readRDS("data/Tidy_Clinical/phs000915.rds")
+phs001141 <- readRDS("data/Tidy_Clinical/phs001141.rds")
 
-phs000554 = phs000554 %>%
+phs000554 <- phs000554 %>%
   slice(1:61) %>%
   mutate(SampleName = sub(" (.*)", "", SampleName))
 
@@ -52,11 +54,11 @@ mapping_df %>%
   pull(gap_accession) %>%
   table()
 
-clean_maps = mapping_df %>%
+clean_maps <- mapping_df %>%
   mutate(
     sample_type = case_when(
       tumor_body_site == "" ~ "Metastatic",
-      tumor_body_site == "N.A." ~ "Unknown",  # Check it using other annotation data
+      tumor_body_site == "N.A." ~ "Unknown", # Check it using other annotation data
       grepl("prostate", tumor_body_site, ignore.case = TRUE) ~ "Primary",
       TRUE ~ "Metastatic"
     )
@@ -66,14 +68,19 @@ clean_maps = mapping_df %>%
 table(clean_maps$sample_type)
 
 # Add annotation one by one
-#==== phs000447 ========
-samps = clean_maps %>% filter(gap_accession == "phs000447") %>% pull(subject_id) %>% unique()
+# ==== phs000447 ========
+samps <- clean_maps %>%
+  filter(gap_accession == "phs000447") %>%
+  pull(subject_id) %>%
+  unique()
 all(samps %in% phs000447$Predict_SampleID)
 
-phs000447_T = phs000447 %>%
+phs000447_T <- phs000447 %>%
   select(-c(`dbGaP SubjID`, `Primary Disease`)) %>%
-  rename(PSA = `PSA Pre-Operative`, RadiationTherapy=`Radiation Therapy`, Stage=`Cancer Stage`,
-         GleasonScore = `Gleason Score`, Fusion = `TMPRSS2-ERG Fusion Status`) %>%
+  rename(
+    PSA = `PSA Pre-Operative`, RadiationTherapy = `Radiation Therapy`, Stage = `Cancer Stage`,
+    GleasonScore = `Gleason Score`, Fusion = `TMPRSS2-ERG Fusion Status`
+  ) %>%
   mutate(Fusion = case_when(
     Fusion == "---" ~ NA_character_,
     grepl("NRF1-BRAF", Fusion) ~ "NRF1-BRAF",
@@ -86,53 +93,73 @@ phs000447_T = phs000447 %>%
 
 table(phs000447_T$Fusion)
 
-#==== phs000554 ========
-samps = clean_maps %>% filter(gap_accession == "phs000554") %>% pull(subject_id) %>% unique()
+# ==== phs000554 ========
+samps <- clean_maps %>%
+  filter(gap_accession == "phs000554") %>%
+  pull(subject_id) %>%
+  unique()
 all(samps %in% phs000554$SUBJECT_ID)
 samps[!samps %in% phs000554$SUBJECT_ID]
 
-phs000554_T = phs000554 %>%
-  mutate(SUBJECT_ID = ifelse(is.na(SUBJECT_ID), "44", SUBJECT_ID),
-         PRIMARY_METASTATIC_TUMOR = ifelse(is.na(PRIMARY_METASTATIC_TUMOR), "Metastatic", PRIMARY_METASTATIC_TUMOR),
-         SampleName = ifelse(SampleName == "WA43-44", "WA43", SampleName)) %>%
+phs000554_T <- phs000554 %>%
+  mutate(
+    SUBJECT_ID = ifelse(is.na(SUBJECT_ID), "44", SUBJECT_ID),
+    PRIMARY_METASTATIC_TUMOR = ifelse(is.na(PRIMARY_METASTATIC_TUMOR), "Metastatic", PRIMARY_METASTATIC_TUMOR),
+    SampleName = ifelse(SampleName == "WA43-44", "WA43", SampleName)
+  ) %>%
   select(-`Tumor/Normal location`) %>%
   filter(!SampleName %in% c("WA43-27", "WA43-71")) %>%
-  rename(Fusion = `ETS/RAF/SPINK1 status`, PSA = `Serum PSA`,
-         GleasonScore = `Gleason score`,
-         PriorTreatment = `Prior Treatment`) %>%
+  rename(
+    Fusion = `ETS/RAF/SPINK1 status`, PSA = `Serum PSA`,
+    GleasonScore = `Gleason score`,
+    PriorTreatment = `Prior Treatment`
+  ) %>%
   mutate(Fusion = case_when(
     grepl("ERG+", Fusion) ~ "ERG",
-    grepl("ETV1+", Fusion) ~ "ERG",  # here ERG means ETS family, change it to ETS latter
+    grepl("ETV1+", Fusion) ~ "ERG", # here ERG means ETS family, change it to ETS latter
     grepl("No ETS", Fusion) ~ "Negative",
     grepl("RAF1+", Fusion) ~ "RAF",
     grepl("SPINK1+", Fusion) ~ "SPINK1"
   ))
 
-#==== phs000909 ========
-samps = clean_maps %>% filter(gap_accession == "phs000909") %>% pull(subject_id) %>% unique()
+# ==== phs000909 ========
+samps <- clean_maps %>%
+  filter(gap_accession == "phs000909") %>%
+  pull(subject_id) %>%
+  unique()
 all(samps %in% phs000909$PatientID)
 samps[!samps %in% phs000909$PatientID]
 
-phs000909_T = phs000909 %>%
+phs000909_T <- phs000909 %>%
   select(PatientID, `Pathology Classification`, `Purity (CLONET)`, `Ploidy (CLONET)`, Genomic_Burden, `Tumor RNASeq ID`, `Methylation ID`)
 
-#==== phs000915 ========
-samps = clean_maps %>% filter(gap_accession == "phs000915") %>% pull(subject_id) %>% unique()
+# ==== phs000915 ========
+samps <- clean_maps %>%
+  filter(gap_accession == "phs000915") %>%
+  pull(subject_id) %>%
+  unique()
 all(samps %in% phs000915$`cBio_SU2C ID`)
 
-phs000915_T = phs000915 %>%
+phs000915_T <- phs000915 %>%
   select(-`FIGURE 2 CASE#`, -`BIOPSY SITE`, -`SEQUENCING INSTITUTE`) %>%
-  rename(SU2C_ID=`cBio_SU2C ID`, PatientID=`PATIENT ID`, Age=AGE,
-         PRIOR_ABI_or_ENZ = `PRIOR ABI or ENZ`, PRIOR_TAXAN = `PRIOR TAXAN`,
-         ClINICAL_SITE = `ClINICAL  SITE`, Purity = `TUMOR CONTENT ESTIMATED BY SEQ`)
+  rename(
+    SU2C_ID = `cBio_SU2C ID`, PatientID = `PATIENT ID`, Age = AGE,
+    PRIOR_ABI_or_ENZ = `PRIOR ABI or ENZ`, PRIOR_TAXAN = `PRIOR TAXAN`,
+    ClINICAL_SITE = `ClINICAL  SITE`, Purity = `TUMOR CONTENT ESTIMATED BY SEQ`
+  )
 
-#==== phs000915 ========
-samps = clean_maps %>% filter(gap_accession == "phs001141") %>% pull(subject_id) %>% unique()
+# ==== phs000915 ========
+samps <- clean_maps %>%
+  filter(gap_accession == "phs001141") %>%
+  pull(subject_id) %>%
+  unique()
 all(samps %in% phs001141$SUBJECT_ID)
 
-phs001141_T = phs001141 %>%
-  select(SUBJECT_ID, age, race, composite_progression, sex, Sample_Name, PRIMARY_METASTATIC_TUMOR,
-         Stage, TUMOR_TREATMENT) %>%
+phs001141_T <- phs001141 %>%
+  select(
+    SUBJECT_ID, age, race, composite_progression, sex, Sample_Name, PRIMARY_METASTATIC_TUMOR,
+    Stage, TUMOR_TREATMENT
+  ) %>%
   rename(Age = age, Race = race, Gender = sex)
 
 save(phs000447_T, phs000554_T, phs000909_T, phs000915_T, phs001141_T, file = "data/dbGap_clean_phenotype.RData")
@@ -141,29 +168,31 @@ save(phs000447_T, phs000554_T, phs000909_T, phs000915_T, phs001141_T, file = "da
 # Merge data --------------------------------------------------------------
 
 # Merge all phenotype data from dbGap
-dbGap_data =
+dbGap_data <-
   list(
-    phs000447 = filter(clean_maps, gap_accession=="phs000447") %>%
-      full_join(phs000447_T, by = c("subject_id"="Predict_SampleID")) %>%
+    phs000447 = filter(clean_maps, gap_accession == "phs000447") %>%
+      full_join(phs000447_T, by = c("subject_id" = "Predict_SampleID")) %>%
       select(-Gender, -RadiationTherapy) %>%
       rename(PatientID = Sample),
-    phs000554 = filter(clean_maps, gap_accession=="phs000554") %>%
-      full_join(phs000554_T, by = c("subject_id"="SUBJECT_ID")) %>%
+    phs000554 = filter(clean_maps, gap_accession == "phs000554") %>%
+      full_join(phs000554_T, by = c("subject_id" = "SUBJECT_ID")) %>%
       rename(PatientID = SampleName) %>%
       select(gap_accession:PSA, PRIMARY_METASTATIC_TUMOR, -DiseaseState) %>%
       mutate(sample_type = PRIMARY_METASTATIC_TUMOR) %>% # correct sample_type
       select(-PRIMARY_METASTATIC_TUMOR),
-    phs000909 = filter(clean_maps, gap_accession=="phs000909") %>%
-      full_join(phs000909_T, by = c("subject_id"="PatientID")) %>%
+    phs000909 = filter(clean_maps, gap_accession == "phs000909") %>%
+      full_join(phs000909_T, by = c("subject_id" = "PatientID")) %>%
       select(gap_accession:normal_Run),
-    phs000915 = filter(clean_maps, gap_accession=="phs000915") %>%
-      full_join(phs000915_T, by = c("subject_id"="SU2C_ID")) %>%
+    phs000915 = filter(clean_maps, gap_accession == "phs000915") %>%
+      full_join(phs000915_T, by = c("subject_id" = "SU2C_ID")) %>%
       select(gap_accession:Age) %>%
       mutate(Age = as.integer(Age)),
-    phs001141 = filter(clean_maps, gap_accession=="phs001141") %>%
-      full_join(phs001141_T, by = c("subject_id"="SUBJECT_ID")) %>%
-      mutate(sample_type = PRIMARY_METASTATIC_TUMOR,
-             Age = as.integer(Age)) %>%
+    phs001141 = filter(clean_maps, gap_accession == "phs001141") %>%
+      full_join(phs001141_T, by = c("subject_id" = "SUBJECT_ID")) %>%
+      mutate(
+        sample_type = PRIMARY_METASTATIC_TUMOR,
+        Age = as.integer(Age)
+      ) %>%
       select(gap_accession:Age)
   ) %>% purrr::map(unique)
 # Then merge data from Nat.Gen
@@ -171,8 +200,8 @@ dbGap_data =
 # sapply(dbGap_data, nrow)
 # sapply(dbGap_data, function(x) x %>% unique() %>% nrow())
 # sapply(dbGap_data, function(x) x %>% unique() %>% nrow()) %>% sum()
-#purrr::reduce(dbGap_data, bind_rows)
-dbGap = purrr::map_df(dbGap_data, bind_rows) %>%
+# purrr::reduce(dbGap_data, bind_rows)
+dbGap <- purrr::map_df(dbGap_data, bind_rows) %>%
   rename(Study = gap_accession)
 table(dbGap$sample_type)
 table(dbGap$Stage)
@@ -191,30 +220,32 @@ dbGap %>%
   mutate_cond(grepl("RAF", Fusion), Fusion = "BRAF") %>%
   mutate_cond(grepl("ERG", Fusion), Fusion = "ETS") %>%
   filter(!is.na(Study)) %>%
-  mutate(PatientID = ifelse(
-    is.na(PatientID),
-    paste(Study, subject_id, sep = "-"),
-    PatientID
-  ),
-  GleasonScore = ifelse(grepl("N", GleasonScore), NA_integer_, GleasonScore),
-  GleasonScore = ifelse(nchar(GleasonScore) >= 3, substr(GleasonScore, 1, 3), GleasonScore),
-  GleasonScore = sapply(GleasonScore, function(x) eval(parse(text=x))) %>%
-    as.integer()) -> zz
+  mutate(
+    PatientID = ifelse(
+      is.na(PatientID),
+      paste(Study, subject_id, sep = "-"),
+      PatientID
+    ),
+    GleasonScore = ifelse(grepl("N", GleasonScore), NA_integer_, GleasonScore),
+    GleasonScore = ifelse(nchar(GleasonScore) >= 3, substr(GleasonScore, 1, 3), GleasonScore),
+    GleasonScore = sapply(GleasonScore, function(x) eval(parse(text = x))) %>%
+      as.integer()
+  ) -> zz
 
 nrow(zz)
 nrow(unique(zz))
 table(clean_maps$gap_accession)
 table(zz$Study)
-zz1 = filter(clean_maps, gap_accession == "phs000447")
-zz2 = filter(zz, Study == "phs000447")
+zz1 <- filter(clean_maps, gap_accession == "phs000447")
+zz2 <- filter(zz, Study == "phs000447")
 setdiff(zz1$subject_id, zz2$subject_id)
 
-dupIDs = zz2$subject_id[which(duplicated(zz2 %>% select(Study, subject_id)))]
+dupIDs <- zz2$subject_id[which(duplicated(zz2 %>% select(Study, subject_id)))]
 dupIDs
 zz2 %>% filter(subject_id %in% dupIDs)
 
 # Remove duplicated records
-dbGap = zz %>%
+dbGap <- zz %>%
   filter(!subject_id %in% dupIDs) %>%
   bind_rows(filter(zz, subject_id %in% dupIDs) %>% slice(seq(1, 12, 2)))
 
@@ -223,79 +254,99 @@ dbGap = zz %>%
 # Clean TCGA clinical dataset ---------------------------------------------
 
 library(UCSCXenaTools)
-xe = XenaGenerate(subset = XenaDatasets == 'TCGA-PRAD.GDC_phenotype.tsv')
-xq = xe %>%
+xe <- XenaGenerate(subset = XenaDatasets == "TCGA-PRAD.GDC_phenotype.tsv")
+xq <- xe %>%
   XenaQuery() %>%
   XenaDownload(destdir = "data/Xena")
-TCGA_PRAD = XenaPrepare(xq)
-TCGA_PRAD = TCGA_PRAD %>%
-  select(c("submitter_id.samples", "age_at_initial_pathologic_diagnosis", "submitter_id",
-           "psa_value", "pathologic_T", "gleason_score", "sample_type.samples")) %>%
-  rename(subject_id = submitter_id.samples,
-         PatientID = submitter_id,
-         sample_type = sample_type.samples,
-         Age = age_at_initial_pathologic_diagnosis,
-         Stage = pathologic_T,
-         PSA = psa_value,
-         GleasonScore = gleason_score) %>%
-  mutate(subject_id = substr(subject_id, 1, 15),
-         GleasonScore = as.integer(GleasonScore)) %>%
+TCGA_PRAD <- XenaPrepare(xq)
+TCGA_PRAD <- TCGA_PRAD %>%
+  select(c(
+    "submitter_id.samples", "age_at_initial_pathologic_diagnosis", "submitter_id",
+    "psa_value", "pathologic_T", "gleason_score", "sample_type.samples"
+  )) %>%
+  rename(
+    subject_id = submitter_id.samples,
+    PatientID = submitter_id,
+    sample_type = sample_type.samples,
+    Age = age_at_initial_pathologic_diagnosis,
+    Stage = pathologic_T,
+    PSA = psa_value,
+    GleasonScore = gleason_score
+  ) %>%
+  mutate(
+    subject_id = substr(subject_id, 1, 15),
+    GleasonScore = as.integer(GleasonScore)
+  ) %>%
   filter(!sample_type %in% "Solid Tissue Normal") %>%
   mutate(sample_type = ifelse(sample_type == "Primary Tumor", "Primary", sample_type)) %>%
   unique()
 table(TCGA_PRAD$sample_type)
 
-TCGA_PAIRED_IDs = read_tsv("dbGap/paired_sample.txt", col_names = FALSE)
-colnames(TCGA_PAIRED_IDs) = c("tumor_Run", "normal_Run")
-TCGA_PAIRED_IDs = TCGA_PAIRED_IDs %>% mutate(subject_id = tumor_Run)
+TCGA_PAIRED_IDs <- read_tsv("dbGap/paired_sample.txt", col_names = FALSE)
+colnames(TCGA_PAIRED_IDs) <- c("tumor_Run", "normal_Run")
+TCGA_PAIRED_IDs <- TCGA_PAIRED_IDs %>% mutate(subject_id = tumor_Run)
 
-TCGA_PRAD = TCGA_PRAD %>%
+TCGA_PRAD <- TCGA_PRAD %>%
   left_join(NatGen_clincal %>%
-              filter(Data.Source == "TCGA") %>%
-              select(Tumor_Sample_Barcode, Fusion), by = c("PatientID"="Tumor_Sample_Barcode")) %>%
-  mutate(Fusion = ifelse(grepl("FUSION", Fusion), "ETS", NA_character_),
-         Study = "TCGA",
-         PSA = as.numeric(PSA)) %>%
+    filter(Data.Source == "TCGA") %>%
+    select(Tumor_Sample_Barcode, Fusion), by = c("PatientID" = "Tumor_Sample_Barcode")) %>%
+  mutate(
+    Fusion = ifelse(grepl("FUSION", Fusion), "ETS", NA_character_),
+    Study = "TCGA",
+    PSA = as.numeric(PSA)
+  ) %>%
   left_join(TCGA_PAIRED_IDs)
 
 # We found PSA value from GDC hub of UCSC Xena is wrong
 # Thus we remove it and use PSA value from TCGA2015 paper
 # Also I note phs000554 has different PSA unit (no unit info from paper or dbGap)
-TCGA2015_cli = read_excel("data/TCGA2015_cli.xlsx") %>%
+TCGA2015_cli <- read_excel("data/TCGA2015_cli.xlsx") %>%
   rename(PSA = PSA_preop) %>%
   mutate(PSA = as.numeric(PSA)) %>%
   select(SAMPLE_ID, PSA)
 
-TCGA_PRAD = TCGA_PRAD %>%
+TCGA_PRAD <- TCGA_PRAD %>%
   select(-PSA) %>%
-  left_join(TCGA2015_cli, by=c('subject_id'='SAMPLE_ID'))
+  left_join(TCGA2015_cli, by = c("subject_id" = "SAMPLE_ID"))
 
 # Naming strategy from Huimin
-CNV_IDs = mapping_df %>% select(gap_accession,subject_id,tumor_Run,normal_Run) %>%
-  group_by(gap_accession, subject_id) %>% mutate(rank = row_number()) %>% ungroup() %>%
+CNV_IDs <- mapping_df %>%
+  select(gap_accession, subject_id, tumor_Run, normal_Run) %>%
+  group_by(gap_accession, subject_id) %>%
+  mutate(rank = row_number()) %>%
+  ungroup() %>%
   mutate(rank = rank - 1) %>%
-  separate(gap_accession,into = c("gap_accession","accseion"), sep = 6) %>%
-  unite(subject_id,accseion,subject_id,sep = "-") %>%
-  mutate(subject_id = ifelse(rank==0, subject_id, paste0(subject_id, "-", rank))) %>%
-  select(subject_id,tumor_Run,normal_Run) %>%
+  separate(gap_accession, into = c("gap_accession", "accseion"), sep = 6) %>%
+  unite(subject_id, accseion, subject_id, sep = "-") %>%
+  mutate(subject_id = ifelse(rank == 0, subject_id, paste0(subject_id, "-", rank))) %>%
+  select(subject_id, tumor_Run, normal_Run) %>%
   rename(CNV_ID = subject_id)
 
-PRAD_CLINICAL = bind_rows(dbGap, TCGA_PRAD)
-PRAD_CLINICAL = PRAD_CLINICAL %>%
+PRAD_CLINICAL <- bind_rows(dbGap, TCGA_PRAD)
+PRAD_CLINICAL <- PRAD_CLINICAL %>%
   mutate(Stage = case_when(
     startsWith(Stage, "T2") ~ "T2",
     startsWith(Stage, "T3") ~ "T3",
     startsWith(Stage, "T4") ~ "T4",
     TRUE ~ NA_character_
   )) %>%
-  left_join(CNV_IDs, by = c("tumor_Run"="tumor_Run", "normal_Run"="normal_Run")) %>%
+  left_join(CNV_IDs, by = c("tumor_Run" = "tumor_Run", "normal_Run" = "normal_Run")) %>%
   mutate_cond(Study == "TCGA",
-              CNV_ID = ifelse(PatientID %in% CNV@summary.per.sample$sample,
-                              PatientID, NA_character_)) %>%
+    CNV_ID = ifelse(PatientID %in% CNV@summary.per.sample$sample,
+      PatientID, NA_character_
+    )
+  ) %>%
   mutate_cond(subject_id == "TCGA-V1-A9O5-06", CNV_ID = NA_character_) # remove duplicated ID
 
 saveRDS(PRAD_CLINICAL, file = "data/PRAD_CLINICAL.rds")
 
-TCGA_PRAD %>% pull(PSA) %>% summary()
-filter(PRAD_CLINICAL, Study=="TCGA") %>% pull(PSA) %>% summary()
-PRAD_CLINICAL %>% filter(!is.na(PSA)) %>% pull(Study) %>% unique()
+TCGA_PRAD %>%
+  pull(PSA) %>%
+  summary()
+filter(PRAD_CLINICAL, Study == "TCGA") %>%
+  pull(PSA) %>%
+  summary()
+PRAD_CLINICAL %>%
+  filter(!is.na(PSA)) %>%
+  pull(Study) %>%
+  unique()
