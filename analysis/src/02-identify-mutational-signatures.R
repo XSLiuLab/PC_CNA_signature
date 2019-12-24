@@ -42,13 +42,9 @@ EST.Maf.rm_hyper <- sig_estimate(nmf_matrix,
 save(EST.Maf.rm_hyper, file = "output/EST.PRAD_TCGA_plus_dbGap_Maf_rm_hyper.RData")
 load(file = "output/EST.PRAD_TCGA_plus_dbGap_Maf_rm_hyper.RData")
 
-show_sig_number_survey(EST.Maf)
-show_sig_number_survey2(EST.Maf$survey, EST.Maf$survey.random)
-
-
+# show_sig_number_survey(EST.Maf)
+# show_sig_number_survey2(EST.Maf$survey, EST.Maf$survey.random)
 show_sig_number_survey(EST.Maf.rm_hyper)
-show_sig_number_survey2(EST.Maf.rm_hyper$survey, EST.Maf.rm_hyper$survey.random, what = "sparseness")
-EST.Maf.rm_hyper$survey_plot
 
 
 # Extract signatures ------------------------------------------------------
@@ -56,11 +52,4 @@ EST.Maf.rm_hyper$survey_plot
 Sig.SNV <- sig_extract(nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
 save(Sig.SNV, file = "output/Sig.PRAD_TCGA_plus_dbGap_rm_hyper.RData")
 
-show_sig_profile(Sig.SNV, mode = "mutation")
-get_sig_similarity(Sig.SNV)
-show_cosmic_sig_profile(c(3, 26, 7, 30, 15, 1))
-
-dd <- get_groups(Sig.SNV)
-table(dd$enrich_sig)
-
-show_sig_exposure(Sig.SNV, rm_space = T, cutoff = 2000)
+Sig.SNV.auto = sig_auto_extract(nmf_matrix, nrun = 100, destdir = "output/BayesianNMF_MutSig", cores = 10)

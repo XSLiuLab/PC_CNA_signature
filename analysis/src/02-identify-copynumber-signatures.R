@@ -132,7 +132,7 @@ EST.facets.M.ref.seqz <- sig_estimate(CNV.facets.derive.M.ref.seqz$nmf_matrix,
 save(EST.facets.M.ref.seqz, file = "output/EST.facets.M.ref.seqz.RData")
 
 
-# Check the best signature number -----------------------------------------
+# Check the proper signature number -----------------------------------------
 
 load("output/EST.seqz.W.all.RData")
 load("output/EST.facets.W.all.RData")
@@ -160,6 +160,9 @@ load(file = "output/CNV.seqz.derive.M.RData")
 load(file = "output/CNV.facets.derive.M.RData")
 load(file = "output/CNV.facets.derive.M.ref.seqz.RData")
 
+Sig.CNV.seqz.W.5 <- sig_extract(CNV.seqz.derive.W$nmf_matrix, n_sig = 5, nrun = 50, cores = ncores)
+save(Sig.CNV.seqz.W.5, file = "output/Sig.CNV.seqz.W.5.RData")
+
 Sig.CNV.seqz.W <- sig_extract(CNV.seqz.derive.W$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
 Sig.CNV.facets.W <- sig_extract(CNV.facets.derive.W$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores, pConstant = 1e-9)
 Sig.CNV.seqz.M <- sig_extract(CNV.seqz.derive.M$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
@@ -172,24 +175,6 @@ save(Sig.CNV.seqz.M, file = "output/Sig.CNV.seqz.M.RData")
 save(Sig.CNV.facets.M, file = "output/Sig.CNV.facets.M.RData")
 save(Sig.CNV.facets.M.ref.seqz, file = "output/Sig.CNV.facets.M.ref.seqz.RData")
 
-
-show_sig_profile(Sig.CNV.seqz.W, method = "W", normalize = "feature", x_label_angle = 90)
-show_sig_profile(Sig.CNV.facets.W, method = "W", normalize = "feature", x_label_angle = 90)
-
-
-show_sig_profile(Sig.CNV.seqz.M,
-  method = "M", normalize = "column",
-  params = CNV.seqz.derive.M$parameters, y_expand = 1.5,
-  set_gradient_color = TRUE,
-  x_label_angle = 90
-)
-
-show_sig_profile(Sig.CNV.facets.M,
-  method = "M", normalize = "column",
-  params = CNV.facets.derive.M$parameters, y_expand = 1.5,
-  set_gradient_color = TRUE,
-  x_label_angle = 90
-)
 
 # Some checks and analysis ------------------------------------------------
 
