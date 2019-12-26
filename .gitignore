@@ -10,6 +10,7 @@ analysis/*html
 analysis/*_cache
 analysis/site_libs
 output/BayesNMF/
+raw_data/
 output/CNV.facets.derive.M*
 output/CNV.seqz.derive.M.RData
 .drake/
