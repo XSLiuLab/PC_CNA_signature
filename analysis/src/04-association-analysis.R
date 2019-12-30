@@ -7,6 +7,7 @@ df.seqz = readRDS(file = "output/PRAD_Merge_Info_CNV_from_sequenza.RData")
 setdiff(colnames(df.facets), colnames(df.seqz))
 
 cols_to_sigs <- c(paste0("CNV_Sig", 1:6), paste0("SNV_Sig", 1:6))
+cols_to_sigs.seqz <- c(paste0("CNV_Sig", 1:5), paste0("SNV_Sig", 1:6))
 
 # Exclude PSA
 cols_to_features <- c(
@@ -27,11 +28,13 @@ feature_type <- c(rep("ca", 2), rep("co", 16))
 tidy_data.feature <- get_sig_feature_association(df.facets,
                                                  cols_to_sigs = cols_to_sigs,
                                                  cols_to_features = cols_to_features,
-                                                 method_co = "pearson",
+                                                 method_co = "spearman",
                                                  type = feature_type, verbose = TRUE) %>%
   get_tidy_association
 
-show_sig_feature_corrplot(tidy_data.feature)
+show_sig_feature_corrplot2(tidy_data.feature)
+
+hist(df.facets$CNV_Sig1, breaks = 100)
 
 tidy_data.gene <- get_sig_feature_association(df.facets,
                                               cols_to_sigs = cols_to_sigs,
@@ -82,7 +85,7 @@ show_sig_feature_corrplot(df.psa, p_val = 1, breaks_count = c(0, 50, 100, 150, 2
 # Sequenza ----------------------------------------------------------------
 
 tidy_data.seqz.feature <- get_sig_feature_association(df.seqz,
-                                                      cols_to_sigs = cols_to_sigs,
+                                                      cols_to_sigs = cols_to_sigs.seqz,
                                                       cols_to_features = cols_to_features,
                                                       method_co = "pearson",
                                                       type = feature_type, verbose = TRUE) %>%

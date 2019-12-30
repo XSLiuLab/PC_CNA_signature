@@ -12,10 +12,11 @@ PurityInfo <- read_tsv("data/PRAD_Purity_and_Ploidy_Sequenza.tsv")
 # Processing CNV data -----------------------------------------------------
 
 load("output/CNV.seqz.RData")
-load("output/Sig.CNV.seqz.W.RData")
+#load("output/Sig.CNV.seqz.W.RData")
+load("output/Sig.CNV.seqz.W.5.RData")
 CNV <- CNV.seqz
-Sig.CNV <- Sig.CNV.seqz.W
-rm(Sig.CNV.seqz.W, CNV.seqz)
+Sig.CNV <- Sig.CNV.seqz.W.5
+rm(Sig.CNV.seqz.W.5, CNV.seqz)
 
 # CNV
 CNVGroupInfo <- get_groups(Sig.CNV, method = "consensus", match_consensus = TRUE)
