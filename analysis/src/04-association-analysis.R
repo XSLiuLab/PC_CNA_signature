@@ -28,11 +28,11 @@ feature_type <- c(rep("ca", 2), rep("co", 16))
 tidy_data.feature <- get_sig_feature_association(df.facets,
                                                  cols_to_sigs = cols_to_sigs,
                                                  cols_to_features = cols_to_features,
-                                                 method_co = "spearman",
+                                                 method_co = "pearson",
                                                  type = feature_type, verbose = TRUE) %>%
-  get_tidy_association
+  get_tidy_association(p_adjust = TRUE)
 
-show_sig_feature_corrplot2(tidy_data.feature)
+show_sig_feature_corrplot(tidy_data.feature)
 
 hist(df.facets$CNV_Sig1, breaks = 100)
 
@@ -40,17 +40,15 @@ tidy_data.gene <- get_sig_feature_association(df.facets,
                                               cols_to_sigs = cols_to_sigs,
                                               cols_to_features = cols_to_mutated_genes,
                                               type = "ca", verbose = TRUE) %>%
-  get_tidy_association
+  get_tidy_association(p_adjust = TRUE)
 
 show_sig_feature_corrplot(tidy_data.gene, ylab = "Mutated genes")
-
-
 
 tidy_data.pathways <- get_sig_feature_association(df.facets,
                                                   cols_to_sigs = cols_to_sigs,
                                                   cols_to_features = cols_to_mutated_pathways,
                                                   type = "ca", verbose = TRUE) %>%
-  get_tidy_association
+  get_tidy_association(p_adjust = TRUE)
 
 show_sig_feature_corrplot(tidy_data.pathways, ylab = "Mutated pathways")
 
@@ -89,25 +87,23 @@ tidy_data.seqz.feature <- get_sig_feature_association(df.seqz,
                                                       cols_to_features = cols_to_features,
                                                       method_co = "pearson",
                                                       type = feature_type, verbose = TRUE) %>%
-  get_tidy_association
+  get_tidy_association(p_adjust = TRUE)
 
 show_sig_feature_corrplot(tidy_data.seqz.feature)
 
 tidy_data.seqz.gene <- get_sig_feature_association(df.seqz,
-                                                   cols_to_sigs = cols_to_sigs,
+                                                   cols_to_sigs = cols_to_sigs.seqz,
                                                    cols_to_features = cols_to_mutated_genes,
                                                    type = "ca", verbose = TRUE) %>%
-  get_tidy_association
+  get_tidy_association(p_adjust = TRUE)
 
 show_sig_feature_corrplot(tidy_data.seqz.gene, ylab = "Mutated genes")
 
-
-
 tidy_data.seqz.pathways <- get_sig_feature_association(df.seqz,
-                                                       cols_to_sigs = cols_to_sigs,
+                                                       cols_to_sigs = cols_to_sigs.seqz,
                                                        cols_to_features = cols_to_mutated_pathways,
                                                        type = "ca", verbose = TRUE) %>%
-  get_tidy_association
+  get_tidy_association(p_adjust = TRUE)
 
 show_sig_feature_corrplot(tidy_data.seqz.pathways, ylab = "Mutated pathways")
 
@@ -122,7 +118,7 @@ df.seqz.psa <- df.seqz.psa %>%
   dplyr::summarise(
     data = purrr:::map(data, function(x) {
       get_sig_feature_association(x,
-                                  cols_to_sigs = cols_to_sigs,
+                                  cols_to_sigs = cols_to_sigs.seqz,
                                   cols_to_features = "PSA",
                                   method_co = "pearson",
                                   type = "co", verbose = TRUE) %>%
@@ -134,7 +130,3 @@ df.seqz.psa <- df.seqz.psa %>%
   dplyr::mutate(feature = Study)
 
 show_sig_feature_corrplot(df.seqz.psa, p_val = 1, breaks_count = c(0, 50, 100, 150, 200), ylab = "PSA")
-
-show_sig_feature_corrplot(df.seqz.psa %>%
-                            dplyr::filter(!(Study == "TCGA" & signature == "SNV_Sig1")),
-                          p_val = 1, breaks_count = c(0, 50, 100, 150, 200), ylab = "PSA")

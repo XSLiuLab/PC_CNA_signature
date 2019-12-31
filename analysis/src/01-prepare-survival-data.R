@@ -2,7 +2,7 @@
 #
 # OS: overall survial
 # PFI: progression-free interval
-# DSS: disease-specific survival
+# DSS: disease-specific survival # basically same as OS
 # DFI: disease-free interval
 #
 # phs000554 should also be used in survival analysis
@@ -52,8 +52,13 @@ phs000554_surv <- phs000554 %>%
 
 
 # Merge -------------------------------------------------------------------
+table(substr(tcga_prad_surv$sample, 14, 15))
 
-prad_surv <- dplyr::bind_rows(tcga_prad_surv, phs000554_surv)
+prad_surv <- dplyr::bind_rows(
+  tcga_prad_surv %>%
+    dplyr::filter(substr(sample, 14, 15) == "01") %>%
+    dplyr::mutate(sample = substr(sample, 1, 12)),
+  phs000554_surv)
 saveRDS(prad_surv, file = "data/PRAD_Survival.rds")
 
 
