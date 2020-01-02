@@ -29,10 +29,15 @@ surv_dt = surv_dt[-dup_ids, ]
 #
 # Scale the CNA burden to 0-20.
 surv_dt = surv_dt %>%
-  dplyr::mutate(cna_burden = 20 * cna_burden) %>%
+  dplyr::mutate(cna_burden = 20 * cna_burden,
+                Stage = as.character(Stage) %>% factor(levels = c("T2", "T3", "T4"))) %>%
   dplyr::mutate_at(cols_to_sigs.seqz, ~ 20 * range01(., na.rm = TRUE))
 
 saveRDS(surv_dt, file = "output/PRAD_merged_survival_dt_seqz.rds")
+
+############
+surv_dt <- readRDS(file = "output/PRAD_merged_survival_dt_seqz.rds")
+cols_to_sigs.seqz <- c(paste0("CNV_Sig", 1:5), paste0("SNV_Sig", 1:6))
 
 # Unvariable analysis
 
@@ -59,9 +64,34 @@ show_forest(surv_dt %>% dplyr::filter(Study == "TCGA"),
             time = "OS.time", status = "OS", merge_models = TRUE, drop_controls = TRUE)
 
 show_forest(surv_dt %>% dplyr::filter(Study == "TCGA"),
-            covariates = cols_to_sigs.seqz, controls = c("purity", "Age"),
+            covariates = cols_to_sigs.seqz, controls = c("purity", "Stage"),
             time = "PFI.time", status = "PFI", merge_models = TRUE, drop_controls = TRUE)
 
 show_forest(surv_dt %>% dplyr::filter(Study == "TCGA"),
-            covariates = cols_to_sigs.seqz, controls = c("purity", "Stage"),
+            covariates = cols_to_sigs.seqz, controls = c("purity", "Age"),
             time = "PFI.time", status = "PFI", merge_models = TRUE, drop_controls = TRUE)
+
+
+cols_to_features <- c(
+  "Age", "Stage", "GleasonScore",
+  "total_mutation", "n_driver", "Ti_fraction", "Tv_fraction",
+  "n_of_cnv", "n_of_amp", "n_of_del", "n_of_vchr", "cna_burden",
+  "MATH", "cluster", "purity", "ploidy"
+)
+
+show_forest(surv_dt %>% dplyr::filter(Study == "TCGA"),
+            covariates = cols_to_features, controls = NULL,
+            time = "OS.time", status = "OS", merge_models = TRUE, limits = log(c(0.5, 5)))
+
+show_forest(surv_dt %>% dplyr::filter(Study == "TCGA"),
+            covariates = cols_to_features, controls = NULL,
+            time = "PFI.time", status = "PFI", merge_models = TRUE, limits = c(log(0.5), log(5)))
+
+
+fits = ezcox(surv_dt %>% dplyr::filter(Study == "TCGA"),
+             covariates = cols_to_features, controls = NULL,
+             time = "OS.time", status = "OS", return_models = T)
+
+# library(survival)
+# coxph(Surv(OS.time, OS) ~ Stage, data = surv_dt %>% dplyr::filter(Study == "TCGA") %>%
+#         dplyr::mutate(Stage = as.character(Stage) %>% factor(levels = c("T2", "T3"))))

@@ -48,6 +48,8 @@ show_sig_number_survey(EST.Maf.rm_hyper)
 
 
 # Extract signatures ------------------------------------------------------
+Sig.SNV.3 <- sig_extract(nmf_matrix, n_sig = 3, nrun = 50, cores = ncores)
+save(Sig.SNV.3, file = "output/Sig.PRAD_TCGA_plus_dbGap_rm_hyper_3sig.RData")
 
 Sig.SNV <- sig_extract(nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
 save(Sig.SNV, file = "output/Sig.PRAD_TCGA_plus_dbGap_rm_hyper.RData")

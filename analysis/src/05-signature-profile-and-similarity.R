@@ -1,3 +1,5 @@
+library(sigminer)
+
 load(file = "output/Sig.PRAD_TCGA_plus_dbGap_rm_hyper.RData")
 # Method W
 load(file = "output/Sig.CNV.seqz.W.5.RData")
@@ -52,6 +54,7 @@ show_sig_profile(Sig.SNV, mode = "mutation")
 # Signature exposure ------------------------------------------------------
 show_sig_exposure(Sig.SNV, rm_space = T, cutoff = 2000)
 
+show_sig_exposure(Sig.CNV.seqz.W.5, rm_space = T)
 show_sig_exposure(Sig.CNV.seqz.W, rm_space = T)
 show_sig_exposure(Sig.CNV.facets.W, rm_space = T)
 
@@ -73,7 +76,6 @@ get_sig_similarity(Sig.CNV.seqz.M, Sig.CNV.facets.M.ref.seqz, normalize = "featu
 
 get_sig_similarity(Sig.SNV)
 get_sig_similarity(Sig.SNV, sig_db = "SBS")
-
 
 
 # Check signature number survey -------------------------------------------

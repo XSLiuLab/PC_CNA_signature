@@ -71,7 +71,7 @@ df.psa <- df.psa %>%
                                   cols_to_features = "PSA",
                                   method_co = "pearson",
                                   type = "co", verbose = TRUE) %>%
-        get_tidy_association
+        get_tidy_association(p_adjust = TRUE)
     })
   ) %>%
   tidyr::unnest("data") %>%
@@ -122,7 +122,7 @@ df.seqz.psa <- df.seqz.psa %>%
                                   cols_to_features = "PSA",
                                   method_co = "pearson",
                                   type = "co", verbose = TRUE) %>%
-        get_tidy_association
+        get_tidy_association(p_adjust = TRUE)
     })
   ) %>%
   tidyr::unnest("data") %>%
