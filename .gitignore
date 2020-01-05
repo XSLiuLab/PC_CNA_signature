@@ -22,6 +22,5 @@ deep_del_result/
 seqz_wes_result/
 seqz_error_input/
 hg38.gtf.gz
-output/EST.*
 output/PRAD_TCGA_plus_dbGap_Maf.RData
 output/BayesianNMF_MutSig/

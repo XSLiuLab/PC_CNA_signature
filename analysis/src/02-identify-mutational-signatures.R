@@ -45,7 +45,7 @@ load(file = "output/EST.PRAD_TCGA_plus_dbGap_Maf_rm_hyper.RData")
 # show_sig_number_survey(EST.Maf)
 # show_sig_number_survey2(EST.Maf$survey, EST.Maf$survey.random)
 show_sig_number_survey(EST.Maf.rm_hyper)
-
+show_sig_number_survey2(EST.Maf.rm_hyper$survey, EST.Maf.rm_hyper$survey.random)
 
 # Extract signatures ------------------------------------------------------
 Sig.SNV.3 <- sig_extract(nmf_matrix, n_sig = 3, nrun = 50, cores = ncores)
