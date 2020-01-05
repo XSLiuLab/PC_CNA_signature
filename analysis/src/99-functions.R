@@ -49,6 +49,8 @@ extract_facets_cnv <- function(target_dir, target_path) {
   rm(list = ls())
 }
 
+# FUN: extract purity and ploidy from FACETS results ---------------------
+
 extract_facets_purity_and_ploidy <- function(target_dir, target_path) {
   SAMPLE <- dir(target_dir, pattern = ".Rdata") %>%
     str_remove(".Rdata")
@@ -72,6 +74,9 @@ extract_facets_purity_and_ploidy <- function(target_dir, target_path) {
   write.table(all_sample, target_path, sep = "\t", quote = FALSE, row.names = F)
   rm(list = ls())
 }
+
+# FUN: generate GISTIC2 input data from FACETS results ---------------------
+# See https://github.com/ShixiangWang/install_GISTIC to install GISTIC2
 
 facets_to_GISTIC2 <- function(target_dir, target_path, rm_X = TRUE, rm_samps = NULL) {
   SAMPLE <- dir(target_dir, pattern = ".Rdata") %>%
@@ -110,28 +115,56 @@ facets_to_GISTIC2 <- function(target_dir, target_path, rm_X = TRUE, rm_samps = N
   rm(list = ls())
 }
 
-# FUN: visualize drake plan quickly ---------------------------------------
 
-vis_plan <- function(plan,
-                     file = character(0),
-                     selfcontained = FALSE,
-                     digits = 1,
-                     targets_only = FALSE,
-                     font_size = 15,
-                     main = NULL, ...) {
-  config <- drake_config(plan)
-  vis_drake_graph(config,
-    file = file,
-    selfcontained = selfcontained,
-    digits = digits,
-    targets_only = targets_only,
-    font_size = font_size,
-    main = main, ...
-  )
+# FUN: extract copy number values from Sequenza results ---------------------
+
+extract_seqz_cnv <- function(target_dir, target_path) {
+  SAMPLE <- dir(target_dir, pattern = "_segments.txt") %>%
+    stringr::str_remove("_segments.txt")
+  res <- purrr::map2_df(file.path(
+    target_dir,
+    paste(SAMPLE,
+          "_segments.txt",
+          sep = ""
+    )
+  ), SAMPLE, function(x, y) {
+    message("Processing ", y)
+    df <- readr::read_tsv(x)
+    df <- df %>%
+      dplyr::select(chromosome, start.pos, end.pos, CNt) %>%
+      dplyr::mutate(sample = y)
+    colnames(df) <- c("Chromosome", "Start.bp", "End.bp", "modal_cn", "sample")
+    df
+  })
+  readr::write_tsv(res, path = target_path)
 }
 
+# FUN: extract purity and ploidy from Sequenza results ---------------------
 
-# From rvcheck
+extract_seqz_purity_and_ploidy <- function(target_dir, target_path) {
+  SAMPLE <- dir(target_dir, pattern = "_alternative_solutions.txt") %>%
+    stringr::str_remove("_alternative_solutions.txt")
+  res <- purrr::map2_df(file.path(
+    target_dir,
+    paste(SAMPLE,
+          "_alternative_solutions.txt",
+          sep = ""
+    )
+  ), SAMPLE, function(x, y) {
+    message("Processing ", y)
+    df <- readr::read_tsv(x)
+    df <- df %>%
+      dplyr::select(cellularity, ploidy) %>%
+      dplyr::mutate(sample = y) %>%
+      dplyr::slice(1) # Choose the best solution
+    colnames(df) <- c("purity", "ploidy", "sample")
+    df
+  })
+  readr::write_tsv(res, path = target_path)
+}
+
+# FUN: open directory ---------------------
+# from rvcheck package
 o <- function(file = ".") {
   is_r_server <- function() {
     if (!exists("RStudio.Version")) {
