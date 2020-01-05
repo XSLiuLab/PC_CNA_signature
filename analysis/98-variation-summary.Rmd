@@ -1,5 +1,5 @@
 ---
-title: "Supplementary Analysis and Visualization"
+title: "Variation Summary"
 author: ["Shixiang Wang", "Huimin Li", "Xuan Wang", "Minfang Song", "Xue-Song Liu (Corresponding author)"]
 date: "`r Sys.Date()`"
 output:
@@ -13,7 +13,7 @@ bibliography: ref.bib
 link-citations: yes
 ---
 
-```{r knitr_init_99, echo=FALSE}
+```{r knitr_init_98, echo=FALSE}
 library(knitr)
 library(rmdformats)
 ## Global options

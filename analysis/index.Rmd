@@ -1,11 +1,11 @@
 ---
 title: "Prostate Cancer Variation Signature Analysis Report"
-author: ["Shixiang Wang", "Huimin Li", "Minfang Song", "Xuan Wang", "Xue-Song Liu (Corresponding author)"]
+author: ["Shixiang Wang", "Huimin Li", "Xuan Wang", "Minfang Song", "Xue-Song Liu (Corresponding author)"]
 date: "`r Sys.Date()`"
 output:
   rmdformats::readthedown:
     highlight: kate
-    self_contained: true
+    self_contained: false
     mathjax: true
 #    thumbnails: true
     lightbox: true
@@ -16,6 +16,25 @@ bibliography: ref.bib
 link-citations: yes
 ---
 
+```{r knitr_init, echo=FALSE}
+library(knitr)
+library(rmdformats)
+## Global options
+options(max.print = "75")
+opts_chunk$set(
+  echo = TRUE,
+  comment = "#>",
+  collapse = TRUE,
+  cache = TRUE,
+  dpi = 300,
+  warning = FALSE,
+  message = FALSE,
+  tidy = "styler"
+)
+opts_knit$set(width = 75)
+```
+
+
 Contact Prof. Xue-Song Liu: <liuxs@shanghaitech.edu.cn>
 
 This report is written to help user understand what and how we did in this project. 
@@ -23,15 +42,15 @@ Please read the formal manuscript **TBD** for more details.
 
 > This document is compiled from an Rmarkdown file which contains all code or description necessary to (auto-)reproduce the analysis for the accompanying project. Each section below describes a different component of the analysis and all numbers and figures are generated directly from the underlying data on compilation.
 
-# Variation Summary
+# Data Preprocessing
 
-```{r, child="01-variation-summary.Rmd"}
+```{r, child="01-data-preprocessing.Rmd"}
 
 ```
 
-# Signature Profile
+# Signature Identification
 
-```{r, child="02-signature-profile.Rmd"}
+```{r, child="02-signature-identification.Rmd"}
 
 ```
 
@@ -41,12 +60,24 @@ Please read the formal manuscript **TBD** for more details.
 
 ```
 
-# Survival Analysis
+# Group Analysis
 
-```{r, child="04-survival-analysis.Rmd"}
+```{r, child="04-group-analysis.Rmd"}
 
 ```
 
+# Survival Analysis
+
+```{r, child="05-survival-analysis.Rmd"}
+
+```
+
+
+# Variation Summary
+
+```{r, child="98-variation-summary.Rmd"}
+
+```
 
 # Supplementary Analysis and Visualization
 

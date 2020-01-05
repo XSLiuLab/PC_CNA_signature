@@ -1,0 +1,32 @@
+---
+title: "Association Analysis"
+author: ["Shixiang Wang", "Huimin Li", "Xuan Wang", "Minfang Song", "Xue-Song Liu (Corresponding author)"]
+date: "`r Sys.Date()`"
+output:
+  rmdformats::readthedown:
+    highlight: kate
+    self_contained: false
+    mathjax: true
+    lightbox: true
+    gallery: true
+bibliography: ref.bib
+link-citations: yes
+---
+
+```{r knitr_init_03, echo=FALSE}
+library(knitr)
+library(rmdformats)
+## Global options
+options(max.print = "75")
+opts_chunk$set(
+  echo = TRUE,
+  comment = "#>",
+  collapse = TRUE,
+  cache = TRUE,
+  dpi = 300,
+  warning = FALSE,
+  message = FALSE,
+  tidy = "styler"
+)
+opts_knit$set(width = 75)
+```

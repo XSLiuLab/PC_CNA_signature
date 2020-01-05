@@ -1,5 +1,5 @@
 ---
-title: "Supplementary Analysis and Visualization"
+title: "Data Preprocessing"
 author: ["Shixiang Wang", "Huimin Li", "Xuan Wang", "Minfang Song", "Xue-Song Liu (Corresponding author)"]
 date: "`r Sys.Date()`"
 output:
@@ -7,13 +7,13 @@ output:
     highlight: kate
     self_contained: false
     mathjax: true
-    lightbox: true
-    gallery: true
+#    lightbox: true
+#    gallery: true
 bibliography: ref.bib
 link-citations: yes
 ---
 
-```{r knitr_init_99, echo=FALSE}
+```{r knitr_init_01, echo=FALSE}
 library(knitr)
 library(rmdformats)
 ## Global options
@@ -22,7 +22,7 @@ opts_chunk$set(
   echo = TRUE,
   comment = "#>",
   collapse = TRUE,
-  cache = TRUE,
+  #cache = TRUE,
   dpi = 300,
   warning = FALSE,
   message = FALSE,
@@ -30,3 +30,30 @@ opts_chunk$set(
 )
 opts_knit$set(width = 75)
 ```
+
+## Download Data
+
+### WES Data
+
+### Phenotype Data
+
+### Survival Data
+
+## Preprocess Data
+
+### Pipeline
+
+```{r, fig.align='center', echo=FALSE}
+knitr::include_graphics("fig/PRAD_Analysis_Pipeline.png")
+```
+
+<center>**Genomic variation signature identification pipeline of prostate cancer**</center>
+
+
+### Sequence Alignment
+
+### Copy Number Calling
+
+### Mutation Calling
+
+### Clean Data
