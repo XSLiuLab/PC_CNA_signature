@@ -26,7 +26,9 @@ CNVExposureInfo <- get_sig_exposure(Sig.CNV)
 # Processing mutation data ------------------------------------------------
 
 load(file = "output/PRAD_TCGA_plus_dbGap_Maf.RData")
-load(file = "output/Sig.PRAD_TCGA_plus_dbGap_rm_hyper.RData")
+# load(file = "output/Sig.PRAD_TCGA_plus_dbGap_rm_hyper.RData")
+load(file = "output/Sig.PRAD_TCGA_plus_dbGap_rm_hyper_3sig.RData")
+Sig.SNV = Sig.SNV.3
 
 TMBInfo <- getSampleSummary(Maf)[, .(Tumor_Sample_Barcode, total)]
 
