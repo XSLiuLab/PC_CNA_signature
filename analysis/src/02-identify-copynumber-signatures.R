@@ -29,11 +29,11 @@ CNV.seqz <- read_copynumber("data/CNV_from_sequenza.tsv",
 CNV.seqz <- subset(CNV.seqz, subset = !sample %in% "WCMC160-SRR3146971")
 save(CNV.seqz, file = "output/CNV.seqz.RData")
 
-
+load(file = "output/CNV.seqz.RData")
+load(file = "output/CNV.facets.RData")
 # Derive copy number features ---------------------------------------------
 
 ncores <- 20
-
 
 ##
 ## W method
@@ -179,4 +179,11 @@ save(Sig.CNV.facets.M.ref.seqz, file = "output/Sig.CNV.facets.M.ref.seqz.RData")
 # Some checks and analysis ------------------------------------------------
 
 get_sig_similarity(Sig.CNV.seqz.W, Sig.CNV.facets.W, normalize = "feature")
+
+show_sig_profile(Sig.CNV.seqz.W, method = "W", normalize = "feature", style = "cosmic")
+show_sig_profile(Sig.CNV.facets.W, method = "W", normalize = "feature", style = "cosmic")
+
 show_sig_exposure(Sig.CNV.seqz.W, rm_space = T)
+show_sig_exposure(Sig.CNV.facets.W, rm_space = T)
+
+
