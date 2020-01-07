@@ -7,7 +7,6 @@ output:
     highlight: kate
     self_contained: false
     mathjax: true
-#    thumbnails: true
     lightbox: true
     gallery: true
 knit: (function(inputFile, encoding) {

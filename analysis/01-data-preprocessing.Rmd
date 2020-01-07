@@ -7,8 +7,8 @@ output:
     highlight: kate
     self_contained: false
     mathjax: true
-#    lightbox: true
-#    gallery: true
+    lightbox: true
+    gallery: true
 bibliography: ref.bib
 link-citations: yes
 ---
