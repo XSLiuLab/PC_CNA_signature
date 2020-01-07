@@ -186,4 +186,7 @@ show_sig_profile(Sig.CNV.facets.W, method = "W", normalize = "feature", style = 
 show_sig_exposure(Sig.CNV.seqz.W, rm_space = T)
 show_sig_exposure(Sig.CNV.facets.W, rm_space = T)
 
-
+# show_sig_profile(Sig.CNV.seqz.W, method = "W",
+#                  normalize = "feature", style = "cosmic",
+#                  sig_orders = paste0("Sig",
+#                                      sigminer:::helper_sort_signature(Sig.CNV.seqz.W$Signature.norm)))
