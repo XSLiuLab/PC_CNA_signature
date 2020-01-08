@@ -12,11 +12,10 @@ PurityInfo <- read_tsv("data/PRAD_Purity_and_Ploidy_Sequenza.tsv")
 # Processing CNV data -----------------------------------------------------
 
 load("output/CNV.seqz.RData")
-#load("output/Sig.CNV.seqz.W.RData")
-load("output/Sig.CNV.seqz.W.5.RData")
+load("output/Sig.CNV.seqz.W.RData")
 CNV <- CNV.seqz
-Sig.CNV <- Sig.CNV.seqz.W.5
-rm(Sig.CNV.seqz.W.5, CNV.seqz)
+Sig.CNV <- Sig.CNV.seqz.W
+rm(Sig.CNV.seqz.W, CNV.seqz)
 
 # CNV
 CNVGroupInfo <- get_groups(Sig.CNV, method = "consensus", match_consensus = TRUE)
@@ -26,9 +25,7 @@ CNVExposureInfo <- get_sig_exposure(Sig.CNV)
 # Processing mutation data ------------------------------------------------
 
 load(file = "output/PRAD_TCGA_plus_dbGap_Maf.RData")
-# load(file = "output/Sig.PRAD_TCGA_plus_dbGap_rm_hyper.RData")
-load(file = "output/Sig.PRAD_TCGA_plus_dbGap_rm_hyper_3sig.RData")
-Sig.SNV = Sig.SNV.3
+load(file = "output/Sig.PRAD_TCGA_plus_dbGap_Maf.RData")
 
 TMBInfo <- getSampleSummary(Maf)[, .(Tumor_Sample_Barcode, total)]
 

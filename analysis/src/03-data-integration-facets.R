@@ -26,10 +26,7 @@ CNVExposureInfo <- get_sig_exposure(Sig.CNV)
 
 load(file = "output/PRAD_TCGA_plus_dbGap_Maf.RData")
 #load(file = "output/Sig.PRAD_TCGA_plus_dbGap_rm_hyper.RData")
-load(file = "output/Sig.PRAD_TCGA_plus_dbGap_rm_hyper_3sig.RData")
-Sig.SNV = Sig.SNV.3
-
-get_sig_similarity(Sig.SNV)
+load(file = "output/Sig.PRAD_TCGA_plus_dbGap_Maf.RData")
 
 TMBInfo <- getSampleSummary(Maf)[, .(Tumor_Sample_Barcode, total)]
 
@@ -54,7 +51,7 @@ save(DriverInfo, driver_genes, DriverDF, file = "output/PRAD_driver_info.RData")
 TitvInfo <- titv(maf = Maf, plot = FALSE, useSyn = TRUE)$TiTv.fractions
 MathInfo <- inferHeterogeneity(Maf, TitvInfo$Tumor_Sample_Barcode, useSyn = TRUE)
 MathDF <- MathInfo$clusterData[, list(MATH = mean(MATH, na.rm = TRUE)), by = Tumor_Sample_Barcode]
-ClusterDF <- MathInfo$clusterMeans[, list(cluster = as.integer(cluster), Tumor_Sample_Barcode)][, list(cluster = max(cluster, na.rm = TRUE)), by = Tumor_Sample_Barcode]
+ClusterDF <- MathInfo$clusterMeans[, list(cluster = ifelse(cluster=="outlier", 0L, as.integer(cluster)), Tumor_Sample_Barcode)][, list(cluster = max(cluster, na.rm = TRUE)), by = Tumor_Sample_Barcode]
 
 save(TitvInfo, MathInfo, MathDF, ClusterDF, file = "output/PRAD_heter_info.RData")
 
