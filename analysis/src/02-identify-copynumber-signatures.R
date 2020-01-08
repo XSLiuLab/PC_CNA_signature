@@ -31,7 +31,7 @@ save(CNV.seqz, file = "output/CNV.seqz.RData")
 
 load(file = "output/CNV.seqz.RData")
 load(file = "output/CNV.facets.RData")
-# Derive copy number features ---------------------------------------------
+# tally copy number features ---------------------------------------------
 
 ncores <- 20
 
@@ -40,11 +40,11 @@ ncores <- 20
 ##
 
 # Use classfication method devised by me ("W")
-CNV.seqz.derive.W <- sig_derive(CNV.seqz, method = "W", cores = ncores, feature_setting = CN.features)
-save(CNV.seqz.derive.W, file = "output/CNV.seqz.derive.W.RData")
+CNV.seqz.tally.W <- sig_tally(CNV.seqz, method = "W", cores = ncores, feature_setting = CN.features)
+save(CNV.seqz.tally.W, file = "output/CNV.seqz.tally.W.RData")
 
-CNV.facets.derive.W <- sig_derive(CNV.facets, method = "W", cores = ncores, feature_setting = CN.features)
-save(CNV.facets.derive.W, file = "output/CNV.facets.derive.W.RData")
+CNV.facets.tally.W <- sig_tally(CNV.facets, method = "W", cores = ncores, feature_setting = CN.features)
+save(CNV.facets.tally.W, file = "output/CNV.facets.tally.W.RData")
 
 ##
 ## M method
@@ -52,39 +52,32 @@ save(CNV.facets.derive.W, file = "output/CNV.facets.derive.W.RData")
 
 # Use classfication method from Macintyre et al ("M")
 system.time(
-  CNV.seqz.derive.M <- sig_derive(CNV.seqz, method = "M", cores = ncores, nrep = 3)
+  CNV.seqz.tally.M <- sig_tally(CNV.seqz, method = "M", cores = ncores, nrep = 3)
 )
 # 5126.994s
-save(CNV.seqz.derive.M, file = "output/CNV.seqz.derive.M.RData")
+save(CNV.seqz.tally.M, file = "output/CNV.seqz.tally.M.RData")
 
 system.time(
-  CNV.facets.derive.M <- sig_derive(CNV.facets, method = "M", cores = ncores, nrep = 3)
+  CNV.facets.tally.M <- sig_tally(CNV.facets, method = "M", cores = ncores, nrep = 3)
 )
-save(CNV.facets.derive.M, file = "output/CNV.facets.derive.M.RData")
+save(CNV.facets.tally.M, file = "output/CNV.facets.tally.M.RData")
 
 # Use components from sequenza as reference
-CNV.facets.derive.M.ref.seqz <- sig_derive(CNV.facets,
+CNV.facets.tally.M.ref.seqz <- sig_tally(CNV.facets,
   method = "M",
-  reference_components = CNV.seqz.derive.M$components,
+  reference_components = CNV.seqz.tally.M$components,
   cores = ncores
 )
 
-save(CNV.facets.derive.M.ref.seqz, file = "output/CNV.facets.derive.M.ref.seqz.RData")
+save(CNV.facets.tally.M.ref.seqz, file = "output/CNV.facets.tally.M.ref.seqz.RData")
 
 
 
 # Estimate number of copy number signatures -------------------------------
 ncores <- 20
 
-EST.seqz.W <- sig_estimate(CNV.seqz.derive.W$nmf_matrix[, 1:50],
-  range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
-  save_plots = FALSE,
-  verbose = TRUE
-)
-save(EST.seqz.W, file = "output/EST.seqz.W.RData")
-
 #
-EST.seqz.W.all <- sig_estimate(CNV.seqz.derive.W$nmf_matrix,
+EST.seqz.W.all <- sig_estimate(CNV.seqz.tally.W$nmf_matrix,
   range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
   save_plots = FALSE,
   verbose = TRUE
@@ -92,15 +85,7 @@ EST.seqz.W.all <- sig_estimate(CNV.seqz.derive.W$nmf_matrix,
 save(EST.seqz.W.all, file = "output/EST.seqz.W.all.RData")
 
 #
-EST.facets.W <- sig_estimate(CNV.facets.derive.W$nmf_matrix[, 1:50],
-  range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
-  save_plots = FALSE, pConstant = 1e-9,
-  verbose = TRUE
-)
-save(EST.facets.W, file = "output/EST.facets.W.RData")
-
-#
-EST.facets.W.all <- sig_estimate(CNV.facets.derive.W$nmf_matrix,
+EST.facets.W.all <- sig_estimate(CNV.facets.tally.W$nmf_matrix,
   range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
   save_plots = FALSE, pConstant = 1e-9,
   verbose = TRUE
@@ -108,7 +93,7 @@ EST.facets.W.all <- sig_estimate(CNV.facets.derive.W$nmf_matrix,
 save(EST.facets.W.all, file = "output/EST.facets.W.all.RData")
 
 #
-EST.seqz.M <- sig_estimate(CNV.seqz.derive.M$nmf_matrix,
+EST.seqz.M <- sig_estimate(CNV.seqz.tally.M$nmf_matrix,
   range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
   save_plots = FALSE,
   verbose = TRUE
@@ -116,7 +101,7 @@ EST.seqz.M <- sig_estimate(CNV.seqz.derive.M$nmf_matrix,
 save(EST.seqz.M, file = "output/EST.seqz.M.RData")
 
 #
-EST.facets.M <- sig_estimate(CNV.facets.derive.M$nmf_matrix,
+EST.facets.M <- sig_estimate(CNV.facets.tally.M$nmf_matrix,
   range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
   save_plots = FALSE,
   verbose = TRUE
@@ -124,7 +109,7 @@ EST.facets.M <- sig_estimate(CNV.facets.derive.M$nmf_matrix,
 save(EST.facets.M, file = "output/EST.facets.M.RData")
 
 #
-EST.facets.M.ref.seqz <- sig_estimate(CNV.facets.derive.M.ref.seqz$nmf_matrix,
+EST.facets.M.ref.seqz <- sig_estimate(CNV.facets.tally.M.ref.seqz$nmf_matrix,
   range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
   save_plots = FALSE,
   verbose = TRUE
@@ -138,6 +123,7 @@ load("output/EST.seqz.W.all.RData")
 load("output/EST.facets.W.all.RData")
 load("output/EST.seqz.M.RData")
 load("output/EST.facets.M.RData")
+load("output/EST.facets.M.ref.seqz.RData")
 
 # show_sig_number_survey(EST.seqz.W)
 # show_sig_number_survey(EST.facets.W)
@@ -154,20 +140,18 @@ show_sig_number_survey(EST.facets.M.ref.seqz)
 
 # Extract copy number signatures ------------------------------------------
 
-load(file = "output/CNV.seqz.derive.W.RData")
-load(file = "output/CNV.facets.derive.W.RData")
-load(file = "output/CNV.seqz.derive.M.RData")
-load(file = "output/CNV.facets.derive.M.RData")
-load(file = "output/CNV.facets.derive.M.ref.seqz.RData")
+load(file = "output/CNV.seqz.tally.W.RData")
+load(file = "output/CNV.facets.tally.W.RData")
+load(file = "output/CNV.seqz.tally.M.RData")
+load(file = "output/CNV.facets.tally.M.RData")
+load(file = "output/CNV.facets.tally.M.ref.seqz.RData")
 
-Sig.CNV.seqz.W.5 <- sig_extract(CNV.seqz.derive.W$nmf_matrix, n_sig = 5, nrun = 50, cores = ncores)
-save(Sig.CNV.seqz.W.5, file = "output/Sig.CNV.seqz.W.5.RData")
 
-Sig.CNV.seqz.W <- sig_extract(CNV.seqz.derive.W$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
-Sig.CNV.facets.W <- sig_extract(CNV.facets.derive.W$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores, pConstant = 1e-9)
-Sig.CNV.seqz.M <- sig_extract(CNV.seqz.derive.M$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
-Sig.CNV.facets.M <- sig_extract(CNV.facets.derive.M$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
-Sig.CNV.facets.M.ref.seqz <- sig_extract(CNV.facets.derive.M.ref.seqz$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
+Sig.CNV.seqz.W <- sig_extract(CNV.seqz.tally.W$nmf_matrix, n_sig = 5, nrun = 50, cores = ncores)
+Sig.CNV.facets.W <- sig_extract(CNV.facets.tally.W$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores, pConstant = 1e-9)
+Sig.CNV.seqz.M <- sig_extract(CNV.seqz.tally.M$nmf_matrix, n_sig = 4, nrun = 50, cores = ncores)
+Sig.CNV.facets.M <- sig_extract(CNV.facets.tally.M$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
+Sig.CNV.facets.M.ref.seqz <- sig_extract(CNV.facets.tally.M.ref.seqz$nmf_matrix, n_sig = 4, nrun = 50, cores = ncores)
 
 save(Sig.CNV.seqz.W, file = "output/Sig.CNV.seqz.W.RData")
 save(Sig.CNV.facets.W, file = "output/Sig.CNV.facets.W.RData")
@@ -181,6 +165,8 @@ save(Sig.CNV.facets.M.ref.seqz, file = "output/Sig.CNV.facets.M.ref.seqz.RData")
 get_sig_similarity(Sig.CNV.seqz.W, Sig.CNV.facets.W, normalize = "feature")
 
 show_sig_profile(Sig.CNV.seqz.W, method = "W", normalize = "feature", style = "cosmic")
+show_sig_profile(Sig.CNV.seqz.W, method = "W", normalize = "feature", style = "cosmic",
+                 filters = "BoChr", palette = use_color_style("cosmic")[8])
 show_sig_profile(Sig.CNV.facets.W, method = "W", normalize = "feature", style = "cosmic")
 
 show_sig_exposure(Sig.CNV.seqz.W, rm_space = T)
@@ -190,3 +176,11 @@ show_sig_exposure(Sig.CNV.facets.W, rm_space = T)
 #                  normalize = "feature", style = "cosmic",
 #                  sig_orders = paste0("Sig",
 #                                      sigminer:::helper_sort_signature(Sig.CNV.seqz.W$Signature.norm)))
+
+
+## Test NC50
+
+cn_list = sigminer:::get_cnlist(CNV.seqz)
+nc50_dt = sigminer:::getNC50(cn_list)
+hist(nc50_dt$value)
+table(nc50_dt$value)

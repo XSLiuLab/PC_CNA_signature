@@ -11,8 +11,8 @@ analysis/*_cache
 analysis/site_libs
 output/BayesNMF/
 raw_data/
-output/CNV.facets.derive.M*
-output/CNV.seqz.derive.M.RData
+output/CNV.facets.tally.M*
+output/CNV.seqz.tally.M.RData
 .drake/
 NIHMS938028-supplement-4.txt
 data/PRAD_Maf.RData
