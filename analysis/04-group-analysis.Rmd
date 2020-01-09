@@ -9,6 +9,7 @@ output:
     mathjax: true
     lightbox: true
     gallery: true
+    toc: 3
 bibliography: ref.bib
 link-citations: yes
 ---
@@ -30,3 +31,18 @@ opts_chunk$set(
 )
 opts_knit$set(width = 75)
 ```
+
+
+Load packages.
+
+```{r, message=FALSE}
+library(tidyverse)
+library(sigminer)
+```
+
+Load the data.
+
+```{r}
+df.seqz = readRDS(file = "../output/PRAD_Merge_Info_CNV_from_sequenza.RData")
+```
+
