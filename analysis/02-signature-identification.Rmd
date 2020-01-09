@@ -9,6 +9,7 @@ output:
     mathjax: true
     lightbox: true
     gallery: true
+    toc: 3
 bibliography: ref.bib
 link-citations: yes
 ---
@@ -345,6 +346,20 @@ The exposure of signature in each sample is plotted as the below.
 
 ```{r}
 show_sig_exposure(Sig.CNV.seqz.W, rm_space = TRUE, style = "cosmic")
+```
+
+### Show similarity matrix
+
+```{r, fig.width=11, fig.height=6}
+pheatmap::pheatmap(sim_v2$similarity,
+  cluster_rows = F
+)
+```
+
+```{r, fig.width=15, fig.height=6}
+pheatmap::pheatmap(sim_v3$similarity,
+  cluster_rows = F
+)
 ```
 
 ***

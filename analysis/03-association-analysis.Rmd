@@ -9,6 +9,7 @@ output:
     mathjax: true
     lightbox: true
     gallery: true
+    toc: 3
 bibliography: ref.bib
 link-citations: yes
 ---
@@ -30,3 +31,329 @@ opts_chunk$set(
 )
 opts_knit$set(width = 75)
 ```
+
+This part has been divided into 2 sections: data integration and association analysis.
+
+## Data integration
+
+In this section, I integrate all genotype/phenotype data as a tidy data table used for downstream analyses.
+
+Load packages and prepared data.
+
+```{r, eval = FALSE}
+library(tidyverse)
+library(sigminer)
+library(maftools)
+
+# Loading clinical related data -------------------------------------------
+
+Info <- readRDS("../data/PRAD_CLINICAL.rds")
+# Purity and ploidy info from facets
+PurityInfo <- read_tsv("../data/PRAD_Purity_and_Ploidy_Sequenza.tsv")
+
+# Processing CNV data -----------------------------------------------------
+
+load("../output/CNV.seqz.RData")
+load("../output/Sig.CNV.seqz.W.RData")
+CNV <- CNV.seqz
+Sig.CNV <- Sig.CNV.seqz.W
+rm(Sig.CNV.seqz.W, CNV.seqz)
+```
+
+After running NMF, we can get robust clusters from consensus matrix, more see `?NMF::predict`. 
+
+I also create a function `get_sig_exposure()` to get the absolute/relative exposure of signatures.
+
+> Relative exposure is more useful for clustering and absolute exposure is more useful for association analysis.
+
+```{r, eval = FALSE}
+# CNV
+CNVGroupInfo <- get_groups(Sig.CNV, method = "consensus", match_consensus = TRUE)
+CNVInfo <- CNV@summary.per.sample
+# Default is absolute exposure
+CNVExposureInfo <- get_sig_exposure(Sig.CNV)
+```
+
+Next, we process mutation data to get TMB, driver info, clusters, and etc (the detail has been described in R script under `analysis/src/` of the repo).
+
+```{r, eval = FALSE}
+# Processing mutation data ------------------------------------------------
+
+load(file = "../output/PRAD_TCGA_plus_dbGap_Maf.RData")
+load(file = "../output/Sig.PRAD_TCGA_plus_dbGap_Maf.RData")
+
+TMBInfo <- getSampleSummary(Maf)[, .(Tumor_Sample_Barcode, total)]
+
+load(file = "../output/PRAD_driver_info.RData")
+load(file = "../output/PRAD_heter_info.RData")
+
+SNVGroupInfo <- get_groups(Sig.SNV, method = "consensus", match_consensus = TRUE)
+SNVExposureInfo <- get_sig_exposure(Sig.SNV)
+
+# Processing gene and pathway mutation ------------------------------------
+
+load(file = "../output/PRAD_gene_and_pathway_mutation.RData")
+```
+
+Next, we keep keys of all `data.frame`s are same and merge them into one.
+
+
+```{r, eval = FALSE}
+# Merge data --------------------------------------------------------------
+Info <- Info %>%
+  dplyr::mutate(
+    CNV_ID = dplyr::case_when(
+      !startsWith(tumor_Run, "TCGA") & !is.na(tumor_Run) ~ paste(subject_id, tumor_Run, sep = "-"),
+      startsWith(tumor_Run, "TCGA") & !is.na(tumor_Run) ~ tumor_Run,
+      TRUE ~ NA_character_
+    )
+  )
+
+PurityInfo
+colnames(CNVGroupInfo) <- c("sample", "cnv_group", "cnv_weight", "cnv_enrich_sig")
+CNVInfo
+colnames(CNVExposureInfo) <- c("sample", paste0("CNV_", colnames(CNVExposureInfo)[-1]))
+colnames(TMBInfo) <- c("sample", "total_mutation")
+TMBInfo[, sample := as.character(sample)][, sample := ifelse(startsWith(sample, "TCGA"),
+  substr(sample, 1, 15),
+  sample
+)]
+DriverDF[, sample := as.character(sample)][, sample := ifelse(startsWith(sample, "TCGA"),
+  substr(sample, 1, 15),
+  sample
+)]
+colnames(SNVGroupInfo) <- c("sample", "snv_group", "snv_weight", "snv_enrich_sig")
+SNVGroupInfo[, sample := as.character(sample)][, sample := ifelse(startsWith(sample, "TCGA"),
+  substr(sample, 1, 15),
+  sample
+)]
+colnames(SNVExposureInfo) <- c("sample", paste0("SNV_", colnames(SNVExposureInfo)[-1]))
+SNVExposureInfo[, sample := as.character(sample)][, sample := ifelse(startsWith(sample, "TCGA"),
+  substr(sample, 1, 15),
+  sample
+)]
+colnames(TitvInfo) <- c("sample", "Ti_fraction", "Tv_fraction")
+TitvInfo[, sample := as.character(sample)][, sample := ifelse(startsWith(sample, "TCGA"),
+  substr(sample, 1, 15),
+  sample
+)]
+colnames(MathDF) <- c("sample", "MATH")
+MathDF[, sample := as.character(sample)][, sample := ifelse(startsWith(sample, "TCGA"),
+  substr(sample, 1, 15),
+  sample
+)]
+colnames(ClusterDF) <- c("sample", "cluster")
+ClusterDF[, sample := as.character(sample)][, sample := ifelse(startsWith(sample, "TCGA"),
+  substr(sample, 1, 15),
+  sample
+)]
+
+data.table::setDT(summary_mutation)
+data.table::setDT(summary_pathway)
+
+colnames(summary_mutation)[1] <- "sample"
+colnames(summary_pathway)[1] <- "sample"
+summary_mutation[, sample := as.character(sample)][, sample := ifelse(startsWith(sample, "TCGA"),
+  substr(sample, 1, 15),
+  sample
+)]
+summary_pathway[, sample := as.character(sample)][, sample := ifelse(startsWith(sample, "TCGA"),
+  substr(sample, 1, 15),
+  sample
+)]
+
+
+MergeInfo <- Info %>%
+  left_join(CNVInfo, by = c("CNV_ID" = "sample")) %>%
+  left_join(CNVGroupInfo, by = c("CNV_ID" = "sample")) %>%
+  left_join(CNVExposureInfo, by = c("CNV_ID" = "sample")) %>%
+  left_join(PurityInfo, by = c("CNV_ID" = "sample")) %>%
+  left_join(summary_mutation, by = c("tumor_Run" = "sample")) %>%
+  left_join(summary_pathway, by = c("tumor_Run" = "sample")) %>%
+  left_join(TMBInfo, by = c("tumor_Run" = "sample")) %>%
+  left_join(DriverDF, by = c("tumor_Run" = "sample")) %>%
+  dplyr::mutate(
+    n_driver = ifelse(!is.na(n_driver), n_driver, 0)
+  ) %>%
+  left_join(TitvInfo, by = c("tumor_Run" = "sample")) %>%
+  left_join(MathDF, by = c("tumor_Run" = "sample")) %>%
+  left_join(ClusterDF, by = c("tumor_Run" = "sample")) %>%
+  left_join(SNVGroupInfo, by = c("tumor_Run" = "sample")) %>%
+  left_join(SNVExposureInfo, by = c("tumor_Run" = "sample")) %>%
+  mutate(
+    Stage = factor(Stage, ordered = TRUE),
+    Fusion = ifelse(Fusion == "Negative", "No", "Yes"),
+    sample_type = ifelse(sample_type == "Unknown", NA_character_, sample_type),
+    HasFusion = Fusion,
+    HasFusion = ifelse(HasFusion == "Yes", TRUE, FALSE),
+    IsMetastatic = ifelse(sample_type == "Metastatic", TRUE, FALSE)
+  )
+
+summary(MergeInfo)
+saveRDS(MergeInfo, file = "../output/PRAD_Merge_Info_CNV_from_sequenza.RData")
+
+```
+
+## Association analysis
+
+Now we do association analysis between signatures (via exposure) and genotypes/phenotypes.
+
+### Prepare
+
+Load packages.
+
+```{r, message=FALSE}
+library(tidyverse)
+library(sigminer)
+```
+
+Load the data.
+
+```{r}
+df.seqz = readRDS(file = "../output/PRAD_Merge_Info_CNV_from_sequenza.RData")
+```
+
+Set the coloumns used for analysis.
+
+```{r}
+cols_to_sigs.seqz <- c(paste0("CNV_Sig", 1:5), paste0("SNV_Sig", 1:3))
+# Driver genes identified by MutSig software
+cols_to_mutated_genes <- colnames(df.seqz)[29:75]
+# 10 oncogenic pathways in TCGA 2018 papers + HR pathway
+cols_to_mutated_pathways <- colnames(df.seqz)[76:86]
+
+# Exclude PSA
+cols_to_features <- c(
+  "IsMetastatic", "HasFusion",
+  "Age", "Stage", "GleasonScore",
+  "total_mutation", "n_driver", "Ti_fraction", "Tv_fraction",
+  "n_of_cnv", "n_of_amp", "n_of_del", "n_of_vchr", "cna_burden",
+  "MATH", "cluster", "purity", "ploidy"
+)
+
+feature_type <- c(rep("ca", 2), rep("co", 16))
+```
+
+### Signatures & features
+
+Analyze the association between signatures and features.
+
+```{r}
+tidy_data.seqz.feature <- get_sig_feature_association(df.seqz,
+                                                      cols_to_sigs = cols_to_sigs.seqz,
+                                                      cols_to_features = cols_to_features,
+                                                      method_co = "pearson",
+                                                      type = feature_type, verbose = TRUE) %>%
+  get_tidy_association(p_adjust = TRUE)  # adjust p value with FDR
+
+```
+
+> Association of signature exposures with other features was performed using one of two procedures: for a continuous association variable (including ordinal variable), pearson correaltion was performed; for a binary association variable, samples were divided into two groups and Mann-Whitney U-test was performed to test for differences in signature exposure medians between the two groups.
+
+Show the result.
+
+```{r, fig.height=8, fig.width=9}
+show_sig_feature_corrplot(tidy_data.seqz.feature)
+```
+
+> All shown circles are statistically significant results (FDR < 0.05). A feature will be chopped off from
+> the plot if has no correlation with any signatures. Same for the similar plots below.
+
+### Signatures & mutated genes
+
+Analyze the association between signatures and mutated genes (only driver genes identified by MutSig).
+
+```{r}
+tidy_data.seqz.gene <- get_sig_feature_association(df.seqz,
+                                                   cols_to_sigs = cols_to_sigs.seqz,
+                                                   cols_to_features = cols_to_mutated_genes,
+                                                   type = "ca", verbose = TRUE) %>%
+  get_tidy_association(p_adjust = TRUE)
+```
+
+```{r, fig.height=8, fig.width=9}
+show_sig_feature_corrplot(tidy_data.seqz.gene, ylab = "Mutated genes")
+```
+
+### Signatures & mutated pathways
+
+Analyze the association between signatures and mutated pathways.
+
+```{r}
+tidy_data.seqz.pathways <- get_sig_feature_association(df.seqz,
+                                                       cols_to_sigs = cols_to_sigs.seqz,
+                                                       cols_to_features = cols_to_mutated_pathways,
+                                                       type = "ca", verbose = TRUE) %>%
+  get_tidy_association(p_adjust = TRUE)
+```
+
+
+```{r, fig.height=5, fig.width=9}
+show_sig_feature_corrplot(tidy_data.seqz.pathways, ylab = "Mutated pathways")
+```
+
+### Correlation network
+
+To determine the structure of relationship between signatures and features, we use continuous variables to do correlation network analysis.
+
+```{r}
+f_dt = df.seqz[, c(cols_to_sigs.seqz, cols_to_features[c(-1, -2)])] %>% 
+  dplyr::mutate_if(is.ordered, as.numeric)
+```
+
+```{r}
+library(corrr)
+
+res.cor <- correlate(f_dt,
+  use = "pairwise.complete.obs",
+  method = "pearson"
+) %>%
+  dplyr::mutate_if(is.numeric, dplyr::coalesce, 0)
+
+res.cor %>%
+  network_plot(min_cor = 0.2,
+               colours = rev(c("indianred2", "white", "skyblue1")))
+```
+
+> variables that are more highly correlated appear closer together and are joined by stronger paths. Paths are also colored by their sign. The proximity of the points are determined using multidimensional clustering.
+
+
+### Signatures & PSA
+
+In all datasets we collected, 3 of them have PSA info. However, the range of PSA value in 3 datasets differs, so I excluded PSA from features above and analyze it independently.
+
+```{r}
+df.seqz.psa = df.seqz %>%
+  dplyr::filter(!is.na(PSA)) %>%
+  dplyr::select(contains("Sig", ignore.case = F), c("PSA", "Study", "CNV_ID"))
+
+df.seqz.psa <- df.seqz.psa %>%
+  dplyr:::group_by(Study) %>%
+  tidyr::nest() %>%
+  dplyr::summarise(
+    data = purrr:::map(data, function(x) {
+      get_sig_feature_association(x,
+                                  cols_to_sigs = cols_to_sigs.seqz,
+                                  cols_to_features = "PSA",
+                                  method_co = "pearson",
+                                  type = "co", verbose = TRUE) %>%
+        get_tidy_association(p_adjust = TRUE)
+    })
+  ) %>%
+  tidyr::unnest("data") %>%
+  dplyr::filter(feature == "PSA") %>%
+  dplyr::mutate(feature = Study)
+```
+
+```{r fig.height=5, fig.width=9}
+show_sig_feature_corrplot(df.seqz.psa, p_val = 1, breaks_count = c(0, 50, 100, 150, 200), ylab = "PSA")
+```
+
+Alought we can observe the statistically significant correlation between signatures and PSA, the results are
+inconsistent across different studies. This may be explained by the dynamic property of PSA while not the sample
+type due to most of them are primary.
+
+```{r}
+table(df.seqz$sample_type, df.seqz$Study)
+```
+

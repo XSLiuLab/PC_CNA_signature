@@ -49,7 +49,7 @@ show_sig_profile(Sig.CNV.facets.M.ref.seqz,
 )
 
 
-show_sig_profile(Sig.SNV, mode = "mutation")
+show_sig_profile(Sig.SNV, mode = "SBS")
 
 # Signature exposure ------------------------------------------------------
 show_sig_exposure(Sig.SNV, rm_space = T, cutoff = 2000)

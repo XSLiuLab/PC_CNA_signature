@@ -6,8 +6,8 @@ df.seqz = readRDS(file = "output/PRAD_Merge_Info_CNV_from_sequenza.RData")
 
 setdiff(colnames(df.facets), colnames(df.seqz))
 
-cols_to_sigs <- c(paste0("CNV_Sig", 1:6), paste0("SNV_Sig", 1:6))
-cols_to_sigs.seqz <- c(paste0("CNV_Sig", 1:5), paste0("SNV_Sig", 1:6))
+cols_to_sigs <- c(paste0("CNV_Sig", 1:6), paste0("SNV_Sig", 1:3))
+cols_to_sigs.seqz <- c(paste0("CNV_Sig", 1:5), paste0("SNV_Sig", 1:3))
 
 # Exclude PSA
 cols_to_features <- c(
