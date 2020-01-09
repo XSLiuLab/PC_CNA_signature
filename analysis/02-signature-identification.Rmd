@@ -30,3 +30,321 @@ opts_chunk$set(
 )
 opts_knit$set(width = 75)
 ```
+
+This part has been divided into 4 sections as the following, it will describe how to get the
+genomic variation (or instability) signatures from mutation profile (including copy number profile
+and single base substitution (SBS) profile).
+
+- Tally variation records
+- Estimate signature number
+- Extract signatures
+- Show signature profile and aetiology
+
+All the processes have been implemented in R package [**sigminer**](https://github.com/ShixiangWang/sigminer).
+
+## Tally variation records
+
+### Methods
+
+For SBS profile, same as previously reported [@alexandrov2013signatures], for each sample, we firstly classified mutation records into six substitution subtypes: C>A, C>G, C>T, T>A, T>C, and T>G (all substitutions are referred to by the pyrimidine of the mutated Watson–Crick base pair). Further, each of the substitutions was examined by incorporating information on the bases immediately 5’ and 3’ to each mutated base generating 96 possible mutation types (6 types of substitution ∗ 4 types of 5’ base ∗ 4 types of 3’ base). Each of 96 mutation types is called **component** here.
+
+For copy number profile, we firstly computed the genome-wide distributions of 8 fundamental copy number features for each sample: 
+
+- the breakpoint count per 10 Mb (BP10MB)
+- the breakpoint count per chromosome arm (BPArm)
+- the copy number of the segments (CN)
+- the difference in copy number between adjacent segments (CNCP)
+- the lengths of oscillating copy number segment chains (OsCN)
+- the log10 based size of segments (SS)
+- the minimal number of chromosome with 50% copy number variation (NC50)
+- the burden of chromosome (BoChr)
+
+These features were selected as hallmarks of previously reported genomic aberations like chromothripsis or to denote the distribution pattern of copy number events. The first 6 features has been used in @macintyre2018copy to uncover the mutational processes in ovarian carcinoma.
+
+Next, unlike @macintyre2018copy applied mixture modeling to separate the first 6 copy number features distributions into mixtures of Poisson or Gaussian distributions, we directly classified 8 copy number features distributions into different components according to
+the comprehensive consideration of value range, abundence and biological significance. Most of the result are discrete values, and the others are range values.
+
+The setting of 8 features with `r nrow(sigminer::CN.features)` components are shown as below.
+
+```{r}
+DT::datatable(sigminer::CN.features)
+```
+
+> When component is a discrete value (label is 'point'), min=max
+> 
+> When component is a range value (label is 'range'), the range is left open and right closed
+>
+> Of note, the blank in `min` column is `-Inf` and the blank in `max` column is `Inf`.
+> `[23]` in `BoChr` represents chromosome X (chromosome Y is excluded).
+
+Compare to the method from @macintyre2018copy, our method has several advantages:
+
+1. the computation is more efficient
+2. the meaning of component is easier to read and understand
+3. the new features NC50 and BoChr can be used to determine the distribution pattern of copy number events (global or local)
+and the contribution of each chromosome
+4. most importantly, the classification is fixed, so it is much easier to compare the signatures within/across tumor types, the results across different studies and the result signatures to reference signatures. In a word, our method constructs the standard to extract, study and compare signatures.
+5. our method is more extensible
+
+I will talk more about No.1-4 in an individual section (**TBD**), the No.5 will be described in [sigminer vignette]()(**TBD**).
+
+We generated sample-by-component matrix using the methods above and treated the result as the input of nonnegative matrix decomposition (NMF) algorithm for extracting signatures.
+
+### Tally records
+
+#### Copy number
+
+Read absolute copy number profile as a `CopyNumber` object.
+
+```{r}
+# Load packages -----------------------------------------------------------
+
+suppressPackageStartupMessages(library(sigminer))
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(NMF))
+```
+
+
+```{r, eval=FALSE}
+# Set this per R session
+options(sigminer.sex = "male", sigminer.copynumber.max = 20L)
+
+# Generate CopyNumber object ----------------------------------------------
+
+CNV.seqz <- read_copynumber("../data/CNV_from_sequenza.tsv",
+  genome_build = "hg38",
+  complement = FALSE, verbose = TRUE
+)
+
+# remove WCMC160-SRR3146971 with only one CNV
+CNV.seqz <- subset(CNV.seqz, subset = !sample %in% "WCMC160-SRR3146971")
+save(CNV.seqz, file = "../output/CNV.seqz.RData")
+```
+
+Tally the alteration records.
+
+```{r, eval=FALSE}
+ncores <- 20 # Set a proper number of thread
+
+# Use classfication method devised by me ("W")
+CNV.seqz.tally.W <- sig_tally(CNV.seqz, method = "W", cores = ncores, feature_setting = CN.features)
+save(CNV.seqz.tally.W, file = "../output/CNV.seqz.tally.W.RData")
+```
+
+#### SBS
+
+Read SBS profile as a `MAF` object.
+
+```{r, eval=FALSE}
+# Reading data ------------------------------------------------------------
+Maf <- data.table::fread("/public/data/maf/all.maf")
+# Remove all NA columns
+Maf <- Maf[, which(unlist(lapply(Maf, function(x) !all(is.na(x))))), with = F]
+Maf <- read_maf(Maf)
+save(Maf, file = "../output/PRAD_TCGA_plus_dbGap_Maf.RData")
+```
+
+The result `MAF` object can be used in any analysis provided by R package **maftools** [@mayakonda2016maftools].
+
+Tally the SBS records.
+
+```{r, eval=FALSE}
+Maf.tally <- sig_tally(Maf,
+                       cores = ncores, ref_genome = "BSgenome.Hsapiens.UCSC.hg38",
+                       useSyn = TRUE)
+save(Maf.tally, file = "../output/PRAD_TCGA_plus_dbGap_Maf.tally.RData")
+```
+
+## Estimate signature number
+
+R package NMF [@gaujoux2010flexible] is used for running NMF algorithm
+Factorization rank `r` in NMF defines the number of signatures used to approximate the target sample-by-component matrix.
+A common way of deciding on `r` is to try different values, compute some quality measure of the results, and choose the best
+value according to this quality criteria.
+
+As suggested, performing 30-50 runs is considered sufficient to get a robust estimate of the `r` value. Here we perform 50 runs.
+
+### Copy number
+
+Estimate the number of copy number signature from 2 to 12.
+
+```{r, eval=FALSE}
+EST.seqz.W.all <- sig_estimate(CNV.seqz.tally.W$nmf_matrix,
+  range = 2:12, nrun = 50, cores = ncores, use_random = TRUE,
+  save_plots = FALSE,
+  verbose = TRUE
+)
+save(EST.seqz.W.all, file = "../output/EST.seqz.W.all.RData")
+```
+
+### SBS
+
+Estimate the number of SBS signature from 2 to 10.
+
+```{r, eval=FALSE}
+# Remove the effect of hyper mutated samples (not removing hyper-mutated samples)
+# The idead is adopted from SignatureAnalyzer package
+nmf_matrix <- handle_hyper_mutation(Maf.tally$nmf_matrix)
+
+EST.Maf <- sig_estimate(nmf_matrix,
+  range = 2:10, nrun = 50, cores = ncores, use_random = TRUE,
+  save_plots = FALSE,
+  verbose = TRUE
+)
+
+save(EST.Maf, file = "../output/EST.PRAD_TCGA_plus_dbGap_Maf.RData")
+save(nmf_matrix, file = "../output/Maf_matrix.RData")
+```
+
+
+### Result
+
+Let's load the estimation results.
+
+```{r}
+load(file = "../output/EST.seqz.W.all.RData")
+load(file = "../output/EST.PRAD_TCGA_plus_dbGap_Maf.RData")
+```
+
+The most common approach is to use the cophenetic correlation coefficient. I show the measure vs. signature number as below.
+
+```{r}
+show_sig_number_survey(EST.seqz.W.all, right_y = NULL)
+```
+
+The best possible signature number value is the one at which the cophenetic correlation value on the y-axis drops significantly [@gaujoux2010flexible]. Here we can take that the value `5` is the optimal signature number. For `3`, it is small to produce the result with biological significance due to the hugo contribution of CNV in prostate cancer; for `8`, it is a little big, so it may be not easy to understand the result considering currently we know few about the mechanism and consequence of copy number events.
+
+```{r}
+p = show_sig_number_survey(EST.seqz.W.all, right_y = NULL)
+add_h_arrow(p, x = 5.1, y = 0.99, seg_len = 0.5)
+```
+
+Next we take a look at SBS.
+
+
+```{r}
+p = show_sig_number_survey(EST.Maf, right_y = NULL)
+add_h_arrow(p, x = 3.1, y = 0.982, seg_len = 0.5)
+```
+
+For SBS, we select `3`. We have the knowledge that `3` mutational signatures from TCGA prostate cancers are recorded in COSMIC database (COSMIC 1, 5, 6), and the cophenetic has a sharp decrease after `3` indicating that substantially less stability is achieved using more than `3` clusters.
+
+## Extract signatures
+
+Now that we have determined the signature number, we then extract the signatures with 50 runs.
+
+Copy number:
+
+```{r, eval=FALSE}
+# Extract signatures ------------------------------------------------------
+Sig.CNV.seqz.W <- sig_extract(CNV.seqz.tally.W$nmf_matrix, n_sig = 5, nrun = 50, cores = ncores)
+save(Sig.CNV.seqz.W, file = "../output/Sig.CNV.seqz.W.RData")
+```
+
+SBS:
+
+```{r, eval=FALSE}
+# Extract signatures ------------------------------------------------------
+Sig.SNV <- sig_extract(nmf_matrix, n_sig = 3, nrun = 50, cores = ncores)
+save(Sig.SNV, file = "../output/Sig.PRAD_TCGA_plus_dbGap_Maf.RData")
+```
+
+## Show signature profile and aetiology
+
+Now that we have the extracted signatures, we can show the signature profile.
+
+```{r}
+load("../output/Sig.PRAD_TCGA_plus_dbGap_Maf.RData")
+load("../output/Sig.CNV.seqz.W.RData")
+```
+
+
+### SBS signature profile
+
+
+```{r, fig.width=10, fig.height=5}
+# I provide two style 'default' and 'cosmic' in sigminer
+show_sig_profile(Sig.SNV, mode = "SBS", style = "cosmic", x_label_angle = 90, x_label_vjust = 0.5)
+```
+
+> SBS signatures are displayed based on the observed component frequency of the human genome, i.e., representing the relative proportions of mutations generated by each signature based on the actual trinucleotide frequencies of the reference human genome.
+
+The aetiologies of SBS signatures is more clear than those of copy number signatures. We can find the aetiologies of the 3 signatures above by computing their cosine similarity to COSMIC reference signatures.
+
+We compare the 3 signature to COSMIC signature database v2 and v3.
+
+```{r}
+sim_v2 = get_sig_similarity(Sig.SNV, sig_db = "legacy")
+```
+
+```{r}
+sim_v3 = get_sig_similarity(Sig.SNV, sig_db = "SBS")
+```
+
+From the results above, basically we can confirm that aetiology of `Sig2` is **dMMR** (defects in mismatch repair) and the aetiology of `Sig3` is **aging**. The aetiology of `Sig1` may be **HRD** (Defective homologous recombination-based DNA damage repair) or an unknown reason.
+
+```{r, fig.width=10, fig.height=5}
+# I provide two style 'default' and 'cosmic' in sigminer
+p = show_sig_profile(Sig.SNV, mode = "SBS", style = "cosmic", x_label_angle = 90, x_label_vjust = 0.5)
+add_labels(p, x = 0.92, y = 0.3, y_end = 0.85, n_label = 3, 
+           labels = rev(c("HRD or unknown", "dMMR", "Aging")), hjust = 1)
+```
+
+The exposure of signature in each sample is plotted as the below.
+
+```{r}
+show_sig_exposure(Sig.SNV, rm_space = TRUE, style = "cosmic")
+```
+
+Set a cutoff 2000 to remove some outliers.
+
+```{r}
+show_sig_exposure(Sig.SNV, 
+                  cutoff = 2000,
+                  rm_space = TRUE, style = "cosmic")
+```
+
+We can clearly see that 
+
+- most of samples have very few SBS signature exposures
+- Sig1 and Sig3 are the major resources
+
+### Copy number signature profile
+
+```{r, fig.width=12, fig.height=7}
+show_sig_profile(Sig.CNV.seqz.W, style = "cosmic", method = "W", normalize = "feature")
+```
+
+> Similar to SBS signatures, copy number signatures are displayed based on the observed component frequency of the human genome.
+> Of note, considering the count of each feature is independent, the profile is row normalized by each feature, 
+> unlike @macintyre2018copy did column normalized (this method is easy to mislead readers),
+> so the bar height can be compared within/between feature
+
+There is no reference database for copy number signatures, we cannot get aetiologies of the 5 signatures by similarity computation. By reading the description of previous reports [@macintyre2018copy, @yi2018patterns] and studying the signature profile carefully, we determine or limite the aetiologies of the 5 signatures with also the downstream analyses supported.
+
+- Sig1 - Focal amplification due to failure of cell cyle control
+  - large copy number changes resulting high copy number states
+- Sig2 - HRD;MMBIR;Tandem duplication through CDK12 inactivation
+  - match the pattern of MMBIR (microhomology mediated break-induced replication): many long OsCN with copy gains
+  - related to CDK12 mutation
+  - high number of breakpoints
+  - small segment size
+  - related to COSMIC 5 (v2) (from @macintyre2018copy)
+- Sig3 - Whole-genome duplication (due to failure of cell cycle control)
+  - high segment copy number
+  - few OsCN
+  - global CNV distribution
+- Sig4 - Chromothripsis
+  - 1 copy number deletions resulting considerable small OsCN
+  - large segment size
+- Sig5 -  BFB, gene fusion and copy number neutral like events including Chromoplexy, translocation, and etc. (these may be early driver events)
+  - few CNV with focal distribution
+  - associated with gene fusion
+
+The exposure of signature in each sample is plotted as the below.
+
+```{r}
+show_sig_exposure(Sig.CNV.seqz.W, rm_space = TRUE, style = "cosmic")
+```
+
+***
