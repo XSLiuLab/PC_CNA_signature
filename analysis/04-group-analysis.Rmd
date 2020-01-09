@@ -46,3 +46,94 @@ Load the data.
 df.seqz = readRDS(file = "../output/PRAD_Merge_Info_CNV_from_sequenza.RData")
 ```
 
+## Group comparison
+
+```{r}
+cols_to_features <- c(
+  "IsMetastatic", "HasFusion", "Stage", "GleasonScore",
+  "Age", 
+  "total_mutation", "n_driver", "Ti_fraction", "Tv_fraction",
+  "n_of_cnv", "n_of_amp", "n_of_del", "n_of_vchr", "cna_burden",
+  "MATH", "cluster", "purity", "ploidy"
+)
+
+feature_type <- c(rep("ca", 4), rep("co", 14))
+```
+
+```{r}
+df.seqz$GleasonScore = as.character(df.seqz$GleasonScore)
+df.seqz$GleasonScore = factor(df.seqz$GleasonScore, levels = as.character(6:10))
+
+grp.cnv <- get_group_comparison(
+  df.seqz,
+  col_group = "cnv_enrich_sig", # or "cnv_group"
+  cols_to_compare = cols_to_features,
+  type = feature_type
+)
+```
+
+```{r}
+plot.cnv <- show_group_comparison(
+  grp.cnv,
+  xlab = NA,
+  hjust = 1,
+  method = "anova",
+  text_angle_x = 60,
+  legend_position_ca = "right"
+)
+```
+
+```{r, fig.width=8, fig.height=6}
+plot.cnv$ca_comb
+```
+
+
+```{r, fig.width=10, fig.height=10}
+plot.cnv$co_comb
+```
+
+
+```{r}
+grp.snv <- get_group_comparison(
+  df.seqz,
+  col_group = "snv_enrich_sig", # or "snv_group"
+  cols_to_compare = cols_to_features,
+  type = feature_type
+)
+```
+
+```{r}
+plot.snv <- show_group_comparison(
+  grp.snv,
+  xlab = NA,
+  hjust = 1,
+  method = "anova",
+  text_angle_x = 60,
+  legend_position_ca = "right"
+)
+```
+
+```{r, fig.width=8, fig.height=6}
+plot.snv$ca_comb
+```
+
+
+```{r, fig.width=9, fig.height=10}
+plot.snv$co_comb
+```
+
+## Group mapping
+
+```{r}
+df.map = df.seqz[, c("sample_type",
+                     "cnv_enrich_sig",
+                     "snv_enrich_sig")] %>% 
+  na.omit()
+```
+
+```{r}
+show_group_mapping(df.map, sig_col = "sample_type", 
+                   map_cols = setdiff(colnames(df.map), "sample_type"),
+                   fill_na = "NA", include_sig = TRUE)
+```
+
