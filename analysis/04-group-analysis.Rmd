@@ -23,7 +23,7 @@ opts_chunk$set(
   echo = TRUE,
   comment = "#>",
   collapse = TRUE,
-  cache = TRUE,
+  cache = FALSE,
   dpi = 300,
   warning = FALSE,
   message = FALSE,
@@ -64,8 +64,15 @@ feature_type <- c(rep("ca", 4), rep("co", 14))
 df.seqz$GleasonScore = as.character(df.seqz$GleasonScore)
 df.seqz$GleasonScore = factor(df.seqz$GleasonScore, levels = as.character(6:10))
 
+df.seqz2 = df.seqz
+df.seqz2$cnv_enrich_sig = ifelse(
+  !is.na(df.seqz2$cnv_enrich_sig),
+  paste(df.seqz2$cnv_enrich_sig, "dominant"),
+  NA
+)
+
 grp.cnv <- get_group_comparison(
-  df.seqz,
+  df.seqz2,
   col_group = "cnv_enrich_sig", # or "cnv_group"
   cols_to_compare = cols_to_features,
   type = feature_type
@@ -76,10 +83,14 @@ grp.cnv <- get_group_comparison(
 plot.cnv <- show_group_comparison(
   grp.cnv,
   xlab = NA,
-  hjust = 1,
   method = "anova",
   text_angle_x = 60,
-  legend_position_ca = "right"
+  text_hjust_x = 1,
+  legend_position_ca = "right",
+  label.x.npc = "center", 
+  label.y.npc = "top",
+  label = "p.format",
+  hjust = 0.5
 )
 ```
 
@@ -94,8 +105,14 @@ plot.cnv$co_comb
 
 
 ```{r}
+df.seqz2$snv_enrich_sig = ifelse(
+  !is.na(df.seqz2$snv_enrich_sig),
+  paste(df.seqz2$snv_enrich_sig, "dominant"),
+  NA
+)
+
 grp.snv <- get_group_comparison(
-  df.seqz,
+  df.seqz2,
   col_group = "snv_enrich_sig", # or "snv_group"
   cols_to_compare = cols_to_features,
   type = feature_type
@@ -106,10 +123,14 @@ grp.snv <- get_group_comparison(
 plot.snv <- show_group_comparison(
   grp.snv,
   xlab = NA,
-  hjust = 1,
   method = "anova",
   text_angle_x = 60,
-  legend_position_ca = "right"
+  text_hjust_x = 1,
+  legend_position_ca = "right",
+  label.x.npc = "center", 
+  label.y.npc = "top",
+  label = "p.format",
+  hjust = 0.5
 )
 ```
 
@@ -129,11 +150,13 @@ df.map = df.seqz[, c("sample_type",
                      "cnv_enrich_sig",
                      "snv_enrich_sig")] %>% 
   na.omit()
+names(df.map) = c("Sample type", "Dominant CNV signature", "Dominant SNV signature")
 ```
 
 ```{r}
-show_group_mapping(df.map, sig_col = "sample_type", 
-                   map_cols = setdiff(colnames(df.map), "sample_type"),
+show_group_mapping(df.map, 
+                   col_to_flow = "Sample type", 
+                   cols_to_map = setdiff(colnames(df.map), "Sample type"),
                    fill_na = "NA", include_sig = TRUE)
 ```
 
