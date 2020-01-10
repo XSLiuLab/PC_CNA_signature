@@ -274,11 +274,11 @@ The aetiologies of SBS signatures is more clear than those of copy number signat
 
 We compare the 3 signature to COSMIC signature database v2 and v3.
 
-```{r}
+```{r, message=TRUE}
 sim_v2 = get_sig_similarity(Sig.SNV, sig_db = "legacy")
 ```
 
-```{r}
+```{r, message=TRUE}
 sim_v3 = get_sig_similarity(Sig.SNV, sig_db = "SBS")
 ```
 
@@ -321,7 +321,7 @@ show_sig_profile(Sig.CNV.seqz.W, style = "cosmic", method = "W", normalize = "fe
 > unlike @macintyre2018copy did column normalized (this method is easy to mislead readers),
 > so the bar height can be compared within/between feature
 
-There is no reference database for copy number signatures, we cannot get aetiologies of the 5 signatures by similarity computation. By reading the description of previous reports [@macintyre2018copy, @yi2018patterns] and studying the signature profile carefully, we determine or limite the aetiologies of the 5 signatures with also the downstream analyses supported.
+There is no reference database for copy number signatures, we cannot get aetiologies of the 5 signatures by similarity computation. By reading the description of previous reports [@macintyre2018copy;@yi2018patterns] and studying the signature profile carefully, we determine or limite the aetiologies of the 5 signatures with also the downstream analyses supported.
 
 - Sig1 - Focal amplification due to failure of cell cyle control
   - large copy number changes resulting high copy number states
