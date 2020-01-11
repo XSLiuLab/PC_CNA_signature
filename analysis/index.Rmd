@@ -15,7 +15,7 @@ bibliography: ref.bib
 link-citations: yes
 ---
 
-```{r knitr_init, echo=FALSE}
+```{r knitr_init, echo=FALSE, warning=FALSE}
 library(knitr)
 library(rmdformats)
 ## Global options
