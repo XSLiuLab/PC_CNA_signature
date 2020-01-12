@@ -271,13 +271,38 @@ tidy_data.seqz.gene <- get_sig_feature_association(df.seqz,
   get_tidy_association(p_adjust = TRUE)
 ```
 
+```{r}
+summary(tidy_data.seqz.gene$measure)
+```
+
+
 ```{r, fig.height=8, fig.width=9}
-show_sig_feature_corrplot(tidy_data.seqz.gene, ylab = "Mutated genes")
+## 用梯度颜色解决 CNV 和 SNV Exposure 差异大的
+## 问题，但颜色条白色没有对应到0
+## 很奇怪，搞了很久没弄好，请教下别人
+
+# myPalette <- colorRampPalette(rev(brewer.pal(11, "RdYlBu")))
+# sc <- scale_colour_gradientn(colours = myPalette(100), limits=c(-20, 600))
+
+sc <- scale_colour_gradientn(
+  colors = c("blue", "white", "yellow", "red"),
+  values = scales::rescale(c(
+    tidy_data.seqz.gene$measure %>% min(na.rm = TRUE),
+    0,
+    20,
+    tidy_data.seqz.gene$measure %>% max(na.rm = TRUE))
+  ))
+
+show_sig_feature_corrplot(tidy_data.seqz.gene, 
+                          ylab = "Mutated genes",
+                          ca_gradient_colors = sc)
+
 ```
 
 ### Signatures & mutated pathways
 
 Analyze the association between signatures and mutated pathways.
+
 
 ```{r}
 tidy_data.seqz.pathways <- get_sig_feature_association(df.seqz,
@@ -288,8 +313,26 @@ tidy_data.seqz.pathways <- get_sig_feature_association(df.seqz,
 ```
 
 
+```{r}
+summary(tidy_data.seqz.pathways$measure)
+```
+
+
+
 ```{r, fig.height=5, fig.width=9}
-show_sig_feature_corrplot(tidy_data.seqz.pathways, ylab = "Mutated pathways")
+sc <- scale_colour_gradientn(
+  colors = c("blue", "white", "yellow", "red"),
+  values = scales::rescale(c(
+    tidy_data.seqz.pathways$measure %>% min(na.rm = TRUE),
+    0, 
+    40,
+    tidy_data.seqz.pathways$measure %>% max(na.rm = TRUE))
+  ))
+
+
+show_sig_feature_corrplot(tidy_data.seqz.pathways,
+                          ylab = "Mutated pathways",
+                          ca_gradient_colors = sc)
 ```
 
 ### Correlation network

@@ -31,6 +31,7 @@ opts_chunk$set(
   tidy = "styler"
 )
 opts_knit$set(width = 75)
+Sys.setenv("LANGUAGE"="EN")
 ```
 
 

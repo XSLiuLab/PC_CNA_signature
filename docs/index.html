@@ -14,7 +14,7 @@
 <meta name="author" content="Minfang Song" />
 <meta name="author" content="Xue-Song Liu (Corresponding author)" />
 
-<meta name="date" content="2020-01-11" />
+<meta name="date" content="2020-01-12" />
 
 <title>Prostate Cancer Variation Signature Analysis Report</title>
 
@@ -249,8 +249,8 @@ $(document).ready(function () {
 <p>Next, unlike <span class="citation">Macintyre et al. (<a href="#ref-macintyre2018copy" role="doc-biblioref">2018</a>)</span> applied mixture modeling to separate the first 6 copy number features distributions into mixtures of Poisson or Gaussian distributions, we directly classified 8 copy number features distributions into different components according to the comprehensive consideration of value range, abundence and biological significance. Most of the result are discrete values, and the others are range values.</p>
 <p>The setting of 8 features with 80 components are shown as below.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>DT<span class="op">::</span><span class="kw">datatable</span>(sigminer<span class="op">::</span>CN.features)</span></code></pre></div>
-<div id="htmlwidget-e83dd83decade47f4973" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e83dd83decade47f4973">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80"],["BP10MB","BP10MB","BP10MB","BP10MB","BP10MB","BP10MB","BP10MB","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","CN","CN","CN","CN","CN","CN","CN","CNCP","CNCP","CNCP","CNCP","CNCP","CNCP","CNCP","OsCN","OsCN","OsCN","OsCN","OsCN","OsCN","OsCN","SS","SS","SS","SS","SS","SS","SS","SS","NC50","NC50","NC50","NC50","NC50","NC50","NC50","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr"],["BP10MB[0]","BP10MB[1]","BP10MB[2]","BP10MB[3]","BP10MB[4]","BP10MB[5]","BP10MB[&gt;5]","BPArm[0]","BPArm[1]","BPArm[2]","BPArm[3]","BPArm[4]","BPArm[5]","BPArm[6]","BPArm[7]","BPArm[8]","BPArm[9]","BPArm[10]","BPArm[&gt;10 &amp; &lt;=20]","BPArm[&gt;20 &amp; &lt;=30]","BPArm[&gt;30]","CN[0]","CN[1]","CN[2]","CN[3]","CN[4]","CN[&gt;4 &amp; &lt;=8]","CN[&gt;8]","CNCP[0]","CNCP[1]","CNCP[2]","CNCP[3]","CNCP[4]","CNCP[&gt;4 &amp; &lt;=8]","CNCP[&gt;8]","OsCN[0]","OsCN[1]","OsCN[2]","OsCN[3]","OsCN[4]","OsCN[&gt;4 &amp; &lt;=10]","OsCN[&gt;10]","SS[&lt;=2]","SS[&gt;2 &amp; &lt;=3]","SS[&gt;3 &amp; &lt;=4]","SS[&gt;4 &amp; &lt;=5]","SS[&gt;5 &amp; &lt;=6]","SS[&gt;6 &amp; &lt;=7]","SS[&gt;7 &amp; &lt;=8]","SS[&gt;8]","NC50[&lt;=2]","NC50[3]","NC50[4]","NC50[5]","NC50[6]","NC50[7]","NC50[&gt;7]","BoChr[1]","BoChr[2]","BoChr[3]","BoChr[4]","BoChr[5]","BoChr[6]","BoChr[7]","BoChr[8]","BoChr[9]","BoChr[10]","BoChr[11]","BoChr[12]","BoChr[13]","BoChr[14]","BoChr[15]","BoChr[16]","BoChr[17]","BoChr[18]","BoChr[19]","BoChr[20]","BoChr[21]","BoChr[22]","BoChr[23]"],["point","point","point","point","point","point","range","point","point","point","point","point","point","point","point","point","point","point","range","range","range","point","point","point","point","point","range","range","point","point","point","point","point","range","range","point","point","point","point","point","range","range","range","range","range","range","range","range","range","range","range","point","point","point","point","point","range","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point"],[0,1,2,3,4,5,5,0,1,2,3,4,5,6,7,8,9,10,10,20,30,0,1,2,3,4,4,8,0,1,2,3,4,4,8,0,1,2,3,4,4,10,null,2,3,4,5,6,7,8,null,3,4,5,6,7,7,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],[0,1,2,3,4,5,null,0,1,2,3,4,5,6,7,8,9,10,20,30,null,0,1,2,3,4,8,null,0,1,2,3,4,8,null,0,1,2,3,4,10,null,2,3,4,5,6,7,8,null,2,3,4,5,6,7,null,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>feature<\/th>\n      <th>component<\/th>\n      <th>label<\/th>\n      <th>min<\/th>\n      <th>max<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-0129d7040a5d6afebf75" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0129d7040a5d6afebf75">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80"],["BP10MB","BP10MB","BP10MB","BP10MB","BP10MB","BP10MB","BP10MB","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","CN","CN","CN","CN","CN","CN","CN","CNCP","CNCP","CNCP","CNCP","CNCP","CNCP","CNCP","OsCN","OsCN","OsCN","OsCN","OsCN","OsCN","OsCN","SS","SS","SS","SS","SS","SS","SS","SS","NC50","NC50","NC50","NC50","NC50","NC50","NC50","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr"],["BP10MB[0]","BP10MB[1]","BP10MB[2]","BP10MB[3]","BP10MB[4]","BP10MB[5]","BP10MB[&gt;5]","BPArm[0]","BPArm[1]","BPArm[2]","BPArm[3]","BPArm[4]","BPArm[5]","BPArm[6]","BPArm[7]","BPArm[8]","BPArm[9]","BPArm[10]","BPArm[&gt;10 &amp; &lt;=20]","BPArm[&gt;20 &amp; &lt;=30]","BPArm[&gt;30]","CN[0]","CN[1]","CN[2]","CN[3]","CN[4]","CN[&gt;4 &amp; &lt;=8]","CN[&gt;8]","CNCP[0]","CNCP[1]","CNCP[2]","CNCP[3]","CNCP[4]","CNCP[&gt;4 &amp; &lt;=8]","CNCP[&gt;8]","OsCN[0]","OsCN[1]","OsCN[2]","OsCN[3]","OsCN[4]","OsCN[&gt;4 &amp; &lt;=10]","OsCN[&gt;10]","SS[&lt;=2]","SS[&gt;2 &amp; &lt;=3]","SS[&gt;3 &amp; &lt;=4]","SS[&gt;4 &amp; &lt;=5]","SS[&gt;5 &amp; &lt;=6]","SS[&gt;6 &amp; &lt;=7]","SS[&gt;7 &amp; &lt;=8]","SS[&gt;8]","NC50[&lt;=2]","NC50[3]","NC50[4]","NC50[5]","NC50[6]","NC50[7]","NC50[&gt;7]","BoChr[1]","BoChr[2]","BoChr[3]","BoChr[4]","BoChr[5]","BoChr[6]","BoChr[7]","BoChr[8]","BoChr[9]","BoChr[10]","BoChr[11]","BoChr[12]","BoChr[13]","BoChr[14]","BoChr[15]","BoChr[16]","BoChr[17]","BoChr[18]","BoChr[19]","BoChr[20]","BoChr[21]","BoChr[22]","BoChr[23]"],["point","point","point","point","point","point","range","point","point","point","point","point","point","point","point","point","point","point","range","range","range","point","point","point","point","point","range","range","point","point","point","point","point","range","range","point","point","point","point","point","range","range","range","range","range","range","range","range","range","range","range","point","point","point","point","point","range","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point"],[0,1,2,3,4,5,5,0,1,2,3,4,5,6,7,8,9,10,10,20,30,0,1,2,3,4,4,8,0,1,2,3,4,4,8,0,1,2,3,4,4,10,null,2,3,4,5,6,7,8,null,3,4,5,6,7,7,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],[0,1,2,3,4,5,null,0,1,2,3,4,5,6,7,8,9,10,20,30,null,0,1,2,3,4,8,null,0,1,2,3,4,8,null,0,1,2,3,4,10,null,2,3,4,5,6,7,8,null,2,3,4,5,6,7,null,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>feature<\/th>\n      <th>component<\/th>\n      <th>label<\/th>\n      <th>min<\/th>\n      <th>max<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[4,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <blockquote>
 <p>When component is a discrete value (label is ‘point’), min=max</p>
 <p>When component is a range value (label is ‘range’), the range is left open and right closed</p>
@@ -695,46 +695,86 @@ $(document).ready(function () {
 <span id="cb35-4"><a href="#cb35-4"></a>  <span class="dt">type =</span> <span class="st">&quot;ca&quot;</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span></span>
 <span id="cb35-5"><a href="#cb35-5"></a>) <span class="op">%&gt;%</span></span>
 <span id="cb35-6"><a href="#cb35-6"></a><span class="st">  </span><span class="kw">get_tidy_association</span>(<span class="dt">p_adjust =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="kw">show_sig_feature_corrplot</span>(tidy_data.seqz.gene, <span class="dt">ylab =</span> <span class="st">&quot;Mutated genes&quot;</span>)</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-44-1.png" width="2700" /></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="kw">summary</span>(tidy_data.seqz.gene<span class="op">$</span>measure)</span>
+<span id="cb36-2"><a href="#cb36-2"></a><span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max.     NA&#39;s </span></span>
+<span id="cb36-3"><a href="#cb36-3"></a><span class="co">#&gt; -17.0000  -0.3532   6.5800  45.3287  22.3250 762.0000      152</span></span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="co">## 用梯度颜色解决 CNV 和 SNV Exposure 差异大的</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="co">## 问题，但颜色条白色没有对应到0</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="co">## 很奇怪，搞了很久没弄好，请教下别人</span></span>
+<span id="cb37-4"><a href="#cb37-4"></a></span>
+<span id="cb37-5"><a href="#cb37-5"></a><span class="co"># myPalette &lt;- colorRampPalette(rev(brewer.pal(11, &quot;RdYlBu&quot;)))</span></span>
+<span id="cb37-6"><a href="#cb37-6"></a><span class="co"># sc &lt;- scale_colour_gradientn(colours = myPalette(100), limits=c(-20, 600))</span></span>
+<span id="cb37-7"><a href="#cb37-7"></a></span>
+<span id="cb37-8"><a href="#cb37-8"></a>sc &lt;-<span class="st"> </span><span class="kw">scale_colour_gradientn</span>(</span>
+<span id="cb37-9"><a href="#cb37-9"></a>  <span class="dt">colors =</span> <span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;yellow&quot;</span>, <span class="st">&quot;red&quot;</span>),</span>
+<span id="cb37-10"><a href="#cb37-10"></a>  <span class="dt">values =</span> scales<span class="op">::</span><span class="kw">rescale</span>(<span class="kw">c</span>(</span>
+<span id="cb37-11"><a href="#cb37-11"></a>    tidy_data.seqz.gene<span class="op">$</span>measure <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">min</span>(<span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb37-12"><a href="#cb37-12"></a>    <span class="dv">0</span>,</span>
+<span id="cb37-13"><a href="#cb37-13"></a>    <span class="dv">20</span>,</span>
+<span id="cb37-14"><a href="#cb37-14"></a>    tidy_data.seqz.gene<span class="op">$</span>measure <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max</span>(<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb37-15"><a href="#cb37-15"></a>  ))</span>
+<span id="cb37-16"><a href="#cb37-16"></a>)</span>
+<span id="cb37-17"><a href="#cb37-17"></a></span>
+<span id="cb37-18"><a href="#cb37-18"></a><span class="kw">show_sig_feature_corrplot</span>(tidy_data.seqz.gene,</span>
+<span id="cb37-19"><a href="#cb37-19"></a>  <span class="dt">ylab =</span> <span class="st">&quot;Mutated genes&quot;</span>,</span>
+<span id="cb37-20"><a href="#cb37-20"></a>  <span class="dt">ca_gradient_colors =</span> sc</span>
+<span id="cb37-21"><a href="#cb37-21"></a>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-45-1.png" width="2700" /></p>
 </div>
 <div id="signatures-mutated-pathways" class="section level3">
 <h3>Signatures &amp; mutated pathways</h3>
 <p>Analyze the association between signatures and mutated pathways.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>tidy_data.seqz.pathways &lt;-<span class="st"> </span><span class="kw">get_sig_feature_association</span>(df.seqz,</span>
-<span id="cb37-2"><a href="#cb37-2"></a>  <span class="dt">cols_to_sigs =</span> cols_to_sigs.seqz,</span>
-<span id="cb37-3"><a href="#cb37-3"></a>  <span class="dt">cols_to_features =</span> cols_to_mutated_pathways,</span>
-<span id="cb37-4"><a href="#cb37-4"></a>  <span class="dt">type =</span> <span class="st">&quot;ca&quot;</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span></span>
-<span id="cb37-5"><a href="#cb37-5"></a>) <span class="op">%&gt;%</span></span>
-<span id="cb37-6"><a href="#cb37-6"></a><span class="st">  </span><span class="kw">get_tidy_association</span>(<span class="dt">p_adjust =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">show_sig_feature_corrplot</span>(tidy_data.seqz.pathways, <span class="dt">ylab =</span> <span class="st">&quot;Mutated pathways&quot;</span>)</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-46-1.png" width="2700" /></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>tidy_data.seqz.pathways &lt;-<span class="st"> </span><span class="kw">get_sig_feature_association</span>(df.seqz,</span>
+<span id="cb38-2"><a href="#cb38-2"></a>  <span class="dt">cols_to_sigs =</span> cols_to_sigs.seqz,</span>
+<span id="cb38-3"><a href="#cb38-3"></a>  <span class="dt">cols_to_features =</span> cols_to_mutated_pathways,</span>
+<span id="cb38-4"><a href="#cb38-4"></a>  <span class="dt">type =</span> <span class="st">&quot;ca&quot;</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span></span>
+<span id="cb38-5"><a href="#cb38-5"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb38-6"><a href="#cb38-6"></a><span class="st">  </span><span class="kw">get_tidy_association</span>(<span class="dt">p_adjust =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="kw">summary</span>(tidy_data.seqz.pathways<span class="op">$</span>measure)</span>
+<span id="cb39-2"><a href="#cb39-2"></a><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="co">#&gt;  -7.020   2.165  10.215  39.377  36.075 531.000</span></span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>sc &lt;-<span class="st"> </span><span class="kw">scale_colour_gradientn</span>(</span>
+<span id="cb40-2"><a href="#cb40-2"></a>  <span class="dt">colors =</span> <span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;yellow&quot;</span>, <span class="st">&quot;red&quot;</span>),</span>
+<span id="cb40-3"><a href="#cb40-3"></a>  <span class="dt">values =</span> scales<span class="op">::</span><span class="kw">rescale</span>(<span class="kw">c</span>(</span>
+<span id="cb40-4"><a href="#cb40-4"></a>    tidy_data.seqz.pathways<span class="op">$</span>measure <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">min</span>(<span class="dt">na.rm =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb40-5"><a href="#cb40-5"></a>    <span class="dv">0</span>,</span>
+<span id="cb40-6"><a href="#cb40-6"></a>    <span class="dv">40</span>,</span>
+<span id="cb40-7"><a href="#cb40-7"></a>    tidy_data.seqz.pathways<span class="op">$</span>measure <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">max</span>(<span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb40-8"><a href="#cb40-8"></a>  ))</span>
+<span id="cb40-9"><a href="#cb40-9"></a>)</span>
+<span id="cb40-10"><a href="#cb40-10"></a></span>
+<span id="cb40-11"><a href="#cb40-11"></a></span>
+<span id="cb40-12"><a href="#cb40-12"></a><span class="kw">show_sig_feature_corrplot</span>(tidy_data.seqz.pathways,</span>
+<span id="cb40-13"><a href="#cb40-13"></a>  <span class="dt">ylab =</span> <span class="st">&quot;Mutated pathways&quot;</span>,</span>
+<span id="cb40-14"><a href="#cb40-14"></a>  <span class="dt">ca_gradient_colors =</span> sc</span>
+<span id="cb40-15"><a href="#cb40-15"></a>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-48-1.png" width="2700" /></p>
 </div>
 <div id="correlation-network" class="section level3">
 <h3>Correlation network</h3>
 <p>To determine the structure of relationship between signatures and features, we use continuous variables to do correlation network analysis.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>f_dt &lt;-<span class="st"> </span>df.seqz[, <span class="kw">c</span>(cols_to_sigs.seqz, cols_to_features[<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">-2</span>)])] <span class="op">%&gt;%</span></span>
-<span id="cb39-2"><a href="#cb39-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_if</span>(is.ordered, as.numeric)</span></code></pre></div>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="kw">library</span>(corrr)</span>
-<span id="cb40-2"><a href="#cb40-2"></a></span>
-<span id="cb40-3"><a href="#cb40-3"></a>res.cor &lt;-<span class="st"> </span><span class="kw">correlate</span>(f_dt,</span>
-<span id="cb40-4"><a href="#cb40-4"></a>  <span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>,</span>
-<span id="cb40-5"><a href="#cb40-5"></a>  <span class="dt">method =</span> <span class="st">&quot;pearson&quot;</span></span>
-<span id="cb40-6"><a href="#cb40-6"></a>) <span class="op">%&gt;%</span></span>
-<span id="cb40-7"><a href="#cb40-7"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_if</span>(is.numeric, dplyr<span class="op">::</span>coalesce, <span class="dv">0</span>)</span>
-<span id="cb40-8"><a href="#cb40-8"></a></span>
-<span id="cb40-9"><a href="#cb40-9"></a><span class="co">## Avoid corrr error</span></span>
-<span id="cb40-10"><a href="#cb40-10"></a><span class="co">## https://github.com/tidymodels/corrr/issues/86</span></span>
-<span id="cb40-11"><a href="#cb40-11"></a><span class="co">## https://github.com/tidymodels/corrr/issues/34</span></span>
-<span id="cb40-12"><a href="#cb40-12"></a>res.cor[, <span class="dv">-1</span>] &lt;-<span class="st"> </span>res.cor[, <span class="dv">-1</span>] <span class="op">*</span><span class="st"> </span><span class="fl">0.99</span></span>
-<span id="cb40-13"><a href="#cb40-13"></a></span>
-<span id="cb40-14"><a href="#cb40-14"></a>p &lt;-<span class="st"> </span>res.cor <span class="op">%&gt;%</span></span>
-<span id="cb40-15"><a href="#cb40-15"></a><span class="st">  </span><span class="kw">network_plot</span>(</span>
-<span id="cb40-16"><a href="#cb40-16"></a>    <span class="dt">min_cor =</span> <span class="fl">0.2</span>,</span>
-<span id="cb40-17"><a href="#cb40-17"></a>    <span class="dt">colours =</span> <span class="kw">rev</span>(<span class="kw">c</span>(<span class="st">&quot;indianred2&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;skyblue1&quot;</span>))</span>
-<span id="cb40-18"><a href="#cb40-18"></a>  )</span>
-<span id="cb40-19"><a href="#cb40-19"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">scale_size</span>(<span class="dt">range =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="dv">2</span>))</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-48-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>f_dt &lt;-<span class="st"> </span>df.seqz[, <span class="kw">c</span>(cols_to_sigs.seqz, cols_to_features[<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">-2</span>)])] <span class="op">%&gt;%</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_if</span>(is.ordered, as.numeric)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="kw">library</span>(corrr)</span>
+<span id="cb42-2"><a href="#cb42-2"></a></span>
+<span id="cb42-3"><a href="#cb42-3"></a>res.cor &lt;-<span class="st"> </span><span class="kw">correlate</span>(f_dt,</span>
+<span id="cb42-4"><a href="#cb42-4"></a>  <span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>,</span>
+<span id="cb42-5"><a href="#cb42-5"></a>  <span class="dt">method =</span> <span class="st">&quot;pearson&quot;</span></span>
+<span id="cb42-6"><a href="#cb42-6"></a>) <span class="op">%&gt;%</span></span>
+<span id="cb42-7"><a href="#cb42-7"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_if</span>(is.numeric, dplyr<span class="op">::</span>coalesce, <span class="dv">0</span>)</span>
+<span id="cb42-8"><a href="#cb42-8"></a></span>
+<span id="cb42-9"><a href="#cb42-9"></a><span class="co">## Avoid corrr error</span></span>
+<span id="cb42-10"><a href="#cb42-10"></a><span class="co">## https://github.com/tidymodels/corrr/issues/86</span></span>
+<span id="cb42-11"><a href="#cb42-11"></a><span class="co">## https://github.com/tidymodels/corrr/issues/34</span></span>
+<span id="cb42-12"><a href="#cb42-12"></a>res.cor[, <span class="dv">-1</span>] &lt;-<span class="st"> </span>res.cor[, <span class="dv">-1</span>] <span class="op">*</span><span class="st"> </span><span class="fl">0.99</span></span>
+<span id="cb42-13"><a href="#cb42-13"></a></span>
+<span id="cb42-14"><a href="#cb42-14"></a>p &lt;-<span class="st"> </span>res.cor <span class="op">%&gt;%</span></span>
+<span id="cb42-15"><a href="#cb42-15"></a><span class="st">  </span><span class="kw">network_plot</span>(</span>
+<span id="cb42-16"><a href="#cb42-16"></a>    <span class="dt">min_cor =</span> <span class="fl">0.2</span>,</span>
+<span id="cb42-17"><a href="#cb42-17"></a>    <span class="dt">colours =</span> <span class="kw">rev</span>(<span class="kw">c</span>(<span class="st">&quot;indianred2&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;skyblue1&quot;</span>))</span>
+<span id="cb42-18"><a href="#cb42-18"></a>  )</span>
+<span id="cb42-19"><a href="#cb42-19"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">scale_size</span>(<span class="dt">range =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="dv">2</span>))</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-50-1.png" width="2400" /></p>
 <blockquote>
 <p>variables that are more highly correlated appear closer together and are joined by stronger paths. Paths are also colored by their sign. The proximity of the points are determined using multidimensional clustering.</p>
 </blockquote>
@@ -742,132 +782,132 @@ $(document).ready(function () {
 <div id="signatures-psa" class="section level3">
 <h3>Signatures &amp; PSA</h3>
 <p>In all datasets we collected, 3 of them have PSA info. However, the range of PSA value in 3 datasets differs, so I excluded PSA from features above and analyze it independently.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>df.seqz.psa &lt;-<span class="st"> </span>df.seqz <span class="op">%&gt;%</span></span>
-<span id="cb41-2"><a href="#cb41-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(PSA)) <span class="op">%&gt;%</span></span>
-<span id="cb41-3"><a href="#cb41-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">contains</span>(<span class="st">&quot;Sig&quot;</span>, <span class="dt">ignore.case =</span> F), <span class="kw">c</span>(<span class="st">&quot;PSA&quot;</span>, <span class="st">&quot;Study&quot;</span>, <span class="st">&quot;CNV_ID&quot;</span>))</span>
-<span id="cb41-4"><a href="#cb41-4"></a></span>
-<span id="cb41-5"><a href="#cb41-5"></a>df.seqz.psa &lt;-<span class="st"> </span>df.seqz.psa <span class="op">%&gt;%</span></span>
-<span id="cb41-6"><a href="#cb41-6"></a><span class="st">  </span>dplyr<span class="op">:::</span><span class="kw">group_by</span>(Study) <span class="op">%&gt;%</span></span>
-<span id="cb41-7"><a href="#cb41-7"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">nest</span>() <span class="op">%&gt;%</span></span>
-<span id="cb41-8"><a href="#cb41-8"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(</span>
-<span id="cb41-9"><a href="#cb41-9"></a>    <span class="dt">data =</span> purrr<span class="op">:::</span><span class="kw">map</span>(data, <span class="cf">function</span>(x) {</span>
-<span id="cb41-10"><a href="#cb41-10"></a>      <span class="kw">get_sig_feature_association</span>(x,</span>
-<span id="cb41-11"><a href="#cb41-11"></a>        <span class="dt">cols_to_sigs =</span> cols_to_sigs.seqz,</span>
-<span id="cb41-12"><a href="#cb41-12"></a>        <span class="dt">cols_to_features =</span> <span class="st">&quot;PSA&quot;</span>,</span>
-<span id="cb41-13"><a href="#cb41-13"></a>        <span class="dt">method_co =</span> <span class="st">&quot;pearson&quot;</span>,</span>
-<span id="cb41-14"><a href="#cb41-14"></a>        <span class="dt">type =</span> <span class="st">&quot;co&quot;</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span></span>
-<span id="cb41-15"><a href="#cb41-15"></a>      ) <span class="op">%&gt;%</span></span>
-<span id="cb41-16"><a href="#cb41-16"></a><span class="st">        </span><span class="kw">get_tidy_association</span>(<span class="dt">p_adjust =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb41-17"><a href="#cb41-17"></a>    })</span>
-<span id="cb41-18"><a href="#cb41-18"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb41-19"><a href="#cb41-19"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">unnest</span>(<span class="st">&quot;data&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb41-20"><a href="#cb41-20"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(feature <span class="op">==</span><span class="st"> &quot;PSA&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb41-21"><a href="#cb41-21"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">feature =</span> Study)</span></code></pre></div>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="kw">show_sig_feature_corrplot</span>(df.seqz.psa, <span class="dt">p_val =</span> <span class="dv">1</span>, <span class="dt">breaks_count =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">150</span>, <span class="dv">200</span>), <span class="dt">ylab =</span> <span class="st">&quot;PSA&quot;</span>)</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-50-1.png" width="2700" /></p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>df.seqz.psa &lt;-<span class="st"> </span>df.seqz <span class="op">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(PSA)) <span class="op">%&gt;%</span></span>
+<span id="cb43-3"><a href="#cb43-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">contains</span>(<span class="st">&quot;Sig&quot;</span>, <span class="dt">ignore.case =</span> F), <span class="kw">c</span>(<span class="st">&quot;PSA&quot;</span>, <span class="st">&quot;Study&quot;</span>, <span class="st">&quot;CNV_ID&quot;</span>))</span>
+<span id="cb43-4"><a href="#cb43-4"></a></span>
+<span id="cb43-5"><a href="#cb43-5"></a>df.seqz.psa &lt;-<span class="st"> </span>df.seqz.psa <span class="op">%&gt;%</span></span>
+<span id="cb43-6"><a href="#cb43-6"></a><span class="st">  </span>dplyr<span class="op">:::</span><span class="kw">group_by</span>(Study) <span class="op">%&gt;%</span></span>
+<span id="cb43-7"><a href="#cb43-7"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">nest</span>() <span class="op">%&gt;%</span></span>
+<span id="cb43-8"><a href="#cb43-8"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(</span>
+<span id="cb43-9"><a href="#cb43-9"></a>    <span class="dt">data =</span> purrr<span class="op">:::</span><span class="kw">map</span>(data, <span class="cf">function</span>(x) {</span>
+<span id="cb43-10"><a href="#cb43-10"></a>      <span class="kw">get_sig_feature_association</span>(x,</span>
+<span id="cb43-11"><a href="#cb43-11"></a>        <span class="dt">cols_to_sigs =</span> cols_to_sigs.seqz,</span>
+<span id="cb43-12"><a href="#cb43-12"></a>        <span class="dt">cols_to_features =</span> <span class="st">&quot;PSA&quot;</span>,</span>
+<span id="cb43-13"><a href="#cb43-13"></a>        <span class="dt">method_co =</span> <span class="st">&quot;pearson&quot;</span>,</span>
+<span id="cb43-14"><a href="#cb43-14"></a>        <span class="dt">type =</span> <span class="st">&quot;co&quot;</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span></span>
+<span id="cb43-15"><a href="#cb43-15"></a>      ) <span class="op">%&gt;%</span></span>
+<span id="cb43-16"><a href="#cb43-16"></a><span class="st">        </span><span class="kw">get_tidy_association</span>(<span class="dt">p_adjust =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb43-17"><a href="#cb43-17"></a>    })</span>
+<span id="cb43-18"><a href="#cb43-18"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb43-19"><a href="#cb43-19"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">unnest</span>(<span class="st">&quot;data&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb43-20"><a href="#cb43-20"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(feature <span class="op">==</span><span class="st"> &quot;PSA&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb43-21"><a href="#cb43-21"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">feature =</span> Study)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="kw">show_sig_feature_corrplot</span>(df.seqz.psa, <span class="dt">p_val =</span> <span class="dv">1</span>, <span class="dt">breaks_count =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">150</span>, <span class="dv">200</span>), <span class="dt">ylab =</span> <span class="st">&quot;PSA&quot;</span>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-52-1.png" width="2700" /></p>
 <p>Alought we can observe the statistically significant correlation between signatures and PSA, the results are inconsistent across different studies. This may be explained by the dynamic property of PSA while not the sample type due to most of them are primary.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="kw">table</span>(df.seqz<span class="op">$</span>sample_type, df.seqz<span class="op">$</span>Study)</span>
-<span id="cb43-2"><a href="#cb43-2"></a><span class="co">#&gt;             </span></span>
-<span id="cb43-3"><a href="#cb43-3"></a><span class="co">#&gt;              phs000447 phs000554 phs000909 phs000915 phs001141 TCGA</span></span>
-<span id="cb43-4"><a href="#cb43-4"></a><span class="co">#&gt;   Metastatic         0        50        70       147        77    1</span></span>
-<span id="cb43-5"><a href="#cb43-5"></a><span class="co">#&gt;   Primary          112        11        28         0         0  500</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="kw">table</span>(df.seqz<span class="op">$</span>sample_type, df.seqz<span class="op">$</span>Study)</span>
+<span id="cb45-2"><a href="#cb45-2"></a><span class="co">#&gt;             </span></span>
+<span id="cb45-3"><a href="#cb45-3"></a><span class="co">#&gt;              phs000447 phs000554 phs000909 phs000915 phs001141 TCGA</span></span>
+<span id="cb45-4"><a href="#cb45-4"></a><span class="co">#&gt;   Metastatic         0        50        70       147        77    1</span></span>
+<span id="cb45-5"><a href="#cb45-5"></a><span class="co">#&gt;   Primary          112        11        28         0         0  500</span></span></code></pre></div>
 </div>
 </div>
 </div>
 <div id="group-analysis" class="section level1">
 <h1>Group Analysis</h1>
 <p>Load packages.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb44-2"><a href="#cb44-2"></a><span class="kw">library</span>(sigminer)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb46-2"><a href="#cb46-2"></a><span class="kw">library</span>(sigminer)</span></code></pre></div>
 <p>Load the data.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>df.seqz &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_Merge_Info_CNV_from_sequenza.RData&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>df.seqz &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_Merge_Info_CNV_from_sequenza.RData&quot;</span>)</span></code></pre></div>
 <div id="group-comparison" class="section level2">
 <h2>Group comparison</h2>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>cols_to_features &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
-<span id="cb46-2"><a href="#cb46-2"></a>  <span class="st">&quot;IsMetastatic&quot;</span>, <span class="st">&quot;HasFusion&quot;</span>, <span class="st">&quot;Stage&quot;</span>, <span class="st">&quot;GleasonScore&quot;</span>,</span>
-<span id="cb46-3"><a href="#cb46-3"></a>  <span class="st">&quot;Age&quot;</span>,</span>
-<span id="cb46-4"><a href="#cb46-4"></a>  <span class="st">&quot;total_mutation&quot;</span>, <span class="st">&quot;n_driver&quot;</span>, <span class="st">&quot;Ti_fraction&quot;</span>, <span class="st">&quot;Tv_fraction&quot;</span>,</span>
-<span id="cb46-5"><a href="#cb46-5"></a>  <span class="st">&quot;n_of_cnv&quot;</span>, <span class="st">&quot;n_of_amp&quot;</span>, <span class="st">&quot;n_of_del&quot;</span>, <span class="st">&quot;n_of_vchr&quot;</span>, <span class="st">&quot;cna_burden&quot;</span>,</span>
-<span id="cb46-6"><a href="#cb46-6"></a>  <span class="st">&quot;MATH&quot;</span>, <span class="st">&quot;cluster&quot;</span>, <span class="st">&quot;purity&quot;</span>, <span class="st">&quot;ploidy&quot;</span></span>
-<span id="cb46-7"><a href="#cb46-7"></a>)</span>
-<span id="cb46-8"><a href="#cb46-8"></a></span>
-<span id="cb46-9"><a href="#cb46-9"></a>feature_type &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;ca&quot;</span>, <span class="dv">4</span>), <span class="kw">rep</span>(<span class="st">&quot;co&quot;</span>, <span class="dv">14</span>))</span></code></pre></div>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>df.seqz<span class="op">$</span>GleasonScore &lt;-<span class="st"> </span><span class="kw">as.character</span>(df.seqz<span class="op">$</span>GleasonScore)</span>
-<span id="cb47-2"><a href="#cb47-2"></a>df.seqz<span class="op">$</span>GleasonScore &lt;-<span class="st"> </span><span class="kw">factor</span>(df.seqz<span class="op">$</span>GleasonScore, <span class="dt">levels =</span> <span class="kw">as.character</span>(<span class="dv">6</span><span class="op">:</span><span class="dv">10</span>))</span>
-<span id="cb47-3"><a href="#cb47-3"></a></span>
-<span id="cb47-4"><a href="#cb47-4"></a>df.seqz2 &lt;-<span class="st"> </span>df.seqz</span>
-<span id="cb47-5"><a href="#cb47-5"></a>df.seqz2<span class="op">$</span>cnv_enrich_sig &lt;-<span class="st"> </span><span class="kw">ifelse</span>(</span>
-<span id="cb47-6"><a href="#cb47-6"></a>  <span class="op">!</span><span class="kw">is.na</span>(df.seqz2<span class="op">$</span>cnv_enrich_sig),</span>
-<span id="cb47-7"><a href="#cb47-7"></a>  <span class="kw">paste</span>(df.seqz2<span class="op">$</span>cnv_enrich_sig, <span class="st">&quot;dominant&quot;</span>),</span>
-<span id="cb47-8"><a href="#cb47-8"></a>  <span class="ot">NA</span></span>
-<span id="cb47-9"><a href="#cb47-9"></a>)</span>
-<span id="cb47-10"><a href="#cb47-10"></a></span>
-<span id="cb47-11"><a href="#cb47-11"></a>grp.cnv &lt;-<span class="st"> </span><span class="kw">get_group_comparison</span>(</span>
-<span id="cb47-12"><a href="#cb47-12"></a>  df.seqz2,</span>
-<span id="cb47-13"><a href="#cb47-13"></a>  <span class="dt">col_group =</span> <span class="st">&quot;cnv_enrich_sig&quot;</span>, <span class="co"># or &quot;cnv_group&quot;</span></span>
-<span id="cb47-14"><a href="#cb47-14"></a>  <span class="dt">cols_to_compare =</span> cols_to_features,</span>
-<span id="cb47-15"><a href="#cb47-15"></a>  <span class="dt">type =</span> feature_type</span>
-<span id="cb47-16"><a href="#cb47-16"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>plot.cnv &lt;-<span class="st"> </span><span class="kw">show_group_comparison</span>(</span>
-<span id="cb48-2"><a href="#cb48-2"></a>  grp.cnv,</span>
-<span id="cb48-3"><a href="#cb48-3"></a>  <span class="dt">xlab =</span> <span class="ot">NA</span>,</span>
-<span id="cb48-4"><a href="#cb48-4"></a>  <span class="dt">method =</span> <span class="st">&quot;anova&quot;</span>,</span>
-<span id="cb48-5"><a href="#cb48-5"></a>  <span class="dt">text_angle_x =</span> <span class="dv">60</span>,</span>
-<span id="cb48-6"><a href="#cb48-6"></a>  <span class="dt">text_hjust_x =</span> <span class="dv">1</span>,</span>
-<span id="cb48-7"><a href="#cb48-7"></a>  <span class="dt">legend_position_ca =</span> <span class="st">&quot;right&quot;</span>,</span>
-<span id="cb48-8"><a href="#cb48-8"></a>  <span class="dt">label.x.npc =</span> <span class="st">&quot;center&quot;</span>,</span>
-<span id="cb48-9"><a href="#cb48-9"></a>  <span class="dt">label.y.npc =</span> <span class="st">&quot;top&quot;</span>,</span>
-<span id="cb48-10"><a href="#cb48-10"></a>  <span class="dt">label =</span> <span class="st">&quot;p.format&quot;</span>,</span>
-<span id="cb48-11"><a href="#cb48-11"></a>  <span class="dt">hjust =</span> <span class="fl">0.5</span></span>
-<span id="cb48-12"><a href="#cb48-12"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>plot.cnv<span class="op">$</span>ca_comb</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-57-1.png" width="2400" /></p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>plot.cnv<span class="op">$</span>co_comb</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-58-1.png" width="3000" /></p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a>df.seqz2<span class="op">$</span>snv_enrich_sig &lt;-<span class="st"> </span><span class="kw">ifelse</span>(</span>
-<span id="cb51-2"><a href="#cb51-2"></a>  <span class="op">!</span><span class="kw">is.na</span>(df.seqz2<span class="op">$</span>snv_enrich_sig),</span>
-<span id="cb51-3"><a href="#cb51-3"></a>  <span class="kw">paste</span>(df.seqz2<span class="op">$</span>snv_enrich_sig, <span class="st">&quot;dominant&quot;</span>),</span>
-<span id="cb51-4"><a href="#cb51-4"></a>  <span class="ot">NA</span></span>
-<span id="cb51-5"><a href="#cb51-5"></a>)</span>
-<span id="cb51-6"><a href="#cb51-6"></a></span>
-<span id="cb51-7"><a href="#cb51-7"></a>grp.snv &lt;-<span class="st"> </span><span class="kw">get_group_comparison</span>(</span>
-<span id="cb51-8"><a href="#cb51-8"></a>  df.seqz2,</span>
-<span id="cb51-9"><a href="#cb51-9"></a>  <span class="dt">col_group =</span> <span class="st">&quot;snv_enrich_sig&quot;</span>, <span class="co"># or &quot;snv_group&quot;</span></span>
-<span id="cb51-10"><a href="#cb51-10"></a>  <span class="dt">cols_to_compare =</span> cols_to_features,</span>
-<span id="cb51-11"><a href="#cb51-11"></a>  <span class="dt">type =</span> feature_type</span>
-<span id="cb51-12"><a href="#cb51-12"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>plot.snv &lt;-<span class="st"> </span><span class="kw">show_group_comparison</span>(</span>
-<span id="cb52-2"><a href="#cb52-2"></a>  grp.snv,</span>
-<span id="cb52-3"><a href="#cb52-3"></a>  <span class="dt">xlab =</span> <span class="ot">NA</span>,</span>
-<span id="cb52-4"><a href="#cb52-4"></a>  <span class="dt">method =</span> <span class="st">&quot;anova&quot;</span>,</span>
-<span id="cb52-5"><a href="#cb52-5"></a>  <span class="dt">text_angle_x =</span> <span class="dv">60</span>,</span>
-<span id="cb52-6"><a href="#cb52-6"></a>  <span class="dt">text_hjust_x =</span> <span class="dv">1</span>,</span>
-<span id="cb52-7"><a href="#cb52-7"></a>  <span class="dt">legend_position_ca =</span> <span class="st">&quot;right&quot;</span>,</span>
-<span id="cb52-8"><a href="#cb52-8"></a>  <span class="dt">label.x.npc =</span> <span class="st">&quot;center&quot;</span>,</span>
-<span id="cb52-9"><a href="#cb52-9"></a>  <span class="dt">label.y.npc =</span> <span class="st">&quot;top&quot;</span>,</span>
-<span id="cb52-10"><a href="#cb52-10"></a>  <span class="dt">label =</span> <span class="st">&quot;p.format&quot;</span>,</span>
-<span id="cb52-11"><a href="#cb52-11"></a>  <span class="dt">hjust =</span> <span class="fl">0.5</span></span>
-<span id="cb52-12"><a href="#cb52-12"></a>)</span></code></pre></div>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>plot.snv<span class="op">$</span>ca_comb</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-61-1.png" width="2400" /></p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>plot.snv<span class="op">$</span>co_comb</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-62-1.png" width="2700" /></p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>cols_to_features &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb48-2"><a href="#cb48-2"></a>  <span class="st">&quot;IsMetastatic&quot;</span>, <span class="st">&quot;HasFusion&quot;</span>, <span class="st">&quot;Stage&quot;</span>, <span class="st">&quot;GleasonScore&quot;</span>,</span>
+<span id="cb48-3"><a href="#cb48-3"></a>  <span class="st">&quot;Age&quot;</span>,</span>
+<span id="cb48-4"><a href="#cb48-4"></a>  <span class="st">&quot;total_mutation&quot;</span>, <span class="st">&quot;n_driver&quot;</span>, <span class="st">&quot;Ti_fraction&quot;</span>, <span class="st">&quot;Tv_fraction&quot;</span>,</span>
+<span id="cb48-5"><a href="#cb48-5"></a>  <span class="st">&quot;n_of_cnv&quot;</span>, <span class="st">&quot;n_of_amp&quot;</span>, <span class="st">&quot;n_of_del&quot;</span>, <span class="st">&quot;n_of_vchr&quot;</span>, <span class="st">&quot;cna_burden&quot;</span>,</span>
+<span id="cb48-6"><a href="#cb48-6"></a>  <span class="st">&quot;MATH&quot;</span>, <span class="st">&quot;cluster&quot;</span>, <span class="st">&quot;purity&quot;</span>, <span class="st">&quot;ploidy&quot;</span></span>
+<span id="cb48-7"><a href="#cb48-7"></a>)</span>
+<span id="cb48-8"><a href="#cb48-8"></a></span>
+<span id="cb48-9"><a href="#cb48-9"></a>feature_type &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;ca&quot;</span>, <span class="dv">4</span>), <span class="kw">rep</span>(<span class="st">&quot;co&quot;</span>, <span class="dv">14</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>df.seqz<span class="op">$</span>GleasonScore &lt;-<span class="st"> </span><span class="kw">as.character</span>(df.seqz<span class="op">$</span>GleasonScore)</span>
+<span id="cb49-2"><a href="#cb49-2"></a>df.seqz<span class="op">$</span>GleasonScore &lt;-<span class="st"> </span><span class="kw">factor</span>(df.seqz<span class="op">$</span>GleasonScore, <span class="dt">levels =</span> <span class="kw">as.character</span>(<span class="dv">6</span><span class="op">:</span><span class="dv">10</span>))</span>
+<span id="cb49-3"><a href="#cb49-3"></a></span>
+<span id="cb49-4"><a href="#cb49-4"></a>df.seqz2 &lt;-<span class="st"> </span>df.seqz</span>
+<span id="cb49-5"><a href="#cb49-5"></a>df.seqz2<span class="op">$</span>cnv_enrich_sig &lt;-<span class="st"> </span><span class="kw">ifelse</span>(</span>
+<span id="cb49-6"><a href="#cb49-6"></a>  <span class="op">!</span><span class="kw">is.na</span>(df.seqz2<span class="op">$</span>cnv_enrich_sig),</span>
+<span id="cb49-7"><a href="#cb49-7"></a>  <span class="kw">paste</span>(df.seqz2<span class="op">$</span>cnv_enrich_sig, <span class="st">&quot;dominant&quot;</span>),</span>
+<span id="cb49-8"><a href="#cb49-8"></a>  <span class="ot">NA</span></span>
+<span id="cb49-9"><a href="#cb49-9"></a>)</span>
+<span id="cb49-10"><a href="#cb49-10"></a></span>
+<span id="cb49-11"><a href="#cb49-11"></a>grp.cnv &lt;-<span class="st"> </span><span class="kw">get_group_comparison</span>(</span>
+<span id="cb49-12"><a href="#cb49-12"></a>  df.seqz2,</span>
+<span id="cb49-13"><a href="#cb49-13"></a>  <span class="dt">col_group =</span> <span class="st">&quot;cnv_enrich_sig&quot;</span>, <span class="co"># or &quot;cnv_group&quot;</span></span>
+<span id="cb49-14"><a href="#cb49-14"></a>  <span class="dt">cols_to_compare =</span> cols_to_features,</span>
+<span id="cb49-15"><a href="#cb49-15"></a>  <span class="dt">type =</span> feature_type</span>
+<span id="cb49-16"><a href="#cb49-16"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>plot.cnv &lt;-<span class="st"> </span><span class="kw">show_group_comparison</span>(</span>
+<span id="cb50-2"><a href="#cb50-2"></a>  grp.cnv,</span>
+<span id="cb50-3"><a href="#cb50-3"></a>  <span class="dt">xlab =</span> <span class="ot">NA</span>,</span>
+<span id="cb50-4"><a href="#cb50-4"></a>  <span class="dt">method =</span> <span class="st">&quot;anova&quot;</span>,</span>
+<span id="cb50-5"><a href="#cb50-5"></a>  <span class="dt">text_angle_x =</span> <span class="dv">60</span>,</span>
+<span id="cb50-6"><a href="#cb50-6"></a>  <span class="dt">text_hjust_x =</span> <span class="dv">1</span>,</span>
+<span id="cb50-7"><a href="#cb50-7"></a>  <span class="dt">legend_position_ca =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb50-8"><a href="#cb50-8"></a>  <span class="dt">label.x.npc =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb50-9"><a href="#cb50-9"></a>  <span class="dt">label.y.npc =</span> <span class="st">&quot;top&quot;</span>,</span>
+<span id="cb50-10"><a href="#cb50-10"></a>  <span class="dt">label =</span> <span class="st">&quot;p.format&quot;</span>,</span>
+<span id="cb50-11"><a href="#cb50-11"></a>  <span class="dt">hjust =</span> <span class="fl">0.5</span></span>
+<span id="cb50-12"><a href="#cb50-12"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a>plot.cnv<span class="op">$</span>ca_comb</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-59-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>plot.cnv<span class="op">$</span>co_comb</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-60-1.png" width="3000" /></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>df.seqz2<span class="op">$</span>snv_enrich_sig &lt;-<span class="st"> </span><span class="kw">ifelse</span>(</span>
+<span id="cb53-2"><a href="#cb53-2"></a>  <span class="op">!</span><span class="kw">is.na</span>(df.seqz2<span class="op">$</span>snv_enrich_sig),</span>
+<span id="cb53-3"><a href="#cb53-3"></a>  <span class="kw">paste</span>(df.seqz2<span class="op">$</span>snv_enrich_sig, <span class="st">&quot;dominant&quot;</span>),</span>
+<span id="cb53-4"><a href="#cb53-4"></a>  <span class="ot">NA</span></span>
+<span id="cb53-5"><a href="#cb53-5"></a>)</span>
+<span id="cb53-6"><a href="#cb53-6"></a></span>
+<span id="cb53-7"><a href="#cb53-7"></a>grp.snv &lt;-<span class="st"> </span><span class="kw">get_group_comparison</span>(</span>
+<span id="cb53-8"><a href="#cb53-8"></a>  df.seqz2,</span>
+<span id="cb53-9"><a href="#cb53-9"></a>  <span class="dt">col_group =</span> <span class="st">&quot;snv_enrich_sig&quot;</span>, <span class="co"># or &quot;snv_group&quot;</span></span>
+<span id="cb53-10"><a href="#cb53-10"></a>  <span class="dt">cols_to_compare =</span> cols_to_features,</span>
+<span id="cb53-11"><a href="#cb53-11"></a>  <span class="dt">type =</span> feature_type</span>
+<span id="cb53-12"><a href="#cb53-12"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>plot.snv &lt;-<span class="st"> </span><span class="kw">show_group_comparison</span>(</span>
+<span id="cb54-2"><a href="#cb54-2"></a>  grp.snv,</span>
+<span id="cb54-3"><a href="#cb54-3"></a>  <span class="dt">xlab =</span> <span class="ot">NA</span>,</span>
+<span id="cb54-4"><a href="#cb54-4"></a>  <span class="dt">method =</span> <span class="st">&quot;anova&quot;</span>,</span>
+<span id="cb54-5"><a href="#cb54-5"></a>  <span class="dt">text_angle_x =</span> <span class="dv">60</span>,</span>
+<span id="cb54-6"><a href="#cb54-6"></a>  <span class="dt">text_hjust_x =</span> <span class="dv">1</span>,</span>
+<span id="cb54-7"><a href="#cb54-7"></a>  <span class="dt">legend_position_ca =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb54-8"><a href="#cb54-8"></a>  <span class="dt">label.x.npc =</span> <span class="st">&quot;center&quot;</span>,</span>
+<span id="cb54-9"><a href="#cb54-9"></a>  <span class="dt">label.y.npc =</span> <span class="st">&quot;top&quot;</span>,</span>
+<span id="cb54-10"><a href="#cb54-10"></a>  <span class="dt">label =</span> <span class="st">&quot;p.format&quot;</span>,</span>
+<span id="cb54-11"><a href="#cb54-11"></a>  <span class="dt">hjust =</span> <span class="fl">0.5</span></span>
+<span id="cb54-12"><a href="#cb54-12"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>plot.snv<span class="op">$</span>ca_comb</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-63-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>plot.snv<span class="op">$</span>co_comb</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-64-1.png" width="2700" /></p>
 </div>
 <div id="group-mapping" class="section level2">
 <h2>Group mapping</h2>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>df.map &lt;-<span class="st"> </span>df.seqz[, <span class="kw">c</span>(</span>
-<span id="cb55-2"><a href="#cb55-2"></a>  <span class="st">&quot;sample_type&quot;</span>,</span>
-<span id="cb55-3"><a href="#cb55-3"></a>  <span class="st">&quot;cnv_enrich_sig&quot;</span>,</span>
-<span id="cb55-4"><a href="#cb55-4"></a>  <span class="st">&quot;snv_enrich_sig&quot;</span></span>
-<span id="cb55-5"><a href="#cb55-5"></a>)] <span class="op">%&gt;%</span></span>
-<span id="cb55-6"><a href="#cb55-6"></a><span class="st">  </span><span class="kw">na.omit</span>()</span>
-<span id="cb55-7"><a href="#cb55-7"></a><span class="kw">names</span>(df.map) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Sample type&quot;</span>, <span class="st">&quot;Dominant CNV signature&quot;</span>, <span class="st">&quot;Dominant SNV signature&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a><span class="kw">show_group_mapping</span>(df.map,</span>
-<span id="cb56-2"><a href="#cb56-2"></a>  <span class="dt">col_to_flow =</span> <span class="st">&quot;Sample type&quot;</span>,</span>
-<span id="cb56-3"><a href="#cb56-3"></a>  <span class="dt">cols_to_map =</span> <span class="kw">setdiff</span>(<span class="kw">colnames</span>(df.map), <span class="st">&quot;Sample type&quot;</span>),</span>
-<span id="cb56-4"><a href="#cb56-4"></a>  <span class="dt">fill_na =</span> <span class="st">&quot;NA&quot;</span>, <span class="dt">include_sig =</span> <span class="ot">TRUE</span></span>
-<span id="cb56-5"><a href="#cb56-5"></a>)</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-64-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a>df.map &lt;-<span class="st"> </span>df.seqz[, <span class="kw">c</span>(</span>
+<span id="cb57-2"><a href="#cb57-2"></a>  <span class="st">&quot;sample_type&quot;</span>,</span>
+<span id="cb57-3"><a href="#cb57-3"></a>  <span class="st">&quot;cnv_enrich_sig&quot;</span>,</span>
+<span id="cb57-4"><a href="#cb57-4"></a>  <span class="st">&quot;snv_enrich_sig&quot;</span></span>
+<span id="cb57-5"><a href="#cb57-5"></a>)] <span class="op">%&gt;%</span></span>
+<span id="cb57-6"><a href="#cb57-6"></a><span class="st">  </span><span class="kw">na.omit</span>()</span>
+<span id="cb57-7"><a href="#cb57-7"></a><span class="kw">names</span>(df.map) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Sample type&quot;</span>, <span class="st">&quot;Dominant CNV signature&quot;</span>, <span class="st">&quot;Dominant SNV signature&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a><span class="kw">show_group_mapping</span>(df.map,</span>
+<span id="cb58-2"><a href="#cb58-2"></a>  <span class="dt">col_to_flow =</span> <span class="st">&quot;Sample type&quot;</span>,</span>
+<span id="cb58-3"><a href="#cb58-3"></a>  <span class="dt">cols_to_map =</span> <span class="kw">setdiff</span>(<span class="kw">colnames</span>(df.map), <span class="st">&quot;Sample type&quot;</span>),</span>
+<span id="cb58-4"><a href="#cb58-4"></a>  <span class="dt">fill_na =</span> <span class="st">&quot;NA&quot;</span>, <span class="dt">include_sig =</span> <span class="ot">TRUE</span></span>
+<span id="cb58-5"><a href="#cb58-5"></a>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-66-1.png" width="2400" /></p>
 </div>
 </div>
 <div id="survival-analysis" class="section level1">
@@ -875,89 +915,89 @@ $(document).ready(function () {
 <div id="prepare-1" class="section level2">
 <h2>Prepare</h2>
 <p>Load package <strong>ezcox</strong> for batch Cox analysis.</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a><span class="kw">library</span>(ezcox)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="kw">library</span>(ezcox)</span></code></pre></div>
 <p>Load the data.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a>df.seqz &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_Merge_Info_CNV_from_sequenza.RData&quot;</span>)</span>
-<span id="cb58-2"><a href="#cb58-2"></a>surv_df &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../data/PRAD_Survival.rds&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>df.seqz &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_Merge_Info_CNV_from_sequenza.RData&quot;</span>)</span>
+<span id="cb60-2"><a href="#cb60-2"></a>surv_df &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../data/PRAD_Survival.rds&quot;</span>)</span></code></pre></div>
 <p>Clean the data to generate a data table for survival analysis.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a>range01 &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</span>
-<span id="cb59-2"><a href="#cb59-2"></a>  (x <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(x, ...)) <span class="op">/</span><span class="st"> </span>(<span class="kw">max</span>(x, ...) <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(x, ...))</span>
-<span id="cb59-3"><a href="#cb59-3"></a>}</span>
-<span id="cb59-4"><a href="#cb59-4"></a></span>
-<span id="cb59-5"><a href="#cb59-5"></a>cols_to_sigs.seqz &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;CNV_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="kw">paste0</span>(<span class="st">&quot;SNV_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>))</span>
-<span id="cb59-6"><a href="#cb59-6"></a></span>
-<span id="cb59-7"><a href="#cb59-7"></a></span>
-<span id="cb59-8"><a href="#cb59-8"></a>surv_dt &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">inner_join</span>(df.seqz <span class="op">%&gt;%</span></span>
-<span id="cb59-9"><a href="#cb59-9"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(</span>
-<span id="cb59-10"><a href="#cb59-10"></a>    <span class="st">&quot;Study&quot;</span>, <span class="st">&quot;subject_id&quot;</span>, <span class="st">&quot;tumor_body_site&quot;</span>,</span>
-<span id="cb59-11"><a href="#cb59-11"></a>    <span class="st">&quot;tumor_Run&quot;</span>, <span class="st">&quot;normal_Run&quot;</span>, <span class="st">&quot;CNV_ID&quot;</span>,</span>
-<span id="cb59-12"><a href="#cb59-12"></a>    <span class="st">&quot;Fusion&quot;</span>, <span class="st">&quot;sample_type&quot;</span></span>
-<span id="cb59-13"><a href="#cb59-13"></a>  )),</span>
-<span id="cb59-14"><a href="#cb59-14"></a>surv_df,</span>
-<span id="cb59-15"><a href="#cb59-15"></a><span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;PatientID&quot;</span> =<span class="st"> &quot;sample&quot;</span>)</span>
-<span id="cb59-16"><a href="#cb59-16"></a>)</span>
-<span id="cb59-17"><a href="#cb59-17"></a></span>
-<span id="cb59-18"><a href="#cb59-18"></a>dup_ids &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">duplicated</span>(surv_dt<span class="op">$</span>PatientID))</span>
-<span id="cb59-19"><a href="#cb59-19"></a><span class="co"># Remove duplicated records</span></span>
-<span id="cb59-20"><a href="#cb59-20"></a>surv_dt &lt;-<span class="st"> </span>surv_dt[<span class="op">-</span>dup_ids, ]</span>
-<span id="cb59-21"><a href="#cb59-21"></a></span>
-<span id="cb59-22"><a href="#cb59-22"></a><span class="co"># Scale the signature activity to 0-20.</span></span>
-<span id="cb59-23"><a href="#cb59-23"></a><span class="co"># To better understand the effect of signature activity on clinical events,</span></span>
-<span id="cb59-24"><a href="#cb59-24"></a><span class="co"># here we scale them into range 0-20. 1 increase means 5% increase of signature activity.</span></span>
-<span id="cb59-25"><a href="#cb59-25"></a><span class="co">#</span></span>
-<span id="cb59-26"><a href="#cb59-26"></a><span class="co"># Scale the CNA burden to 0-20.</span></span>
-<span id="cb59-27"><a href="#cb59-27"></a>surv_dt &lt;-<span class="st"> </span>surv_dt <span class="op">%&gt;%</span></span>
-<span id="cb59-28"><a href="#cb59-28"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(</span>
-<span id="cb59-29"><a href="#cb59-29"></a>    <span class="dt">cna_burden =</span> <span class="dv">20</span> <span class="op">*</span><span class="st"> </span>cna_burden,</span>
-<span id="cb59-30"><a href="#cb59-30"></a>    <span class="dt">Stage =</span> <span class="kw">as.character</span>(Stage) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;T2&quot;</span>, <span class="st">&quot;T3&quot;</span>, <span class="st">&quot;T4&quot;</span>))</span>
-<span id="cb59-31"><a href="#cb59-31"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb59-32"><a href="#cb59-32"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(cols_to_sigs.seqz, <span class="op">~</span><span class="st"> </span><span class="dv">20</span> <span class="op">*</span><span class="st"> </span><span class="kw">range01</span>(., <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb59-33"><a href="#cb59-33"></a></span>
-<span id="cb59-34"><a href="#cb59-34"></a><span class="kw">saveRDS</span>(surv_dt, <span class="dt">file =</span> <span class="st">&quot;../output/PRAD_merged_survival_dt_seqz.rds&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a>range01 &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</span>
+<span id="cb61-2"><a href="#cb61-2"></a>  (x <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(x, ...)) <span class="op">/</span><span class="st"> </span>(<span class="kw">max</span>(x, ...) <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(x, ...))</span>
+<span id="cb61-3"><a href="#cb61-3"></a>}</span>
+<span id="cb61-4"><a href="#cb61-4"></a></span>
+<span id="cb61-5"><a href="#cb61-5"></a>cols_to_sigs.seqz &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;CNV_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="kw">paste0</span>(<span class="st">&quot;SNV_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>))</span>
+<span id="cb61-6"><a href="#cb61-6"></a></span>
+<span id="cb61-7"><a href="#cb61-7"></a></span>
+<span id="cb61-8"><a href="#cb61-8"></a>surv_dt &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">inner_join</span>(df.seqz <span class="op">%&gt;%</span></span>
+<span id="cb61-9"><a href="#cb61-9"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(</span>
+<span id="cb61-10"><a href="#cb61-10"></a>    <span class="st">&quot;Study&quot;</span>, <span class="st">&quot;subject_id&quot;</span>, <span class="st">&quot;tumor_body_site&quot;</span>,</span>
+<span id="cb61-11"><a href="#cb61-11"></a>    <span class="st">&quot;tumor_Run&quot;</span>, <span class="st">&quot;normal_Run&quot;</span>, <span class="st">&quot;CNV_ID&quot;</span>,</span>
+<span id="cb61-12"><a href="#cb61-12"></a>    <span class="st">&quot;Fusion&quot;</span>, <span class="st">&quot;sample_type&quot;</span></span>
+<span id="cb61-13"><a href="#cb61-13"></a>  )),</span>
+<span id="cb61-14"><a href="#cb61-14"></a>surv_df,</span>
+<span id="cb61-15"><a href="#cb61-15"></a><span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;PatientID&quot;</span> =<span class="st"> &quot;sample&quot;</span>)</span>
+<span id="cb61-16"><a href="#cb61-16"></a>)</span>
+<span id="cb61-17"><a href="#cb61-17"></a></span>
+<span id="cb61-18"><a href="#cb61-18"></a>dup_ids &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">duplicated</span>(surv_dt<span class="op">$</span>PatientID))</span>
+<span id="cb61-19"><a href="#cb61-19"></a><span class="co"># Remove duplicated records</span></span>
+<span id="cb61-20"><a href="#cb61-20"></a>surv_dt &lt;-<span class="st"> </span>surv_dt[<span class="op">-</span>dup_ids, ]</span>
+<span id="cb61-21"><a href="#cb61-21"></a></span>
+<span id="cb61-22"><a href="#cb61-22"></a><span class="co"># Scale the signature activity to 0-20.</span></span>
+<span id="cb61-23"><a href="#cb61-23"></a><span class="co"># To better understand the effect of signature activity on clinical events,</span></span>
+<span id="cb61-24"><a href="#cb61-24"></a><span class="co"># here we scale them into range 0-20. 1 increase means 5% increase of signature activity.</span></span>
+<span id="cb61-25"><a href="#cb61-25"></a><span class="co">#</span></span>
+<span id="cb61-26"><a href="#cb61-26"></a><span class="co"># Scale the CNA burden to 0-20.</span></span>
+<span id="cb61-27"><a href="#cb61-27"></a>surv_dt &lt;-<span class="st"> </span>surv_dt <span class="op">%&gt;%</span></span>
+<span id="cb61-28"><a href="#cb61-28"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(</span>
+<span id="cb61-29"><a href="#cb61-29"></a>    <span class="dt">cna_burden =</span> <span class="dv">20</span> <span class="op">*</span><span class="st"> </span>cna_burden,</span>
+<span id="cb61-30"><a href="#cb61-30"></a>    <span class="dt">Stage =</span> <span class="kw">as.character</span>(Stage) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;T2&quot;</span>, <span class="st">&quot;T3&quot;</span>, <span class="st">&quot;T4&quot;</span>))</span>
+<span id="cb61-31"><a href="#cb61-31"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb61-32"><a href="#cb61-32"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(cols_to_sigs.seqz, <span class="op">~</span><span class="st"> </span><span class="dv">20</span> <span class="op">*</span><span class="st"> </span><span class="kw">range01</span>(., <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb61-33"><a href="#cb61-33"></a></span>
+<span id="cb61-34"><a href="#cb61-34"></a><span class="kw">saveRDS</span>(surv_dt, <span class="dt">file =</span> <span class="st">&quot;../output/PRAD_merged_survival_dt_seqz.rds&quot;</span>)</span></code></pre></div>
 </div>
 <div id="os-analysis-fo-signatures" class="section level2">
 <h2>OS analysis fo signatures</h2>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a><span class="co">############</span></span>
-<span id="cb60-2"><a href="#cb60-2"></a>surv_dt &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_merged_survival_dt_seqz.rds&quot;</span>)</span>
-<span id="cb60-3"><a href="#cb60-3"></a>cols_to_sigs.seqz &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;CNV_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="kw">paste0</span>(<span class="st">&quot;SNV_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>))</span>
-<span id="cb60-4"><a href="#cb60-4"></a></span>
-<span id="cb60-5"><a href="#cb60-5"></a><span class="co"># Unvariable analysis</span></span>
-<span id="cb60-6"><a href="#cb60-6"></a><span class="kw">show_forest</span>(surv_dt,</span>
-<span id="cb60-7"><a href="#cb60-7"></a>  <span class="dt">covariates =</span> cols_to_sigs.seqz,</span>
-<span id="cb60-8"><a href="#cb60-8"></a>  <span class="dt">time =</span> <span class="st">&quot;OS.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;OS&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span></span>
-<span id="cb60-9"><a href="#cb60-9"></a>)</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-68-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a><span class="co">############</span></span>
+<span id="cb62-2"><a href="#cb62-2"></a>surv_dt &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_merged_survival_dt_seqz.rds&quot;</span>)</span>
+<span id="cb62-3"><a href="#cb62-3"></a>cols_to_sigs.seqz &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;CNV_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="kw">paste0</span>(<span class="st">&quot;SNV_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>))</span>
+<span id="cb62-4"><a href="#cb62-4"></a></span>
+<span id="cb62-5"><a href="#cb62-5"></a><span class="co"># Unvariable analysis</span></span>
+<span id="cb62-6"><a href="#cb62-6"></a><span class="kw">show_forest</span>(surv_dt,</span>
+<span id="cb62-7"><a href="#cb62-7"></a>  <span class="dt">covariates =</span> cols_to_sigs.seqz,</span>
+<span id="cb62-8"><a href="#cb62-8"></a>  <span class="dt">time =</span> <span class="st">&quot;OS.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;OS&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span></span>
+<span id="cb62-9"><a href="#cb62-9"></a>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-70-1.png" width="2400" /></p>
 </div>
 <div id="pfs-analysis-for-signatures" class="section level2">
 <h2>PFS analysis for signatures</h2>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="kw">show_forest</span>(surv_dt,</span>
-<span id="cb61-2"><a href="#cb61-2"></a>  <span class="dt">covariates =</span> cols_to_sigs.seqz,</span>
-<span id="cb61-3"><a href="#cb61-3"></a>  <span class="dt">time =</span> <span class="st">&quot;PFI.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;PFI&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span></span>
-<span id="cb61-4"><a href="#cb61-4"></a>)</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-69-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a><span class="kw">show_forest</span>(surv_dt,</span>
+<span id="cb63-2"><a href="#cb63-2"></a>  <span class="dt">covariates =</span> cols_to_sigs.seqz,</span>
+<span id="cb63-3"><a href="#cb63-3"></a>  <span class="dt">time =</span> <span class="st">&quot;PFI.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;PFI&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span></span>
+<span id="cb63-4"><a href="#cb63-4"></a>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-71-1.png" width="2400" /></p>
 </div>
 <div id="os-analysis-for-features" class="section level2">
 <h2>OS analysis for features</h2>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a>cols_to_features &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
-<span id="cb62-2"><a href="#cb62-2"></a>  <span class="st">&quot;Age&quot;</span>, <span class="st">&quot;Stage&quot;</span>, <span class="st">&quot;GleasonScore&quot;</span>,</span>
-<span id="cb62-3"><a href="#cb62-3"></a>  <span class="st">&quot;total_mutation&quot;</span>, <span class="st">&quot;n_driver&quot;</span>, <span class="st">&quot;Ti_fraction&quot;</span>, <span class="st">&quot;Tv_fraction&quot;</span>,</span>
-<span id="cb62-4"><a href="#cb62-4"></a>  <span class="st">&quot;n_of_cnv&quot;</span>, <span class="st">&quot;n_of_amp&quot;</span>, <span class="st">&quot;n_of_del&quot;</span>, <span class="st">&quot;n_of_vchr&quot;</span>, <span class="st">&quot;cna_burden&quot;</span>,</span>
-<span id="cb62-5"><a href="#cb62-5"></a>  <span class="st">&quot;MATH&quot;</span>, <span class="st">&quot;cluster&quot;</span>, <span class="st">&quot;purity&quot;</span>, <span class="st">&quot;ploidy&quot;</span></span>
-<span id="cb62-6"><a href="#cb62-6"></a>)</span>
-<span id="cb62-7"><a href="#cb62-7"></a></span>
-<span id="cb62-8"><a href="#cb62-8"></a><span class="kw">show_forest</span>(surv_dt,</span>
-<span id="cb62-9"><a href="#cb62-9"></a>  <span class="dt">covariates =</span> cols_to_features, <span class="dt">controls =</span> <span class="ot">NULL</span>,</span>
-<span id="cb62-10"><a href="#cb62-10"></a>  <span class="dt">time =</span> <span class="st">&quot;OS.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;OS&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span>, <span class="dt">limits =</span> <span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.5</span>, <span class="dv">10</span>))</span>
-<span id="cb62-11"><a href="#cb62-11"></a>)</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-70-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>cols_to_features &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb64-2"><a href="#cb64-2"></a>  <span class="st">&quot;Age&quot;</span>, <span class="st">&quot;Stage&quot;</span>, <span class="st">&quot;GleasonScore&quot;</span>,</span>
+<span id="cb64-3"><a href="#cb64-3"></a>  <span class="st">&quot;total_mutation&quot;</span>, <span class="st">&quot;n_driver&quot;</span>, <span class="st">&quot;Ti_fraction&quot;</span>, <span class="st">&quot;Tv_fraction&quot;</span>,</span>
+<span id="cb64-4"><a href="#cb64-4"></a>  <span class="st">&quot;n_of_cnv&quot;</span>, <span class="st">&quot;n_of_amp&quot;</span>, <span class="st">&quot;n_of_del&quot;</span>, <span class="st">&quot;n_of_vchr&quot;</span>, <span class="st">&quot;cna_burden&quot;</span>,</span>
+<span id="cb64-5"><a href="#cb64-5"></a>  <span class="st">&quot;MATH&quot;</span>, <span class="st">&quot;cluster&quot;</span>, <span class="st">&quot;purity&quot;</span>, <span class="st">&quot;ploidy&quot;</span></span>
+<span id="cb64-6"><a href="#cb64-6"></a>)</span>
+<span id="cb64-7"><a href="#cb64-7"></a></span>
+<span id="cb64-8"><a href="#cb64-8"></a><span class="kw">show_forest</span>(surv_dt,</span>
+<span id="cb64-9"><a href="#cb64-9"></a>  <span class="dt">covariates =</span> cols_to_features, <span class="dt">controls =</span> <span class="ot">NULL</span>,</span>
+<span id="cb64-10"><a href="#cb64-10"></a>  <span class="dt">time =</span> <span class="st">&quot;OS.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;OS&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span>, <span class="dt">limits =</span> <span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.5</span>, <span class="dv">10</span>))</span>
+<span id="cb64-11"><a href="#cb64-11"></a>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-72-1.png" width="2400" /></p>
 </div>
 <div id="pfi-analysis-for-features" class="section level2">
 <h2>PFI analysis for features</h2>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a><span class="kw">show_forest</span>(surv_dt,</span>
-<span id="cb63-2"><a href="#cb63-2"></a>  <span class="dt">covariates =</span> cols_to_features, <span class="dt">controls =</span> <span class="ot">NULL</span>,</span>
-<span id="cb63-3"><a href="#cb63-3"></a>  <span class="dt">time =</span> <span class="st">&quot;PFI.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;PFI&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span>, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="kw">log</span>(<span class="fl">0.5</span>), <span class="kw">log</span>(<span class="dv">5</span>))</span>
-<span id="cb63-4"><a href="#cb63-4"></a>)</span></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-71-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1"></a><span class="kw">show_forest</span>(surv_dt,</span>
+<span id="cb65-2"><a href="#cb65-2"></a>  <span class="dt">covariates =</span> cols_to_features, <span class="dt">controls =</span> <span class="ot">NULL</span>,</span>
+<span id="cb65-3"><a href="#cb65-3"></a>  <span class="dt">time =</span> <span class="st">&quot;PFI.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;PFI&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span>, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="kw">log</span>(<span class="fl">0.5</span>), <span class="kw">log</span>(<span class="dv">5</span>))</span>
+<span id="cb65-4"><a href="#cb65-4"></a>)</span></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-73-1.png" width="2400" /></p>
 </div>
 </div>
 <div id="variation-summary" class="section level1">
@@ -997,7 +1037,7 @@ $(document).ready(function () {
 <p class="author"><span class="glyphicon glyphicon-user"></span> Xuan Wang</p>
 <p class="author"><span class="glyphicon glyphicon-user"></span> Minfang Song</p>
 <p class="author"><span class="glyphicon glyphicon-user"></span> Xue-Song Liu (Corresponding author)</p>
-<p class="date"><span class="glyphicon glyphicon-calendar"></span> 2020-01-11</p>
+<p class="date"><span class="glyphicon glyphicon-calendar"></span> 2020-01-12</p>
 </div>
 
 
