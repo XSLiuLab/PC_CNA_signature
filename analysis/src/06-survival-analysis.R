@@ -1,3 +1,5 @@
+## Old code
+
 library(ezcox)
 
 range01 <- function(x, ...) {

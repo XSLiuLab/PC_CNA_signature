@@ -1,3 +1,5 @@
+## Old code
+
 library(sigminer)
 
 load("output/CNV.seqz.RData")

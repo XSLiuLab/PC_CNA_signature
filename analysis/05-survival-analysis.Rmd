@@ -118,7 +118,7 @@ show_forest(surv_dt,
 ```
 
 
-## PFI analysis for features
+## PFS analysis for features
 
 
 ```{r}
