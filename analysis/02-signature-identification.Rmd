@@ -362,4 +362,91 @@ pheatmap::pheatmap(sim_v3$similarity,
 )
 ```
 
+### Check the signature exposure
+
+Signature exposure is the estimation of mutation records. Here we check this by correlation analysis.
+
+#### Mutation
+
+Observed total SBS mutations from data. 
+
+```{r}
+load(file = "../output/PRAD_TCGA_plus_dbGap_Maf.RData")
+Maf_dt = rbind(Maf@data, Maf@maf.silent)
+Mut_dt = Maf_dt[Variant_Type == "SNP", .(Total = .N), by = Tumor_Sample_Barcode]
+```
+
+Estimated SBS mutations from signature exposure.
+
+```{r}
+Mut_expo = get_sig_exposure(Sig.SNV)[, .(sample, Est=Sig1+Sig2+Sig3)]
+```
+
+Merge the two `data.table` above.
+
+```{r}
+Mut_merged_dt = merge(Mut_dt, Mut_expo, by.x = "Tumor_Sample_Barcode", by.y = "sample")
+# log10 the data
+Mut_merged_dt[, `:=`(Total = log10(Total), Est = log10(Est))]
+
+head(Mut_merged_dt)
+```
+
+Now we can see their correlation.
+
+```{r}
+ggpubr::ggscatter(Mut_merged_dt, x = "Total", y = "Est", add = "reg.line",
+                  xlab = "Log10 based total SBS counts (observed)",
+                  ylab = "Log10 based total SBS counts (estimated)") +
+  ggpubr::stat_cor(label.x.npc = 0.5, label.y.npc = 0.8)
+```
+
+We can know that we did a perfect NMF for SBS data.
+
+#### Copy number
+
+Observed total segment counts from copy number data. 
+
+```{r}
+load(file = "../output/CNV.seqz.RData")
+CN_dt = CNV.seqz@data[, .(Total = .N), by = sample]
+```
+
+Estimated segment counts from signature exposure.
+
+```{r}
+CN_expo = get_sig_exposure(Sig.CNV.seqz.W)[, .(sample, Est=Sig1+Sig2+Sig3+Sig4+Sig5)]
+```
+
+Merge the two `data.table` above.
+
+```{r}
+CN_merged_dt = merge(CN_dt, CN_expo, by = "sample")
+
+head(CN_merged_dt)
+```
+
+
+Now we can see their correlation.
+
+```{r}
+ggpubr::ggscatter(CN_merged_dt, x = "Total", y = "Est", add = "reg.line",
+                  xlab = "Log10 based total segment counts (observed)",
+                  ylab = "Log10 based total segment counts (estimated)") +
+  ggpubr::stat_cor(label.x.npc = 0.5, label.y.npc = 0.8, hjust = 1)
+```
+
+We can see that the estimation of copy number segment count fits observed data well. The residue can be further visualized by histgram.
+
+```{r}
+CN_merged_dt[, Residue:=Est-Total]
+```
+
+```{r}
+library(ggplot2)
+ggplot(CN_merged_dt) +
+  geom_histogram(aes(x = Residue))
+```
+
+
 ***

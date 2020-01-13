@@ -24,7 +24,7 @@ opts_chunk$set(
   echo = TRUE,
   comment = "#>",
   collapse = TRUE,
-  cache = TRUE,
+  cache = FALSE,
   dpi = 300,
   warning = FALSE,
   message = FALSE,

@@ -253,7 +253,7 @@ tidy_data.seqz.feature <- get_sig_feature_association(df.seqz,
 Show the result.
 
 ```{r, fig.height=8, fig.width=9}
-show_sig_feature_corrplot(tidy_data.seqz.feature)
+show_sig_feature_corrplot(tidy_data.seqz.feature, p_val = 0.05)
 ```
 
 > All shown circles are statistically significant results (FDR < 0.05). A feature will be chopped off from
@@ -272,30 +272,33 @@ tidy_data.seqz.gene <- get_sig_feature_association(df.seqz,
 ```
 
 ```{r}
-summary(tidy_data.seqz.gene$measure)
+sum_genes = tidy_data.seqz.gene %>% 
+  dplyr::filter(p <= 0.05) %>% 
+  dplyr::summarise(min = min(measure, na.rm = T),
+                   max = max(measure, na.rm = T),
+                   sum = list(summary(measure)))
+
+sum_genes$sum
 ```
 
 
 ```{r, fig.height=8, fig.width=9}
-## 用梯度颜色解决 CNV 和 SNV Exposure 差异大的
-## 问题，但颜色条白色没有对应到0
-## 很奇怪，搞了很久没弄好，请教下别人
-
 # myPalette <- colorRampPalette(rev(brewer.pal(11, "RdYlBu")))
 # sc <- scale_colour_gradientn(colours = myPalette(100), limits=c(-20, 600))
 
 sc <- scale_colour_gradientn(
-  colors = c("blue", "white", "yellow", "red"),
+  colors = c("blue", "white", "orange", "red"),
   values = scales::rescale(c(
-    tidy_data.seqz.gene$measure %>% min(na.rm = TRUE),
+   sum_genes$min,
     0,
     20,
-    tidy_data.seqz.gene$measure %>% max(na.rm = TRUE))
-  ))
+    sum_genes$max
+  )))
 
 show_sig_feature_corrplot(tidy_data.seqz.gene, 
                           ylab = "Mutated genes",
-                          ca_gradient_colors = sc)
+                          ca_gradient_colors = sc,
+                          p_val = 0.05) # p_val needs to keep in line with the sum_genes p <= 0.05
 
 ```
 
@@ -314,20 +317,26 @@ tidy_data.seqz.pathways <- get_sig_feature_association(df.seqz,
 
 
 ```{r}
-summary(tidy_data.seqz.pathways$measure)
+sum_pathways = tidy_data.seqz.pathways %>% 
+  dplyr::filter(p <= 0.05) %>% 
+  dplyr::summarise(min = min(measure, na.rm = T),
+                   max = max(measure, na.rm = T),
+                   sum = list(summary(measure)))
+
+sum_pathways$sum
 ```
 
 
 
 ```{r, fig.height=5, fig.width=9}
 sc <- scale_colour_gradientn(
-  colors = c("blue", "white", "yellow", "red"),
+  colors = c("blue", "white", "orange", "red"),
   values = scales::rescale(c(
-    tidy_data.seqz.pathways$measure %>% min(na.rm = TRUE),
+    sum_pathways$min,
     0, 
-    40,
-    tidy_data.seqz.pathways$measure %>% max(na.rm = TRUE))
-  ))
+    20,
+    sum_pathways$max
+  )))
 
 
 show_sig_feature_corrplot(tidy_data.seqz.pathways,
@@ -361,8 +370,14 @@ res.cor[,-1] = res.cor[, -1] * 0.99
 p = res.cor %>%
   network_plot(min_cor = 0.2,
                colours = rev(c("indianred2", "white", "skyblue1")))
-p + scale_size(range=c(0.1, 2))
+
+#png("corrr_network.png", width = 7, height = 7, res = 300)
+#p + scale_size(range=c(0.1, 2))
+#ggsave("corrr_network.pdf", plot = p + scale_size(range=c(0.1, 2)))
+#dev.off()
 ```
+
+[Click here to see the plot](corrr_network.pdf)
 
 > variables that are more highly correlated appear closer together and are joined by stronger paths. Paths are also colored by their sign. The proximity of the points are determined using multidimensional clustering.
 
