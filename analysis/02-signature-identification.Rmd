@@ -305,6 +305,8 @@ show_sig_exposure(Sig.SNV,
                   rm_space = TRUE, style = "cosmic")
 ```
 
+> The `Est_Counts` panel shows the estimated SBS count.
+
 We can clearly see that 
 
 - most of samples have very few SBS signature exposures
@@ -347,6 +349,8 @@ The exposure of signature in each sample is plotted as the below.
 ```{r}
 show_sig_exposure(Sig.CNV.seqz.W, rm_space = TRUE, style = "cosmic")
 ```
+
+> The `Est_Counts` panel shows the estimated copy number segment count.
 
 ### Show similarity matrix
 
