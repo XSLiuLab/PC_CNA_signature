@@ -259,6 +259,13 @@ show_sig_feature_corrplot(tidy_data.seqz.feature, p_val = 0.05)
 > All shown circles are statistically significant results (FDR < 0.05). A feature will be chopped off from
 > the plot if has no correlation with any signatures. Same for the similar plots below.
 
+The result table:
+
+```{r}
+DT::datatable(tidy_data.seqz.feature)
+```
+
+
 ### Signatures & mutated genes
 
 Analyze the association between signatures and mutated genes (only driver genes identified by MutSig).
@@ -302,6 +309,13 @@ show_sig_feature_corrplot(tidy_data.seqz.gene,
 
 ```
 
+
+The result table:
+
+```{r}
+DT::datatable(tidy_data.seqz.gene)
+```
+
 ### Signatures & mutated pathways
 
 Analyze the association between signatures and mutated pathways.
@@ -342,6 +356,14 @@ sc <- scale_colour_gradientn(
 show_sig_feature_corrplot(tidy_data.seqz.pathways,
                           ylab = "Mutated pathways",
                           ca_gradient_colors = sc)
+```
+
+
+
+The result table:
+
+```{r}
+DT::datatable(tidy_data.seqz.pathways)
 ```
 
 ### Correlation network

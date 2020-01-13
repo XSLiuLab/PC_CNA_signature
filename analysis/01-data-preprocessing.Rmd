@@ -43,7 +43,9 @@ opts_knit$set(width = 75)
 
 ### Pipeline
 
-![](fig/PRAD_Analysis_Pipeline.png)
+```{r}
+knitr::include_graphics("fig/PRAD_Analysis_Pipeline.png", dpi = 300)
+```
 
 <center>**Genomic variation signature identification pipeline of prostate cancer**</center>
 
