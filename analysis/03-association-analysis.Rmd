@@ -294,7 +294,7 @@ sum_genes$sum
 # sc <- scale_colour_gradientn(colours = myPalette(100), limits=c(-20, 600))
 
 sc <- scale_colour_gradientn(
-  colors = c("blue", "white", "orange", "red"),
+  colors = c("lightblue", "white", "orange", "red"),
   values = scales::rescale(c(
    sum_genes$min,
     0,
@@ -344,7 +344,7 @@ sum_pathways$sum
 
 ```{r, fig.height=5, fig.width=9}
 sc <- scale_colour_gradientn(
-  colors = c("blue", "white", "orange", "red"),
+  colors = c("lightblue", "white", "orange", "red"),
   values = scales::rescale(c(
     sum_pathways$min,
     0, 
