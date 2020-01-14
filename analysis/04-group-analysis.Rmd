@@ -52,12 +52,12 @@ df.seqz = readRDS(file = "../output/PRAD_Merge_Info_CNV_from_sequenza.RData")
 cols_to_features <- c(
   "IsMetastatic", "HasFusion", "Stage", "GleasonScore",
   "Age", 
-  "total_mutation", "n_driver", "Ti_fraction", "Tv_fraction",
+  "total_mutation", "INDELs", "n_driver", "Ti_fraction", "Tv_fraction",
   "n_of_cnv", "n_of_amp", "n_of_del", "n_of_vchr", "cna_burden",
   "MATH", "cluster", "purity", "ploidy"
 )
 
-feature_type <- c(rep("ca", 4), rep("co", 14))
+feature_type <- c(rep("ca", 4), rep("co", 15))
 ```
 
 ```{r}
@@ -67,7 +67,7 @@ df.seqz$GleasonScore = factor(df.seqz$GleasonScore, levels = as.character(6:10))
 df.seqz2 = df.seqz
 df.seqz2$cnv_enrich_sig = ifelse(
   !is.na(df.seqz2$cnv_enrich_sig),
-  paste(df.seqz2$cnv_enrich_sig, "dominant"),
+  paste(df.seqz2$cnv_enrich_sig, "enriched"),
   NA
 )
 
@@ -94,20 +94,20 @@ plot.cnv <- show_group_comparison(
 )
 ```
 
-```{r, fig.width=8, fig.height=6}
-plot.cnv$ca_comb
+```{r, fig.width=9, fig.height=6}
+cowplot::plot_grid(plotlist = plot.cnv$ca, align = "hv", ncol = 2)
 ```
 
 
-```{r, fig.width=10, fig.height=10}
-plot.cnv$co_comb
+```{r, fig.width=10, fig.height=12}
+cowplot::plot_grid(plotlist = plot.cnv$co, align = "hv", ncol = 3)
 ```
 
 
 ```{r}
 df.seqz2$snv_enrich_sig = ifelse(
   !is.na(df.seqz2$snv_enrich_sig),
-  paste(df.seqz2$snv_enrich_sig, "dominant"),
+  paste(df.seqz2$snv_enrich_sig, "enriched"),
   NA
 )
 
@@ -134,13 +134,13 @@ plot.snv <- show_group_comparison(
 )
 ```
 
-```{r, fig.width=8, fig.height=6}
-plot.snv$ca_comb
+```{r, fig.width=9, fig.height=6}
+cowplot::plot_grid(plotlist = plot.snv$ca, align = "hv", ncol = 2)
 ```
 
 
-```{r, fig.width=9, fig.height=10}
-plot.snv$co_comb
+```{r, fig.width=10, fig.height=12}
+cowplot::plot_grid(plotlist = plot.snv$co, align = "hv", ncol = 3)
 ```
 
 ## Group mapping
@@ -150,7 +150,7 @@ df.map = df.seqz[, c("sample_type",
                      "cnv_enrich_sig",
                      "snv_enrich_sig")] %>% 
   na.omit()
-names(df.map) = c("Sample type", "Dominant CNV signature", "Dominant SNV signature")
+names(df.map) = c("Sample type", "Enriched CN signature", "Enriched SBS signature")
 ```
 
 ```{r}
@@ -181,6 +181,7 @@ Get the groups and relative exposures and merge them.
 
 ```{r}
 cn_group <- get_groups(Sig.CNV.seqz.W, method = "consensus", match_consensus = TRUE)
+cn_group$enrich_sig[cn_group$group == "1"] = "Sig1"
 cn_expo <- get_sig_exposure(Sig.CNV.seqz.W, type = "relative")
 
 df <- dplyr::left_join(cn_group, cn_expo)
@@ -193,12 +194,16 @@ Now we can use data to find the cases with a specific signature enriched.
 The group with enriched Sig1 is dominated by Sig3, we need to take case of it.
 
 ```{r, fig.height=6, fig.width=14}
-show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
-  samples = df %>%
-    dplyr::filter(group == "1") %>%
+samps_to_show = df %>%
+    dplyr::filter(enrich_sig == "Sig1") %>%
     dplyr::arrange(dplyr::desc(Sig1)) %>%
     dplyr::slice(1:6) %>% dplyr::pull(sample)
+
+samps_to_show
+                                                                                                                                                                                                                               
+show_cn_profile(
+  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
+  samples = samps_to_show 
 )
 ```
 
@@ -207,58 +212,82 @@ Of note, only the segments with **high copy number** are contributed by Sig1.
 ### Sig2 cases
 
 ```{r, fig.height=6, fig.width=14}
-show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
-  samples = df %>%
+samps_to_show = df %>%
     dplyr::filter(enrich_sig == "Sig2") %>%
     dplyr::arrange(dplyr::desc(Sig2)) %>%
     dplyr::slice(1:6) %>% dplyr::pull(sample)
+
+samps_to_show
+
+show_cn_profile(
+  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
+  samples = samps_to_show
 )
 ```
 
 ### Sig3 cases
 
 ```{r,fig.height=6, fig.width=14}
-show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
-  samples = df %>%
+samps_to_show = df %>%
     dplyr::filter(enrich_sig == "Sig3") %>%
     dplyr::arrange(dplyr::desc(Sig3)) %>%
     dplyr::slice(1:6) %>% dplyr::pull(sample)
+
+samps_to_show
+
+show_cn_profile(
+  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
+  samples = samps_to_show
 )
 ```
 
 ### Sig4 cases
 
 ```{r fig.height=6, fig.width=14}
-show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
-  samples = df %>%
+samps_to_show = df %>%
     dplyr::filter(enrich_sig == "Sig4") %>%
     dplyr::arrange(dplyr::desc(Sig4)) %>%
     dplyr::slice(1:6) %>% dplyr::pull(sample)
+
+samps_to_show
+
+show_cn_profile(
+  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
+  samples = samps_to_show
 )
 ```
 
 ### Sig5 cases
 
 ```{r fig.height=6, fig.width=14}
-show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
-  samples = df %>%
+samps_to_show = df %>%
     dplyr::filter(enrich_sig == "Sig5") %>%
     dplyr::arrange(dplyr::desc(Sig5)) %>%
     dplyr::slice(1:6) %>% dplyr::pull(sample)
+
+samps_to_show
+
+show_cn_profile(
+  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
+  samples = samps_to_show
 )
 ```
 
 
 ```{r fig.height=6, fig.width=14}
+samps_to_show = df %>%
+    dplyr::filter(enrich_sig == "Sig5") %>%
+    dplyr::left_join(as.data.frame(CNV.seqz.tally.W$nmf_matrix) %>%
+                tibble::rownames_to_column("sample") %>%
+                dplyr::select(sample, `BPArm[2]`, `BPArm[1]`)) %>%
+    dplyr::mutate(BK = `BPArm[2]` + `BPArm[1]`) %>%
+    dplyr::arrange(desc(BK)) %>%
+    dplyr::slice(1:6) %>% dplyr::pull(sample)
+
+samps_to_show
+
 show_cn_profile(
   data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
-  samples = df %>%
-    dplyr::filter(enrich_sig == "Sig5") %>%
-    dplyr::arrange(dplyr::desc(Sig5)) %>%
-    dplyr::slice(1:6) %>% dplyr::pull(sample)
+  samples = samps_to_show
 )
 ```

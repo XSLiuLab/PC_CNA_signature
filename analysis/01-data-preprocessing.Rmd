@@ -43,7 +43,7 @@ opts_knit$set(width = 75)
 
 ### Pipeline
 
-```{r}
+```{r, out.width = "600px", fig.align="center", echo=FALSE}
 knitr::include_graphics("fig/PRAD_Analysis_Pipeline.png", dpi = 300)
 ```
 

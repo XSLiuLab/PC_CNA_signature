@@ -26,7 +26,7 @@ opts_chunk$set(
   cache = TRUE,
   dpi = 300,
   warning = FALSE,
-  message = FALSE,
+  message = TRUE,
   tidy = "styler"
 )
 opts_knit$set(width = 75)
@@ -40,7 +40,7 @@ In this section, I integrate all genotype/phenotype data as a tidy data table us
 
 Load packages and prepared data.
 
-```{r, eval = FALSE}
+```{r, message=FALSE}
 library(tidyverse)
 library(sigminer)
 library(maftools)
@@ -66,7 +66,7 @@ I also create a function `get_sig_exposure()` to get the absolute/relative expos
 
 > Relative exposure is more useful for clustering and absolute exposure is more useful for association analysis.
 
-```{r, eval = FALSE}
+```{r}
 # CNV
 CNVGroupInfo <- get_groups(Sig.CNV, method = "consensus", match_consensus = TRUE)
 CNVInfo <- CNV@summary.per.sample
@@ -74,15 +74,23 @@ CNVInfo <- CNV@summary.per.sample
 CNVExposureInfo <- get_sig_exposure(Sig.CNV)
 ```
 
+We find that the group `1` is assigned to `Sig3` due to sample with `Sig3` dominant has the maximum fraction in group `1`. However, group `1` is the only group with `Sig1` enriched. So we modify this result.
+
+```{r}
+CNVGroupInfo$enrich_sig[CNVGroupInfo$group == "1"] = "Sig1"
+```
+
 Next, we process mutation data to get TMB, driver info, clusters, and etc (the detail has been described in R script under `analysis/src/` of the repo).
 
-```{r, eval = FALSE}
+```{r}
 # Processing mutation data ------------------------------------------------
 
 load(file = "../output/PRAD_TCGA_plus_dbGap_Maf.RData")
 load(file = "../output/Sig.PRAD_TCGA_plus_dbGap_Maf.RData")
 
-TMBInfo <- getSampleSummary(Maf)[, .(Tumor_Sample_Barcode, total)]
+TMBInfo <- Maf@variant.type.summary[, .(Tumor_Sample_Barcode, total, INS, DEL)]
+TMBInfo$INDELs = TMBInfo$INS + TMBInfo$DEL
+TMBInfo$INS = TMBInfo$DEL = NULL
 
 load(file = "../output/PRAD_driver_info.RData")
 load(file = "../output/PRAD_heter_info.RData")
@@ -98,7 +106,7 @@ load(file = "../output/PRAD_gene_and_pathway_mutation.RData")
 Next, we keep keys of all `data.frame`s are same and merge them into one.
 
 
-```{r, eval = FALSE}
+```{r}
 # Merge data --------------------------------------------------------------
 Info <- Info %>%
   dplyr::mutate(
@@ -112,8 +120,8 @@ Info <- Info %>%
 PurityInfo
 colnames(CNVGroupInfo) <- c("sample", "cnv_group", "cnv_weight", "cnv_enrich_sig")
 CNVInfo
-colnames(CNVExposureInfo) <- c("sample", paste0("CNV_", colnames(CNVExposureInfo)[-1]))
-colnames(TMBInfo) <- c("sample", "total_mutation")
+colnames(CNVExposureInfo) <- c("sample", paste0("CN_", colnames(CNVExposureInfo)[-1]))
+colnames(TMBInfo) <- c("sample", "total_mutation", "INDELs")
 TMBInfo[, sample := as.character(sample)][, sample := ifelse(startsWith(sample, "TCGA"),
   substr(sample, 1, 15),
   sample
@@ -127,7 +135,7 @@ SNVGroupInfo[, sample := as.character(sample)][, sample := ifelse(startsWith(sam
   substr(sample, 1, 15),
   sample
 )]
-colnames(SNVExposureInfo) <- c("sample", paste0("SNV_", colnames(SNVExposureInfo)[-1]))
+colnames(SNVExposureInfo) <- c("sample", paste0("SBS_", colnames(SNVExposureInfo)[-1]))
 SNVExposureInfo[, sample := as.character(sample)][, sample := ifelse(startsWith(sample, "TCGA"),
   substr(sample, 1, 15),
   sample
@@ -194,6 +202,11 @@ saveRDS(MergeInfo, file = "../output/PRAD_Merge_Info_CNV_from_sequenza.RData")
 
 ```
 
+```{r, echo=FALSE}
+rm(list = ls())
+```
+
+
 ## Association analysis
 
 Now we do association analysis between signatures (via exposure) and genotypes/phenotypes.
@@ -216,7 +229,7 @@ df.seqz = readRDS(file = "../output/PRAD_Merge_Info_CNV_from_sequenza.RData")
 Set the coloumns used for analysis.
 
 ```{r}
-cols_to_sigs.seqz <- c(paste0("CNV_Sig", 1:5), paste0("SNV_Sig", 1:3))
+cols_to_sigs.seqz <- c(paste0("CN_Sig", 1:5), paste0("SBS_Sig", 1:3))
 # Driver genes identified by MutSig software
 cols_to_mutated_genes <- colnames(df.seqz)[29:75]
 # 10 oncogenic pathways in TCGA 2018 papers + HR pathway
@@ -226,12 +239,12 @@ cols_to_mutated_pathways <- colnames(df.seqz)[76:86]
 cols_to_features <- c(
   "IsMetastatic", "HasFusion",
   "Age", "Stage", "GleasonScore",
-  "total_mutation", "n_driver", "Ti_fraction", "Tv_fraction",
+  "total_mutation", "INDELs", "n_driver", "Ti_fraction", "Tv_fraction",
   "n_of_cnv", "n_of_amp", "n_of_del", "n_of_vchr", "cna_burden",
   "MATH", "cluster", "purity", "ploidy"
 )
 
-feature_type <- c(rep("ca", 2), rep("co", 16))
+feature_type <- c(rep("ca", 2), rep("co", 17))
 ```
 
 ### Signatures & features
@@ -394,7 +407,7 @@ p = res.cor %>%
                colours = rev(c("indianred2", "white", "skyblue1")))
 
 #png("corrr_network.png", width = 7, height = 7, res = 300)
-#p + scale_size(range=c(0.1, 2))
+p + scale_size(range=c(0.1, 2))
 #ggsave("corrr_network.pdf", plot = p + scale_size(range=c(0.1, 2)))
 #dev.off()
 ```

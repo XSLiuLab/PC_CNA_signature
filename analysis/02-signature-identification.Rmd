@@ -340,7 +340,7 @@ There is no reference database for copy number signatures, we cannot get aetiolo
 - Sig4 - Chromothripsis
   - 1 copy number deletions resulting considerable small OsCN
   - large segment size
-- Sig5 -  BFB, gene fusion and copy number neutral like events including Chromoplexy, translocation, and etc. (these may be early driver events)
+- Sig5 -  BFB and copy number neutral like events including Chromoplexy, translocation, and etc. (these may be early driver events)
   - few CNV with focal distribution
   - associated with gene fusion
 

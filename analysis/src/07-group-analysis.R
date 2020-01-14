@@ -13,7 +13,7 @@ cnv_expo <- get_sig_exposure(Sig.CNV.seqz.W.5, type = "relative")
 df <- dplyr::left_join(cnv_group, cnv_expo)
 
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 2, show_title = T,
+  data = CNV.seqz, nrow = 3, ncol = 2, show_title = T,
   samples = df %>%
     dplyr::filter(enrich_sig == "Sig1") %>%
     dplyr::arrange(dplyr::desc(Sig1)) %>%
@@ -21,7 +21,7 @@ show_cn_profile(
 )
 
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 2, show_title = T,
+  data = CNV.seqz, nrow = 3, ncol = 2, show_title = T,
   samples = df %>%
     dplyr::filter(enrich_sig == "Sig2") %>%
     dplyr::arrange(dplyr::desc(Sig2)) %>%
@@ -29,7 +29,7 @@ show_cn_profile(
 )
 
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 2, show_title = T,
+  data = CNV.seqz, nrow = 3, ncol = 2, show_title = T,
   samples = df %>%
     dplyr::filter(enrich_sig == "Sig3") %>%
     dplyr::arrange(dplyr::desc(Sig3)) %>%
@@ -37,7 +37,7 @@ show_cn_profile(
 )
 
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 2, show_title = T,
+  data = CNV.seqz, nrow = 3, ncol = 2, show_title = T,
   samples = df %>%
     dplyr::filter(enrich_sig == "Sig4") %>%
     dplyr::arrange(dplyr::desc(Sig4)) %>%
@@ -45,7 +45,7 @@ show_cn_profile(
 )
 
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 2, show_title = T,
+  data = CNV.seqz, nrow = 3, ncol = 2, show_title = T,
   samples = df %>%
     dplyr::filter(enrich_sig == "Sig5") %>%
     dplyr::arrange(dplyr::desc(Sig5)) %>%
@@ -55,7 +55,7 @@ show_cn_profile(
 
 
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X", "Y")), nrow = 3, ncol = 2, show_title = T,
+  data = CNV.seqz, nrow = 3, ncol = 2, show_title = T,
   samples = df %>%
     dplyr::filter(enrich_sig == "Sig5") %>%
     dplyr::left_join(as.data.frame(CNV.seqz.derive.W$nmf_matrix) %>%
