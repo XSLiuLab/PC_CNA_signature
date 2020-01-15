@@ -1,5 +1,11 @@
-# prad_signature
+# Prostate Cancer Variation Signature Analysis Report
 
-A [workflowr][] project.
+## LICENSE
 
-[workflowr]: https://github.com/jdblischak/workflowr
+MIT &copy;2020 Shixiang Wang, Huimin Li, Xuan Wang, Minfang Song and Xue-Song Liu
+
+***
+
+**Cancer Biology Group @ShanghaiTech**
+
+**Research group led by Xue-Song Liu in ShanghaiTech University**
