@@ -31,17 +31,67 @@ opts_chunk$set(
 opts_knit$set(width = 75)
 ```
 
-## Download Data
+This part focuses on data preprocessing, it contains the following sections:
 
-### WES Data
+- Data downloading
+- Data preprocessing
+  - Pipeline
+  - Copy number calling
+  - Mutation calling
+- Data cleaning
 
-### Phenotype Data
+## Data downloading
 
-### Survival Data
+This section describes where and how we downloaded the data.
 
-## Preprocess Data
+### WES data
+
+Whole exome sequencing raw data were downloaded from the following 6 dbGap studies:
+
+- `phs000178`: this is TCGA prostate cancer cohort, the raw data is `bam` format stored in [GDC portal](https://portal.gdc.cancer.gov/), we
+access them by dbGap permission
+- `phs000447`: `sra` data
+- `phs000554`: `sra` data
+- `phs000909`: `sra` data
+- `phs000915`: `sra` data
+- `phs001141`: `sra` data
+
+A recent study [@armenia2018long] used 5 dbGap studies:
+
+- `phs000178`
+- `phs000447`
+- `phs000909`
+- `phs000915`
+- `phs000945`
+
+Our study contains two new datasets `phs000554` and `phs001141` than @armenia2018long,
+however, `phs000945` was excluded from our study due to
+its unavailable status in dbGap database.
+
+Therefore, to our knowledge, we included all available raw WES data in our study.
+
+After selecting the raw WES data, we downloaded them by either `sratools` for dbGap data or `gdc-client` for TCGA data. 
+
+### Phenotype data
+
+Phenotype data of `phs000447`, `phs000554`, `phs000909`, `phs000915` and `phs001141` were downloaded along with the raw WES data.
+Phenotype data of TCGA prostate cancer cohort were downloaded from UCSC Xena by UCSCXenaTools [@wang2019ucscxenatools].
+The cleaning process is described in ['Data cleaning'](#data-cleaning) section.
+
+### Survival data
+
+Survival data of `phs000554` were included in phenotype data described above.
+Survival data of TCGA prostate cancer cohort were downloaded from UCSC Xena by UCSCXenaTools [@wang2019ucscxenatools].
+The cleaning process is described in ['Data cleaning'](#data-cleaning) section.
+
+## Data preprocessing
+
+This section describes how we preprocessed the data.
 
 ### Pipeline
+
+The following diagram shows our upstream workflow. Steps before signature identification are belong to preprocessing.
+The preprocessing pipeline generated the variation records of samples.
 
 ```{r, out.width = "600px", fig.align="center", echo=FALSE}
 knitr::include_graphics("fig/PRAD_Analysis_Pipeline.png", dpi = 300)
@@ -49,11 +99,395 @@ knitr::include_graphics("fig/PRAD_Analysis_Pipeline.png", dpi = 300)
 
 <center>**Genomic variation signature identification pipeline of prostate cancer**</center>
 
+### Sequence alignment
 
-### Sequence Alignment
+For `phs000447`, `phs000554`, `phs000909`, `phs000915` and `phs001141` cohorts, the raw data are in `sra` format.
+We did sequence alignment to them. To keep in line with TCGA bam data,
+we used the same reference genome (downlowned from [GDC portal](https://portal.gdc.cancer.gov/)) and operation (see [GDC docs](https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/DNA_Seq_Variant_Calling_Pipeline/)).
 
-### Copy Number Calling
+> Of note, the preprocessing was done on Linux server provided by High Performance Computing Service of ShanghaiTech University.
+> So the work is presented in PBS scripts. If readers want to reproduce this work, please focus on the key code lines.
 
-### Mutation Calling
+The details are described as below.
 
-### Clean Data
+#### 1. from `sra` to `fastq`
+
+The raw WES downloaded from dbGap database are in `sra` format, we need to convert them into `fastq` format firstly.
+
+```bash
+#PBS -N fastq_<sample>
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=20:00:00
+#PBS -l mem=10gb
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate wes
+workdir=/public/home/liuxs/ncbi/dbGaP-16533
+cd $workdir
+fastq-dump -outdir fastq --split-3 --skip-technical --clip --gzip $workdir/sra/<sample>.sra
+```
+
+#### 2. removed the adapters
+
+This step detected and removed the adapters with `trimgalore` [@krueger2015trim].
+
+```bash
+#PBS -N <sample>_clean
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=12:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+source activate wes
+workdir=/public/home/liuxs/ncbi/dbGaP-16533
+
+trim_galore -q 20 --phred33 --stringency 3 --length 20 -e 0.1 --paired --gzip $workdir/fastq/<sample>_1.fastq.gz \
+$workdir/fastq/<sample>_2.fastq.gz -o $workdir/dnaseq/trimclean
+```
+
+#### 3. bwa
+
+This step aligned sequence reads to reference genome with recommended `BWA MEM` algorithm [@li2013aligning].
+
+```bash
+#PBS -N mem_<sample>
+#PBS -l nodes=1:ppn=4
+#PBS -l walltime=35:00:00
+#PBS -l mem=20gb
+#PBS -S /bin/bash
+#PBS -q normal_3
+#PBS -j oe
+
+source activate wes
+bwa mem -M -R "@RG\tID:<sample>\t\
+LM:<sample>\t\
+SM:<sample>\t\
+PL:illumina\tPU:<sample>"\
+ /public/home/liuxs/biodata/reference/genome/gdc_hg38/GRCh38.d1.vd1.fa\
+ /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/trimclean/<sample>_1_val_1.fq.gz\
+ /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/trimclean/<sample>_2_val_2.fq.gz\
+><sample>.sam\
+|mv <sample>.sam /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/bwa
+```
+
+#### 4. `sam` to `bam`
+
+This step converted `sam` files to `bam` files with `samtools` [@li2009sequence], which are smaller.
+
+```bash
+#PBS -N bam_<sample>
+#PBS -l nodes=1:ppn=4
+#PBS -l walltime=15:00:00
+#PBS -l mem=20gb
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate wes
+samtools view -bS /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/bwa/<sample>.sam>\
+/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/bam/<sample>.bam
+```
+
+#### 5. sort `bam`
+
+Next we sorted the `bam` files with `Picard` [@Picard2019toolkit].
+
+```bash
+#PBS -N sort_<sample>
+#PBS -l nodes=1:ppn=4
+#PBS -l walltime=15:00:00
+#PBS -l mem=20gb
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate wes
+java -jar -Xmx12G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp \
+ /public/home/liuxs/anaconda3/envs/wes/share/picard-2.20.6-0/picard.jar  SortSam\
+ I=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/bam/<sample>.bam\
+ O=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/bamsort/<sample>.sort.bam\
+ SORT_ORDER=coordinate
+ ```
+
+#### 6. mark duplications 
+
+Mark duplications with `Picard`.
+
+```bash
+#PBS -N rmdump_<sample> 
+#PBS -l nodes=1:ppn=4
+#PBS -l walltime=10:00:00
+#PBS -l mem=10gb
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate wes
+java -jar /public/home/liuxs/anaconda3/envs/wes/share/picard-2.20.6-0/picard.jar MarkDuplicates\
+ I=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/bamsort/<sample>.sort.bam\
+ O=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/markqump/<sample>.rdup.bam\
+ VALIDATION_STRINGENCY=LENIENT \
+ MAX_FILE_HANDLES_FOR_READ_ENDS_MAP=1000 \
+ M=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/markqump/matric/<sample>.sort.addhead.rmdup.metric
+```
+
+Build index with `samtools`.
+
+```bash
+#PBS -N index_<sample>
+#PBS -l nodes=1:ppn=4
+#PBS -l walltime=10:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate wes
+
+samtools index /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/markqump/<sample>.rdup.bam\
+ /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/markqump/<sample>.rdup.bam.bai
+```
+
+#### 7. BQSR
+
+A base quality score recalibration (BQSR) step is then performed.
+
+```bash
+#PBS -N bqsr_<sample1>
+#PBS -l nodes=1:ppn=4
+#PBS -l walltime=30:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate wes
+cd /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/markqump
+
+sample=<sample1>
+dbsnp=/public/home/liuxs/biodata/reference/genome/hg38/ftp.broadinstitute.org/bundle/hg38/dbsnp_146.hg38.vcf.gz
+dbsnp1000G=/public/home/liuxs/biodata/reference/genome/hg38/ftp.broadinstitute.org/bundle/hg38/1000G_phase1.snps.high_confidence.hg38.vcf.gz 
+dbindel100G=/public/home/liuxs/biodata/reference/genome/hg38/ftp.broadinstitute.org/bundle/hg38/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz
+
+if [ -e $sample.rdup.bam ]; then
+   java -jar -Xmx12G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp  /public/home/liuxs/anaconda3/envs/wes/share/gatk4-4.1.3.0-0/gatk-package-4.1.3.0-local.jar BaseRecalibrator \
+    -R /public/home/liuxs/biodata/reference/genome/gdc_hg38/GRCh38.d1.vd1.fa \
+    -I ${sample}.rdup.bam \
+    -O /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/table/${sample}.recal_data.table \
+    --known-sites $dbsnp --known-sites $dbsnp1000G --known-sites $dbindel100G && \
+   java -jar -Xmx12G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp   /public/home/liuxs/anaconda3/envs/wes/share/gatk4-4.1.3.0-0/gatk-package-4.1.3.0-local.jar  ApplyBQSR  \
+    -R /public/home/liuxs/biodata/reference/genome/gdc_hg38/GRCh38.d1.vd1.fa \
+    -I ${sample}.rdup.bam \
+    --bqsr-recal-file /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/table/${sample}.recal_data.table \
+    -O /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/bqsrbam/${sample}.sorted.marked.BQSR.bam 
+    echo gatk-BQSR `date`
+fi
+```
+
+The result `bam` files were then used for copy number calling and mutation calling.
+
+### Copy number calling
+
+#### FACETS
+
+#### Sequenza
+
+### Mutation calling
+
+Somatic mutations were detected by following GATK best practice with Mutect2 [@van2013fastq]. 
+
+#### 1.
+
+```bash
+#PBS -N call-<sample>
+#PBS -l nodes=1:ppn=7
+#PBS -l walltime=30:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate wes
+gene=/public/home/liuxs/biodata/reference/genome/gdc_hg38
+normal=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/bqsrbam
+tumor=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/bqsrbam
+path=/public/home/liuxs/ncbi/dbGaP-21926/dnaseq/BQSR/bqsrbam
+ref=/public/home/liuxs/biodata/reference/genome/hg38/test/ftp.broadinstitute.org/bundle/Mutect2
+out=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/vcf
+inter=/public/home/liuxs/ncbi/dbGaP-16533/run/gatk/mutect
+out2=/public/home/liuxs/ncbi/dbGaP-21926/dnaseq/BQSR/vcf
+name=<sample1>
+if [ -e /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/bqsrbam/$name.sorted.marked.BQSR.bam ]; 
+then 
+gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp"  Mutect2 \
+ -R $gene/GRCh38.d1.vd1.fa \
+ -L $inter/Homo_sapiens_assembly38.targets.interval_list \
+ -I $tumor/<sample1>.sorted.marked.BQSR.bam \
+ -tumor <sample1> \
+ -I $normal/<sample2>.sorted.marked.BQSR.bam  \
+ -normal <sample2>\
+ --germline-resource $ref/af-only-gnomad.hg38.vcf.gz \
+ --panel-of-normals /public/home/liuxs/biodata/reference/genome/hg38/test/mu_call_ref/ref/ref/test/1000g_pon.hg38.vcf.gz \
+ --af-of-alleles-not-in-resource 0.0000025 \
+ --disable-read-filter  MateOnSameContigOrNoMappedMateReadFilter \
+ --bam-output $out/bam/<sample>.bam \
+ --f1r2-tar-gz $out/fir2/<sample>.tar.gz \
+ -O $out/<sample>.vcf
+else
+gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp"  Mutect2 \
+   -R $gene/GRCh38.d1.vd1.fa \
+   -L $inter/Homo_sapiens_assembly38.targets.interval_list \
+   -I $path/<sample1>.sorted.marked.BQSR.bam \
+   -tumor <sample1> \
+   -I $path/<sample2>.sorted.marked.BQSR.bam  \
+   -normal <sample2>\
+   --germline-resource $ref/af-only-gnomad.hg38.vcf.gz \
+   --panel-of-normals /public/home/liuxs/biodata/reference/genome/hg38/test/mu_call_ref/ref/ref/test/1000g_pon.hg38.vcf.gz \
+   --af-of-alleles-not-in-resource 0.0000025 \
+   --disable-read-filter  MateOnSameContigOrNoMappedMateReadFilter \
+   --bam-output $out2/bam/<sample>.bam \
+   --f1r2-tar-gz $out2/fir2/<sample>.tar.gz \
+   -O $out2/<sample>.vcf
+fi
+```
+
+#### 2.
+
+```bash
+#PBS -N getpile_normal_<sample2>
+#PBS -l nodes=1:ppn=7
+#PBS -l walltime=30:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate wes
+bam=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/bqsrbam
+SNP=/public/home/liuxs/biodata/reference/genome/hg38/test/ftp.broadinstitute.org/bundle/Mutect2
+out=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/vcf/piptable
+path=/public/home/liuxs/ncbi/dbGaP-21926/dnaseq/BQSR/bqsrbam
+out2=/public/home/liuxs/ncbi/dbGaP-21926/dnaseq/BQSR/vcf/piptable
+
+gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/wangshx/wx/tmp"  GetPileupSummaries \
+-I $bam/<sample2>.sorted.marked.BQSR.bam \
+-L /public/home/liuxs/ncbi/dbGaP-16533/run/gatk/mutect/Homo_sapiens_assembly38.targets.interval_list \
+-V $SNP/af-only-gnomad.hg38.vcf.gz \
+-O $out/<sample2>-normal.pileups.table
+```
+
+#### 3.
+
+```bash
+#PBS -N seg_and_cont
+#PBS -l nodes=1:ppn=7
+#PBS -l walltime=30:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate wes
+
+input=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/vcf/piptable
+input2=/public/home/liuxs/ncbi/dbGaP-21926/dnaseq/BQSR/vcf/piptable
+
+name=<sample1>
+if [ -e /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/vcf/piptable/$name-tumor.pileups.table ]; 
+then
+gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/wangshx/wx/tmp"  CalculateContamination \
+-I $input/<sample1>-tumor.pileups.table \
+-matched $input/<sample2>-normal.pileups.table \
+-O $input/<sample>-contamination.table \
+-tumor-segmentation $input/<sample>-segments.table
+else
+gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/wangshx/wx/tmp"  CalculateContamination \
+ -I $input2/<sample1>-tumor.pileups.table \
+ -matched $input2/<sample2>-normal.pileups.table \
+ -O $input2/<sample>-contamination.table \
+ -tumor-segmentation $input2/<sample>-segments.table
+fi
+```
+
+#### 4.
+
+```bash
+#PBS -N flr_<sample>
+#PBS -l nodes=1:ppn=7
+#PBS -l walltime=20:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate wes
+out=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/vcf/fir2
+
+java -jar /public/home/liuxs/anaconda3/envs/wes/share/gatk4-4.1.3.0-0/gatk-package-4.1.3.0-local.jar  LearnReadOrientationModel \
+-I /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/vcf/fir2/<sample>.tar.gz  \
+-O $out/<sample>-tumor-artifact-prior.tar.gz
+```
+
+#### 5.
+
+```bash
+#PBS -N filter-<sample>
+#PBS -l nodes=1:ppn=4
+#PBS -l walltime=20:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate wes
+gene=/public/home/liuxs/biodata/reference/genome/gdc_hg38
+out=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/vcf
+input=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/vcf/piptable
+fir2=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/vcf/fir2
+
+
+gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp" FilterMutectCalls \
+-R $gene/GRCh38.d1.vd1.fa \
+-V $out/<sample>.vcf \
+-O /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/filter/<sample>.filter.vcf \
+--tumor-segmentation $input/<sample>-segments.table \
+--contamination-table $input/<sample>-contamination.table \
+--ob-priors $fir2/<sample>-tumor-artifact-prior.tar.gz \
+--min-allele-fraction 0.05
+```
+
+#### 6.
+
+```bash
+#PBS -N call-<sample>
+#PBS -l nodes=1:ppn=7
+#PBS -l walltime=30:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate wes
+vcftools --vcf /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/filter/<sample>.filter.vcf\
+  --remove-filtered-all --recode --recode-INFO-all --out /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/PASS/<sample>-SNvs_only
+```
+
+#### 7. mutation annotation
+
+This step annotated somatic mutations with VEP [@mclaren2016ensembl].
+
+```bash
+#PBS -N annotate-<sample>
+#PBS -l nodes=1:ppn=4
+#PBS -l walltime=20:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate neo
+
+vep  --input_file /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/PASS/<sample>-SNvs_only.recode.vcf \
+--output_file /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/annonate/<sample>.anno.vcf \
+--symbol --term SO  --format vcf --vcf --cache --assembly GRCh38 --tsl \
+--hgvs --fasta ~/.vep/homo_sapiens/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz \
+--offline --cache --dir_cache ~/.vep/ \
+--transcript_version --cache_version 98 \
+--plugin Downstream  --plugin Wildtype \
+--dir_plugins ~/.vep/Plugins 
+```
+
+## Data cleaning

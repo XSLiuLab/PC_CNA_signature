@@ -37,7 +37,7 @@ Sys.setenv("LANGUAGE"="EN")
 
 Contact Prof. Xue-Song Liu: <liuxs@shanghaitech.edu.cn>
 
-This report is written to help user understand what and how we did in this project. 
+This report is written to help readers understand what and how we did in this project. 
 Please read the formal manuscript **TBD** for more details.
 
 > This document is compiled from an Rmarkdown file which contains all code or description necessary to (auto-)reproduce the analysis for the accompanying project. Each section below describes a different component of the analysis and all numbers and figures are generated directly from the underlying data on compilation.
