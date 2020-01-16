@@ -291,6 +291,8 @@ The result `bam` files were then used for copy number calling and mutation calli
 
 The absolute copy number profile for each sample was detected by two well known softwares [FACETS](https://github.com/mskcc/facets) [@shen_facets:_2016] and [Sequenza](https://sequenzatools.bitbucket.io/#/home) [@favero2014sequenza].
 
+The code to generate tumor-normal pair for FACETS is [here](https://github.com/ShixiangWang/prad_signature/blob/master/analysis/src/00-generate-samplefile-for-facets-cnv-calling.R), the code to generate tumor-normal pair for Sequenza is [here](https://github.com/ShixiangWang/prad_signature/blob/master/analysis/src/00-generate-samplefile-for-seqz-cnv-calling.R).
+
 #### FACETS
 
 We followed the standard pipeline of FACETS described in [vignette](https://github.com/mskcc/facets/blob/master/vignettes/FACETS.pdf) to call absolute copy number.
