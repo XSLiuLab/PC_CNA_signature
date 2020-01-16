@@ -9,6 +9,7 @@ output:
     mathjax: true
     lightbox: true
     gallery: true
+    toc: 3
 bibliography: ref.bib
 link-citations: yes
 ---
@@ -91,7 +92,7 @@ This section describes how we preprocessed the data.
 ### Pipeline
 
 The following diagram shows our upstream workflow. Steps before signature identification are belong to preprocessing.
-The preprocessing pipeline generated the variation records of samples.
+The preprocessing pipeline generates the variation records of samples.
 
 ```{r, out.width = "600px", fig.align="center", echo=FALSE}
 knitr::include_graphics("fig/PRAD_Analysis_Pipeline.png", dpi = 300)
@@ -233,7 +234,7 @@ java -jar /public/home/liuxs/anaconda3/envs/wes/share/picard-2.20.6-0/picard.jar
  M=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/markqump/matric/<sample>.sort.addhead.rmdup.metric
 ```
 
-Build index with `samtools`.
+Build index with `samtools`
 
 ```bash
 #PBS -N index_<sample>
@@ -288,9 +289,225 @@ The result `bam` files were then used for copy number calling and mutation calli
 
 ### Copy number calling
 
+The absolute copy number profile for each sample was detected by two well known softwares [FACETS](https://github.com/mskcc/facets) [@shen_facets:_2016] and [Sequenza](https://sequenzatools.bitbucket.io/#/home) [@favero2014sequenza].
+
 #### FACETS
 
+We followed the standard pipeline of FACETS described in [vignette](https://github.com/mskcc/facets/blob/master/vignettes/FACETS.pdf) to call absolute copy number.
+
+##### 1. SNP pileup
+
+This step followed the <https://github.com/mskcc/facets/blob/master/inst/extcode/README.txt>.
+
+For dbGap studies:
+
+```bash
+#PBS -N <sample>_snp
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=10:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+cd /public/home/liuxs/anaconda3/envs/R/lib/R/library/facets/extcode
+source activate R
+
+# <sample1>=tumorbam
+# <sample2>=normalbam
+
+path1="/public/home/liuxs/ncbi/dbGaP-16533/copy/out"
+path2="/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/bqsrbam"
+path3="/public/home/liuxs/ncbi/dbGaP-21926/dnaseq/BQSR/bqsrbam"
+
+name=<sample1>
+
+if [ -e /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/bqsrbam/$name.sorted.marked.BQSR.bam ]; 
+ then 
+  ./snp-pileup -g -q15 -Q20 -P100 -r25,0 /public/home/liuxs/biodata/reference/genome/hg38/snpvcf/common_all_20180418.vcf.gz\
+  ${path1}/<sample>.out.gz \
+  ${path2}/<sample2>.sorted.marked.BQSR.bam \
+  ${path2}/<sample1>.sorted.marked.BQSR.bam
+ else
+  ./snp-pileup -g -q15 -Q20 -P100 -r25,0 /public/home/liuxs/biodata/reference/genome/hg38/snpvcf/common_all_20180418.vcf.gz\
+ ${path1}/<sample>.out.gz \
+ ${path3}/<sample2>.sorted.marked.BQSR.bam  \
+ ${path3}/<sample1>.sorted.marked.BQSR.bam 
+fi
+```
+
+For TCGA:
+
+```bash
+#PBS -N <sample>_snp
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=10:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+cd /public/home/liuxs/anaconda3/envs/R/lib/R/library/facets/extcode
+source activate R
+
+# <sample1>=tumorbam
+# <sample2>=normalbam
+
+path1="/public/home/liuxs/ncbi/dbGaP-16533/copy/csv"
+path2="/public/home/liuxs/biodata/gdc/links/TCGA_PRAD"
+
+
+./snp-pileup -g -q15 -Q20 -P100 -r25,0 /public/home/liuxs/biodata/reference/genome/hg38/snpvcf/common_all_20180418.vcf.gz ${path1}/<sample>.out.gz ${path2}/<sample2>.bam ${path2}/<sample1>.bam
+```
+
+##### 2. run `facets` package
+
+This is a template R script used for copy number calling.
+
+```r
+#! /usr/bin/env Rscript
+
+library("pctGCdata")
+library("facets")
+set.seed(1234)
+rcmat = readSnpMatrix("/public/home/liuxs/ncbi/dbGaP-16533/copy/out/<sample>.out.gz")
+xx = preProcSample(rcmat,gbuild = "hg38")
+oo=procSample(xx,cval=150)
+fit=emcncf(oo)
+
+#plot 
+pdf("/public/home/liuxs/ncbi/dbGaP-16533/copy/facetdata_150/<sample>.pdf")
+plotSample(x=oo,emfit=fit)
+logRlogORspider(oo$out, oo$dipLogR) 
+while (!is.null(dev.list()))  dev.off()
+# 
+save(fit,file = "/public/home/liuxs/ncbi/dbGaP-16533/copy/facetdata_150/<sample>.Rdata")
+# output purity and ploidy -----
+purity=fit$purity
+purity=round(purity,2)
+ploidy=fit$ploidy
+ploidy=round(ploidy,1)
+output <- paste("<sample>", purity, ploidy, sep = "\t")
+write(output, "/public/home/liuxs/ncbi/dbGaP-16533/copy/facetdata_150/<sample>.txt", append = TRUE)
+```
+
+This is the PBS script used for calling the R script above. 
+
+```bash
+##### submit R script
+#PBS -N R
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=50:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate R
+for i in /public/home/liuxs/ncbi/dbGaP-16533/copy/Rdata/re150/pbs_150/*pbs;do Rscript $i;done
+```
+
+
 #### Sequenza
+
+We followed the standard pipeline of Sequenza described in [vignette](https://cran.r-project.org/web/packages/sequenza/vignettes/sequenza.html) to call absolute copy number.
+A modified [copynumber](https://github.com/ShixiangWang/copynumber) package was used to work with hg38 genome build.
+
+##### 1. process a `fasta` file to produce a GC `wiggle` track file
+
+```bash
+source activate python3
+
+ref_file=/public/home/liuxs/biodata/reference/genome/gdc_hg38/GRCh38.d1.vd1.fa
+gc_file=/public/home/wangshx/wangshx/PRAD_Sig/hg38.gc50Base.wig.gz
+
+mkdir -p $(dirname $gc_file)
+# sequenza-utils version: 3.0.0
+sequenza-utils gc_wiggle -w 50 --fasta $ref_file -o $gc_file
+```
+
+##### 2. process `bam` and `wiggle` files to produce a small `seqz` file:
+
+```bash
+#PBS -N PBS_<sample>_seqz
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=70:00:00
+#PBS -S /bin/bash
+#PBS -j oe
+#PBS -q normal_8
+
+source activate python3
+
+ref_file=/public/home/liuxs/biodata/reference/genome/gdc_hg38/GRCh38.d1.vd1.fa
+gc_file=/public/home/wangshx/wangshx/PRAD_Sig/hg38.gc50Base.wig.gz
+
+out_dir=/public/home/wangshx/wangshx/PRAD_Sig
+seqz_dir=$out_dir"/seqz"
+sseqz_dir=$out_dir"/small-seqz"
+
+mkdir -p $seqz_dir
+mkdir -p $sseqz_dir
+
+#tumor=<tumor>
+#normal=<normal>
+
+sequenza-utils bam2seqz -n <normal> -t <tumor> \
+    --fasta $ref_file -gc $gc_file \
+    -o $seqz_dir/"<sample>.seqz.gz"
+
+sequenza-utils seqz_binning --seqz $seqz_dir/"<sample>.seqz.gz" \
+    -w 50 -o $sseqz_dir/"<sample>.small.seqz.gz"
+
+# Only keep chr1-22,X,Y
+zcat $sseqz_dir/"<sample>.small.seqz.gz" | \
+    awk '/^chromosome|chr[12]?[0-9XY]\t/{print}' | \
+    gzip > $sseqz_dir/"<sample>.small_filter.seqz.gz"
+```
+
+##### 3. call copy number in R
+
+This is a template R script used for copy number calling.
+
+```r
+#! /usr/bin/env Rscript
+
+library("sequenza")
+
+args <- commandArgs(TRUE)
+sample_id <- args[1]
+input_file <- args[2]
+out_dir <- args[3]
+
+# https://github.com/ShixiangWang/copynumber
+test <- sequenza.extract(input_file, assembly = "hg38")
+
+CP <- sequenza.fit(test, female = FALSE)
+
+sequenza.results(
+  sequenza.extract = test,
+  cp.table = CP,
+  sample.id = sample_id,
+  out.dir = out_dir,
+  female = FALSE
+)
+
+```
+
+This is a template PBS script used for calling the R script above.
+
+```bash
+#PBS -N PBS_<sample>_seqz
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=70:00:00
+#PBS -S /bin/bash
+#PBS -j oe
+#PBS -q normal_8
+
+source activate R_36
+
+out_dir=/public/home/wangshx/wangshx/PRAD_Sig
+sseqz_dir=$out_dir"/small-seqz"
+res_dir=$out_dir"/seqz_wes_result"
+
+Rscript $out_dir"/3-sequenza.R" <sample> $sseqz_dir/"<sample>.small_filter.seqz.gz" $res_dir
+```
 
 ### Mutation calling
 
