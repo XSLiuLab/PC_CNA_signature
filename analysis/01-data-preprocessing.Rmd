@@ -34,12 +34,12 @@ opts_knit$set(width = 75)
 
 This part focuses on data preprocessing, it contains the following sections:
 
-- Data downloading
-- Data preprocessing
+- [Data downloading](#data-downloading)
+- [Data preprocessing](#data-preprocessing)
   - Pipeline
   - Copy number calling
   - Mutation calling
-- Data cleaning
+- [Data cleaning](#data-cleaning)
 
 ## Data downloading
 
@@ -49,8 +49,8 @@ This section describes where and how we downloaded the data.
 
 Whole exome sequencing raw data were downloaded from the following 6 dbGap studies:
 
-- `phs000178`: this is TCGA prostate cancer cohort, the raw data is `bam` format stored in [GDC portal](https://portal.gdc.cancer.gov/), we
-access them by dbGap permission
+- `phs000178`: this is TCGA prostate cancer cohort, the raw data is `bam` format
+stored in [GDC portal](https://portal.gdc.cancer.gov/), we access them by dbGap permission
 - `phs000447`: `sra` data
 - `phs000554`: `sra` data
 - `phs000909`: `sra` data
@@ -102,18 +102,18 @@ knitr::include_graphics("fig/PRAD_Analysis_Pipeline.png", dpi = 300)
 
 ### Sequence alignment
 
-For `phs000447`, `phs000554`, `phs000909`, `phs000915` and `phs001141` cohorts, the raw data are in `sra` format.
+For cohorts including `phs000447`, `phs000554`, `phs000909`, `phs000915` and `phs001141`, the raw data are in `sra` format.
 We did sequence alignment to them. To keep in line with TCGA bam data,
-we used the same reference genome (downlowned from [GDC portal](https://portal.gdc.cancer.gov/)) and operation (see [GDC docs](https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/DNA_Seq_Variant_Calling_Pipeline/)).
+we used the same reference genome (downlowned from [GDC portal](https://portal.gdc.cancer.gov/)) and operations (see [GDC docs](https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/DNA_Seq_Variant_Calling_Pipeline/)).
 
-> Of note, the preprocessing was done on Linux server provided by High Performance Computing Service of ShanghaiTech University.
+> Of note, the preprocessing step was done on Linux server provided by High Performance Computing Service of ShanghaiTech University.
 > So the work is presented in PBS scripts. If readers want to reproduce this work, please focus on the key code lines.
 
 The details are described as below.
 
 #### 1. from `sra` to `fastq`
 
-The raw WES downloaded from dbGap database are in `sra` format, we need to convert them into `fastq` format firstly.
+The raw WES data downloaded from dbGap database are in `sra` format, we need to convert them into `fastq` format firstly.
 
 ```bash
 #PBS -N fastq_<sample>
@@ -210,11 +210,11 @@ java -jar -Xmx12G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp \
  I=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/bam/<sample>.bam\
  O=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/bamsort/<sample>.sort.bam\
  SORT_ORDER=coordinate
- ```
+```
 
 #### 6. mark duplications 
 
-Mark duplications with `Picard`.
+This step marked duplications with `Picard`.
 
 ```bash
 #PBS -N rmdump_<sample> 
@@ -234,7 +234,7 @@ java -jar /public/home/liuxs/anaconda3/envs/wes/share/picard-2.20.6-0/picard.jar
  M=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/markqump/matric/<sample>.sort.addhead.rmdup.metric
 ```
 
-Build index with `samtools`
+We then built index with `samtools`.
 
 ```bash
 #PBS -N index_<sample>
@@ -252,7 +252,7 @@ samtools index /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/markqump/<sample>.rdup
 
 #### 7. BQSR
 
-A base quality score recalibration (BQSR) step is then performed.
+A base quality score recalibration (BQSR) step was then performed.
 
 ```bash
 #PBS -N bqsr_<sample1>
@@ -710,3 +710,32 @@ vep  --input_file /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/PASS/<sample>-
 ```
 
 ## Data cleaning
+
+This section describes how we cleaned the data for downstream analysis.
+
+### Phenotype data
+
+2 info tables of SRA runs downloaded from dbGap are stored in [here](https://github.com/ShixiangWang/prad_signature/tree/master/dbGap).
+Phenotype data of dbGap studies are stored in [here](https://github.com/ShixiangWang/prad_signature/tree/master/dbGap/phenotype).
+Phenotype data of some cohorts were also downloaded from original articles and cleaned by hand.
+We then carefully checked and compared all available data, extracted key info and generated tidy datasets
+including sample-pair data used for variation calling and phenotype data used for downstream analysis.
+
+The whole procedure is recorded in [01-tidy_mapping.R](https://github.com/ShixiangWang/prad_signature/blob/master/dbGap/01-tidy_mapping.R), [02-tidy_clinical_data.R](https://github.com/ShixiangWang/prad_signature/blob/master/dbGap/02-tidy_clinical_data.R) and [03-combine_and_clean_IDs.R](https://github.com/ShixiangWang/prad_signature/blob/master/dbGap/03-combine_and_clean_IDs.R).
+
+
+### Survival data
+
+We merged two available clinical datasets from TCGA and `phs000554` with [R script](https://github.com/ShixiangWang/prad_signature/blob/master/analysis/src/01-prepare-survival-data.R).
+
+
+### Variation profile
+
+[Copy number calling](#copy-number-calling) and [mutation calling](#mutation-calling) all generated per-sample results. 
+We go further merged them into one file, respectively.
+
+For results from Sequenza, we merged them with R script [00-generate-samplefile-for-seqz-cnv-calling.R](https://github.com/ShixiangWang/prad_signature/blob/master/analysis/src/00-generate-samplefile-for-seqz-cnv-calling.R).
+
+For results from FACETS, we merged them with R script [00-generate-samplefile-for-facets-cnv-calling.R](https://github.com/ShixiangWang/prad_signature/blob/master/analysis/src/00-generate-samplefile-for-facets-cnv-calling.R).
+
+For results from Mutect2, we merged VCFs into MAF with tool [vcf2maf](https://github.com/mskcc/vcf2maf). TODO: more detail code.

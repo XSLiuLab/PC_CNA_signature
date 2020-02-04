@@ -32,7 +32,7 @@ opts_chunk$set(
 opts_knit$set(width = 75)
 ```
 
-This part has been divided into 4 sections as the following, it will describe how to get the
+This part has been divided into 4 sections as the following, it describes how to get the
 genomic variation (or instability) signatures from mutation profile (including copy number profile
 and single base substitution (SBS) profile).
 
