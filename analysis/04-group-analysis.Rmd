@@ -172,7 +172,49 @@ load("../output/Sig.PRAD_TCGA_plus_dbGap_Maf.RData")
 load("../output/Sig.CNV.seqz.W.RData")
 ```
 
+### Copy number signatures
 
+```{r}
+map_df = df.seqz %>% 
+  dplyr::select(cnv_enrich_sig, CNV_ID) %>% 
+  dplyr::filter(!is.na(CNV_ID))
+
+groups = map_df$cnv_enrich_sig
+names(groups) = map_df$CNV_ID
+
+show_sig_exposure(Sig.CNV.seqz.W,
+                  groups = groups, 
+                  #grp_order = , 
+                  rm_space = TRUE, 
+                  style = "cosmic",
+                  rm_grid_line = FALSE,
+                  rm_panel_border = TRUE,
+                  grp_size = 7)
+```
+
+### SBS signatures
+
+```{r}
+map_df = df.seqz %>% 
+  dplyr::select(tumor_Run, snv_enrich_sig) %>% 
+  dplyr::filter(!is.na(tumor_Run))
+
+groups = map_df$snv_enrich_sig
+names(groups) = map_df$tumor_Run
+
+Sig.SNV2 = Sig.SNV
+
+TCGA_INDEX = startsWith(colnames(Sig.SNV2$Exposure), "TCGA")
+colnames(Sig.SNV2$Exposure)[TCGA_INDEX] = substr(colnames(Sig.SNV2$Exposure)[TCGA_INDEX], 1, 15)
+
+show_sig_exposure(Sig.SNV2,
+                  groups = groups,
+                  cutoff = 2000,
+                  rm_space = TRUE, 
+                  style = "cosmic",
+                  rm_grid_line = FALSE,
+                  rm_panel_border = TRUE)
+```
 
 ## Copy number profile of different groups
 
