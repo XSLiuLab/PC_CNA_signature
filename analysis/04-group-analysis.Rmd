@@ -32,6 +32,9 @@ opts_chunk$set(
 opts_knit$set(width = 75)
 ```
 
+This part has been divided into four parts to show the differences across sample groups defined by signature exposure.
+It provides insight into the heterogeneity of prostate cancers and relative importance of two types of genomic variation signatures.
+
 
 Load packages.
 
@@ -159,6 +162,17 @@ show_group_mapping(df.map,
                    cols_to_map = setdiff(colnames(df.map), "Sample type"),
                    fill_na = "NA", include_sig = TRUE)
 ```
+
+## Grouped signature exposure profile
+
+We have showed the exposure profiles, here we add group annotation to them.
+
+```{r}
+load("../output/Sig.PRAD_TCGA_plus_dbGap_Maf.RData")
+load("../output/Sig.CNV.seqz.W.RData")
+```
+
+
 
 ## Copy number profile of different groups
 

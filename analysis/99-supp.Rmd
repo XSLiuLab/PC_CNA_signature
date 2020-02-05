@@ -30,3 +30,13 @@ opts_chunk$set(
 )
 opts_knit$set(width = 75)
 ```
+
+This part shows some supplementary analyses and descriptions.
+
+## FACETS results
+
+TODO: Show some basic results from FACETS
+
+## Method comparison of  
+
+TODO: Show more details described in ["Tally variation records"](#tally-variation-records).

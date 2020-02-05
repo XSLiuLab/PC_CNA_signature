@@ -32,6 +32,8 @@ opts_chunk$set(
 opts_knit$set(width = 75)
 ```
 
+To check the clinical relavance of signatures, this part we do survival analysis with Cox model.
+
 ## Prepare
 
 Load package **ezcox** for batch Cox analysis.
@@ -68,9 +70,9 @@ dup_ids = which(duplicated(surv_dt$PatientID))
 # Remove duplicated records
 surv_dt = surv_dt[-dup_ids, ]
 
-# Scale the signature activity to 0-20.
-# To better understand the effect of signature activity on clinical events,
-# here we scale them into range 0-20. 1 increase means 5% increase of signature activity.
+# Scale the signature exposure to 0-20.
+# To better understand the effect of signature exposure on clinical events,
+# here we scale them into range 0-20. 1 increase means 5% increase of signature exposure.
 #
 # Scale the CNA burden to 0-20.
 surv_dt = surv_dt %>%

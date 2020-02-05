@@ -412,7 +412,7 @@ p + scale_size(range=c(0.1, 2))
 #dev.off()
 ```
 
-[Click here to see the plot](corrr_network.pdf)
+~~[click here to see the plot](corrr_network.pdf)~~
 
 > variables that are more highly correlated appear closer together and are joined by stronger paths. Paths are also colored by their sign. The proximity of the points are determined using multidimensional clustering.
 

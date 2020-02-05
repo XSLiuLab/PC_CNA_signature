@@ -30,3 +30,14 @@ opts_chunk$set(
 )
 opts_knit$set(width = 75)
 ```
+
+This part discribes some big pictures of genomic variations in prostate cancers.
+They are not directly related to the core analyses previously reported.
+
+## Oncoplot
+
+## Summary plots
+
+### SBS
+
+### Copy number
