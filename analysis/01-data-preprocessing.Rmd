@@ -104,7 +104,7 @@ knitr::include_graphics("fig/PRAD_Analysis_Pipeline.png", dpi = 300)
 
 For cohorts including `phs000447`, `phs000554`, `phs000909`, `phs000915` and `phs001141`, the raw data are in `sra` format.
 We did sequence alignment to them. To keep in line with TCGA bam data,
-we used the same reference genome (downlowned from [GDC portal](https://portal.gdc.cancer.gov/)) and operations (see [GDC docs](https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/DNA_Seq_Variant_Calling_Pipeline/)).
+we used the same reference genome (downloaded from [GDC portal](https://portal.gdc.cancer.gov/)) and operations (see [GDC docs](https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/DNA_Seq_Variant_Calling_Pipeline/)).
 
 > Of note, the preprocessing step was done on Linux server provided by High Performance Computing Service of ShanghaiTech University.
 > So the work is presented in PBS scripts. If readers want to reproduce this work, please focus on the key code lines.
