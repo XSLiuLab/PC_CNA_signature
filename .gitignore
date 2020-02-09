@@ -8,6 +8,7 @@ analysis/figure
 analysis/*png
 analysis/*html
 analysis/*_cache
+analysis/*_files
 analysis/site_libs
 output/BayesNMF/
 raw_data/
