@@ -106,8 +106,15 @@ This problem seems to come from the raw data. However, we checked the data and t
 from the result of Sequenza.
 
 To summary, we used result from Sequenza instead of FACETS for downstream analyses because we found there 
-may be some unknown method problems in FACETS.
+may be some unknown method problems in FACETS (in general, this method is still reliable).
 
 ## Method comparison between Macintyre et al and our study
 
 TODO: Show more details described in ["Tally variation records"](#tally-variation-records).
+
+```{r}
+load("../output/Sig.CNV.seqz.M.RData")
+load("../output/EST.seqz.M.RData")
+
+```
+

@@ -34,6 +34,15 @@ opts_knit$set(width = 75)
 This part discribes some big pictures of genomic variations in prostate cancers.
 They are not directly related to the core analyses previously reported.
 
+```{r}
+library(sigminer)
+
+
+load("../output/CNV.seqz.RData")
+load("../output/CNV.seqz.tally.W.RData")
+```
+
+
 ## Oncoplot
 
 ## Summary plots
@@ -41,3 +50,34 @@ They are not directly related to the core analyses previously reported.
 ### SBS
 
 ### Copy number
+
+#### Copy number segment distribution
+
+
+```{r}
+show_cn_distribution(CNV.seqz, mode = "ld")
+```
+
+```{r}
+show_cn_distribution(CNV.seqz, mode = "cd")
+```
+
+#### Feature distribution
+
+```{r, fig.width=10, fig.height=6}
+show_cn_features(CNV.seqz.tally.W$features, method = "W", log_y = TRUE)
+```
+
+#### Component distribution
+
+```{r, fig.width=10, fig.height=6}
+show_cn_components(CNV.seqz.tally.W$parameters, method = "W", log_y = TRUE)
+```
+
+Data details can be viewed as a table:
+
+```{r}
+DT::datatable(CNV.seqz.tally.W$parameters)
+```
+
+> `n_obs` column indicates the number of event of corresponding copy number component.
