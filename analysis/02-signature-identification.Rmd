@@ -87,7 +87,7 @@ and the contribution of each chromosome.
 4. most importantly, the classification is fixed, so it is much easier to compare the signatures within/across tumor types, the results across different studies and the result signatures to reference signatures. In a word, our method constructs the standard to extract, study and compare copy number signatures.
 5. our method is more extensible.
 
-I will talk more about No.1-4 in an individual section (**TBD**), the No.5 will be described in [sigminer vignette]()(**TBD**).
+I talk more about No.1-4 in an individual section (["Method comparison between Macintyre et al and our study"](#method-comparison-between-macintyre-et-al-and-our-study)), the No.5 will be described in [sigminer vignette]()(**TBD**).
 
 We will generate sample-by-component matrix using the methods above and treate the result as the input of nonnegative matrix decomposition (NMF) algorithm for extracting signatures.
 

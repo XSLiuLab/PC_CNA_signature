@@ -40,14 +40,50 @@ library(sigminer)
 
 load("../output/CNV.seqz.RData")
 load("../output/CNV.seqz.tally.W.RData")
+load("../output/PRAD_TCGA_plus_dbGap_Maf.RData")
 ```
 
 
 ## Oncoplot
 
+
+TODO: add GISTIC/MutSig, etc. data (plots ref to <http://bioconductor.org/packages/release/bioc/vignettes/maftools/inst/doc/oncoplots.html>) 
+
+```{r}
+oncoplot(maf = Maf, top = 10)
+```
+
+
+
 ## Summary plots
 
 ### SBS
+
+
+```{r}
+library(maftools)
+```
+
+#### MAF summary
+
+```{r}
+plotmafSummary(maf = Maf, rmOutlier = TRUE, addStat = 'median', dashboard = TRUE, titvRaw = FALSE, log_scale = TRUE)
+```
+
+#### Transition and Transversions
+
+```{r}
+maf.titv = titv(maf = Maf, plot = FALSE, useSyn = TRUE)
+#plot titv summary
+plotTiTv(res = maf.titv)
+```
+
+#### Somatic Interactions
+
+```{r}
+somaticInteractions(maf = Maf, top = 25, pvalue = c(0.05, 0.1))
+```
+
 
 ### Copy number
 
