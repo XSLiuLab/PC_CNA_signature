@@ -53,9 +53,9 @@ load("../output/EST.facets.W.all.RData")
 
 According to the estimation of signature number, 6 signatures were extracted.
 
-```{r}
+```{r, fig.height=3, fig.width=4}
 p <- show_sig_number_survey(EST.facets.W.all, right_y = NULL)
-add_h_arrow(p, x = 6.1, y = 0.986, seg_len = 0.5)
+add_h_arrow(p, x = 6.2, y = 0.986, seg_len = 0.5, space = 0.2)
 ```
 
 The result signatures are shown as the below.
@@ -151,8 +151,9 @@ Next section, I will talk more problems raised by method "M" from the visualizat
 
 We still use the cophenetic plot for deciding on the signature number.
 
-```{r}
-show_sig_number_survey(EST.seqz.M, right_y = NULL)
+```{r, fig.height=3, fig.width=4}
+p = show_sig_number_survey(EST.seqz.M, right_y = NULL)
+add_h_arrow(p, x = 4.2, y = 0.991, seg_len = 0.5, space = 0.2)
 ```
 
 We selected 4 signatures. Let's see their signature profile.

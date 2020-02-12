@@ -14,7 +14,7 @@
 <meta name="author" content="Minfang Song" />
 <meta name="author" content="Xue-Song Liu (Corresponding author)" />
 
-<meta name="date" content="2020-02-10" />
+<meta name="date" content="2020-02-12" />
 
 <title>Prostate Cancer Variation Signature Analysis Report</title>
 
@@ -938,12 +938,12 @@ $(document).ready(function () {
 <p><img src="index_files/figure-html/unnamed-chunk-18-1.png" width="2400" /></p>
 <p>The best possible signature number value is the one at which the cophenetic correlation value on the y-axis drops significantly <span class="citation">(Gaujoux and Seoighe <a href="#ref-gaujoux2010flexible">2010</a>)</span>. Here we can take that the value <code>5</code> is the optimal signature number. For <code>3</code>, it is small to produce the result with biological significance due to the hugo contribution of CNV in prostate cancer; for <code>8</code>, it is a little bigger, so it may be not easy to understand the result considering currently we know few about the mechanism and consequence of copy number events.</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">p &lt;-<span class="st"> </span><span class="kw">show_sig_number_survey</span>(EST.seqz.W.all, <span class="dt">right_y =</span> <span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb34-2" data-line-number="2"><span class="kw">add_h_arrow</span>(p, <span class="dt">x =</span> <span class="fl">5.1</span>, <span class="dt">y =</span> <span class="fl">0.99</span>, <span class="dt">seg_len =</span> <span class="fl">0.5</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" width="2400" /></p>
+<a class="sourceLine" id="cb34-2" data-line-number="2"><span class="kw">add_h_arrow</span>(p, <span class="dt">x =</span> <span class="fl">5.2</span>, <span class="dt">y =</span> <span class="fl">0.99</span>, <span class="dt">seg_len =</span> <span class="fl">0.5</span>, <span class="dt">space =</span> <span class="fl">0.2</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" width="1200" /></p>
 <p>Next we take a look at SBS.</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">p &lt;-<span class="st"> </span><span class="kw">show_sig_number_survey</span>(EST.Maf, <span class="dt">right_y =</span> <span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="kw">add_h_arrow</span>(p, <span class="dt">x =</span> <span class="fl">3.1</span>, <span class="dt">y =</span> <span class="fl">0.982</span>, <span class="dt">seg_len =</span> <span class="fl">0.5</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" width="2400" /></p>
+<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="kw">add_h_arrow</span>(p, <span class="dt">x =</span> <span class="fl">3.2</span>, <span class="dt">y =</span> <span class="fl">0.982</span>, <span class="dt">seg_len =</span> <span class="fl">0.5</span>, <span class="dt">space =</span> <span class="fl">0.2</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" width="1200" /></p>
 <p>For SBS, we select <code>3</code>. We have the knowledge that <code>3</code> mutational signatures from TCGA prostate cancers are recorded in COSMIC database (COSMIC 1, 5, 6), and the cophenetic has a sharp decrease after <code>3</code> indicating that substantially less stability is achieved using more than <code>3</code> clusters.</p>
 </div>
 </div>
@@ -1179,26 +1179,16 @@ $(document).ready(function () {
 </blockquote>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1"><span class="co"># CNV</span></a>
 <a class="sourceLine" id="cb60-2" data-line-number="2">CNVGroupInfo &lt;-<span class="st"> </span><span class="kw">get_groups</span>(Sig.CNV, <span class="dt">method =</span> <span class="st">&quot;consensus&quot;</span>, <span class="dt">match_consensus =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb60-3" data-line-number="3"><span class="co">#&gt; =&gt; Obtaining clusters from the hierarchical clustering of the consensus matrix...</span></a>
-<a class="sourceLine" id="cb60-4" data-line-number="4"><span class="co">#&gt; =&gt; Finding the dominant signature of each group...</span></a>
-<a class="sourceLine" id="cb60-5" data-line-number="5"><span class="co">#&gt; =&gt; Generating a table of group and dominant signature:</span></a>
-<a class="sourceLine" id="cb60-6" data-line-number="6"><span class="co">#&gt;    </span></a>
-<a class="sourceLine" id="cb60-7" data-line-number="7"><span class="co">#&gt;     Sig1 Sig2 Sig3 Sig4 Sig5</span></a>
-<a class="sourceLine" id="cb60-8" data-line-number="8"><span class="co">#&gt;   1    9    2   14   10    0</span></a>
-<a class="sourceLine" id="cb60-9" data-line-number="9"><span class="co">#&gt;   2    0   60    0    3    0</span></a>
-<a class="sourceLine" id="cb60-10" data-line-number="10"><span class="co">#&gt;   3    0    3  219    2    0</span></a>
-<a class="sourceLine" id="cb60-11" data-line-number="11"><span class="co">#&gt;   4    0    0    0  170    0</span></a>
-<a class="sourceLine" id="cb60-12" data-line-number="12"><span class="co">#&gt;   5    0    3   35  200  207</span></a>
-<a class="sourceLine" id="cb60-13" data-line-number="13"><span class="co">#&gt; =&gt; Assigning a group to a signature with the maxium fraction (stored in &#39;map_table&#39; attr)...</span></a>
-<a class="sourceLine" id="cb60-14" data-line-number="14"><span class="co">#&gt; =&gt; Summarizing...</span></a>
-<a class="sourceLine" id="cb60-15" data-line-number="15"><span class="co">#&gt;  group #1: 35 samples with Sig3 enriched.</span></a>
-<a class="sourceLine" id="cb60-16" data-line-number="16"><span class="co">#&gt;  group #2: 63 samples with Sig2 enriched.</span></a>
-<a class="sourceLine" id="cb60-17" data-line-number="17"><span class="co">#&gt;  group #3: 224 samples with Sig3 enriched.</span></a>
-<a class="sourceLine" id="cb60-18" data-line-number="18"><span class="co">#&gt;  group #4: 170 samples with Sig4 enriched.</span></a>
-<a class="sourceLine" id="cb60-19" data-line-number="19"><span class="co">#&gt;  group #5: 445 samples with Sig5 enriched.</span></a>
-<a class="sourceLine" id="cb60-20" data-line-number="20">CNVInfo &lt;-<span class="st"> </span>CNV<span class="op">@</span>summary.per.sample</a>
-<a class="sourceLine" id="cb60-21" data-line-number="21"><span class="co"># Default is absolute exposure</span></a>
-<a class="sourceLine" id="cb60-22" data-line-number="22">CNVExposureInfo &lt;-<span class="st"> </span><span class="kw">get_sig_exposure</span>(Sig.CNV)</a></code></pre></div>
+<a class="sourceLine" id="cb60-3" data-line-number="3"><span class="co">#&gt;    </span></a>
+<a class="sourceLine" id="cb60-4" data-line-number="4"><span class="co">#&gt;     Sig1 Sig2 Sig3 Sig4 Sig5</span></a>
+<a class="sourceLine" id="cb60-5" data-line-number="5"><span class="co">#&gt;   1    9    2   14   10    0</span></a>
+<a class="sourceLine" id="cb60-6" data-line-number="6"><span class="co">#&gt;   2    0   60    0    3    0</span></a>
+<a class="sourceLine" id="cb60-7" data-line-number="7"><span class="co">#&gt;   3    0    3  219    2    0</span></a>
+<a class="sourceLine" id="cb60-8" data-line-number="8"><span class="co">#&gt;   4    0    0    0  170    0</span></a>
+<a class="sourceLine" id="cb60-9" data-line-number="9"><span class="co">#&gt;   5    0    3   35  200  207</span></a>
+<a class="sourceLine" id="cb60-10" data-line-number="10">CNVInfo &lt;-<span class="st"> </span>CNV<span class="op">@</span>summary.per.sample</a>
+<a class="sourceLine" id="cb60-11" data-line-number="11"><span class="co"># Default is absolute exposure</span></a>
+<a class="sourceLine" id="cb60-12" data-line-number="12">CNVExposureInfo &lt;-<span class="st"> </span><span class="kw">get_sig_exposure</span>(Sig.CNV)</a></code></pre></div>
 <p>We find that the group <code>1</code> is assigned to <code>Sig3</code> due to sample with <code>Sig3</code> dominant has the maximum fraction in group <code>1</code>. However, group <code>1</code> is the only group with <code>Sig1</code> enriched. So we modify this result.</p>
 <div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1">CNVGroupInfo<span class="op">$</span>enrich_sig[CNVGroupInfo<span class="op">$</span>group <span class="op">==</span><span class="st"> &quot;1&quot;</span>] &lt;-<span class="st"> &quot;Sig1&quot;</span></a></code></pre></div>
 <p>Next, we process mutation data to get TMB, driver info, clusters, and etc (the detail has been described in R script under <code>analysis/src/</code> of the repo).</p>
@@ -1215,24 +1205,16 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb62-11" data-line-number="11"><span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_heter_info.RData&quot;</span>)</a>
 <a class="sourceLine" id="cb62-12" data-line-number="12"></a>
 <a class="sourceLine" id="cb62-13" data-line-number="13">SNVGroupInfo &lt;-<span class="st"> </span><span class="kw">get_groups</span>(Sig.SNV, <span class="dt">method =</span> <span class="st">&quot;consensus&quot;</span>, <span class="dt">match_consensus =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb62-14" data-line-number="14"><span class="co">#&gt; =&gt; Obtaining clusters from the hierarchical clustering of the consensus matrix...</span></a>
-<a class="sourceLine" id="cb62-15" data-line-number="15"><span class="co">#&gt; =&gt; Finding the dominant signature of each group...</span></a>
-<a class="sourceLine" id="cb62-16" data-line-number="16"><span class="co">#&gt; =&gt; Generating a table of group and dominant signature:</span></a>
-<a class="sourceLine" id="cb62-17" data-line-number="17"><span class="co">#&gt;    </span></a>
-<a class="sourceLine" id="cb62-18" data-line-number="18"><span class="co">#&gt;     Sig1 Sig2 Sig3</span></a>
-<a class="sourceLine" id="cb62-19" data-line-number="19"><span class="co">#&gt;   1   16   34   21</span></a>
-<a class="sourceLine" id="cb62-20" data-line-number="20"><span class="co">#&gt;   2   30    0  193</span></a>
-<a class="sourceLine" id="cb62-21" data-line-number="21"><span class="co">#&gt;   3  677    0    0</span></a>
-<a class="sourceLine" id="cb62-22" data-line-number="22"><span class="co">#&gt; =&gt; Assigning a group to a signature with the maxium fraction (stored in &#39;map_table&#39; attr)...</span></a>
-<a class="sourceLine" id="cb62-23" data-line-number="23"><span class="co">#&gt; =&gt; Summarizing...</span></a>
-<a class="sourceLine" id="cb62-24" data-line-number="24"><span class="co">#&gt;  group #1: 71 samples with Sig2 enriched.</span></a>
-<a class="sourceLine" id="cb62-25" data-line-number="25"><span class="co">#&gt;  group #2: 223 samples with Sig3 enriched.</span></a>
-<a class="sourceLine" id="cb62-26" data-line-number="26"><span class="co">#&gt;  group #3: 677 samples with Sig1 enriched.</span></a>
-<a class="sourceLine" id="cb62-27" data-line-number="27">SNVExposureInfo &lt;-<span class="st"> </span><span class="kw">get_sig_exposure</span>(Sig.SNV)</a>
-<a class="sourceLine" id="cb62-28" data-line-number="28"></a>
-<a class="sourceLine" id="cb62-29" data-line-number="29"><span class="co"># Processing gene and pathway mutation ------------------------------------</span></a>
-<a class="sourceLine" id="cb62-30" data-line-number="30"></a>
-<a class="sourceLine" id="cb62-31" data-line-number="31"><span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_gene_and_pathway_mutation.RData&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb62-14" data-line-number="14"><span class="co">#&gt;    </span></a>
+<a class="sourceLine" id="cb62-15" data-line-number="15"><span class="co">#&gt;     Sig1 Sig2 Sig3</span></a>
+<a class="sourceLine" id="cb62-16" data-line-number="16"><span class="co">#&gt;   1   16   34   21</span></a>
+<a class="sourceLine" id="cb62-17" data-line-number="17"><span class="co">#&gt;   2   30    0  193</span></a>
+<a class="sourceLine" id="cb62-18" data-line-number="18"><span class="co">#&gt;   3  677    0    0</span></a>
+<a class="sourceLine" id="cb62-19" data-line-number="19">SNVExposureInfo &lt;-<span class="st"> </span><span class="kw">get_sig_exposure</span>(Sig.SNV)</a>
+<a class="sourceLine" id="cb62-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb62-21" data-line-number="21"><span class="co"># Processing gene and pathway mutation ------------------------------------</span></a>
+<a class="sourceLine" id="cb62-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb62-23" data-line-number="23"><span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_gene_and_pathway_mutation.RData&quot;</span>)</a></code></pre></div>
 <p>Next, we keep keys of all <code>data.frame</code>s are same and merge them into one.</p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="co"># Merge data --------------------------------------------------------------</span></a>
 <a class="sourceLine" id="cb63-2" data-line-number="2">Info &lt;-<span class="st"> </span>Info <span class="op">%&gt;%</span></a>
@@ -1417,17 +1399,7 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb67-4" data-line-number="4">  <span class="dt">method_co =</span> <span class="st">&quot;pearson&quot;</span>,</a>
 <a class="sourceLine" id="cb67-5" data-line-number="5">  <span class="dt">type =</span> feature_type, <span class="dt">verbose =</span> <span class="ot">TRUE</span></a>
 <a class="sourceLine" id="cb67-6" data-line-number="6">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb67-7" data-line-number="7"><span class="st">  </span><span class="kw">get_tidy_association</span>(<span class="dt">p_adjust =</span> <span class="ot">TRUE</span>) <span class="co"># adjust p value with FDR</span></a>
-<a class="sourceLine" id="cb67-8" data-line-number="8"><span class="co">#&gt; -&gt; Detecting and transforming possibly ordinal variables...</span></a>
-<a class="sourceLine" id="cb67-9" data-line-number="9"><span class="co">#&gt; -&gt; Calculating correlations for continuous variables using pearson...</span></a>
-<a class="sourceLine" id="cb67-10" data-line-number="10"><span class="co">#&gt; -&gt; Calculating correlations for categorical variables using wilcox.test...</span></a>
-<a class="sourceLine" id="cb67-11" data-line-number="11"><span class="co">#&gt; --&gt; building test models, be patient...</span></a>
-<a class="sourceLine" id="cb67-12" data-line-number="12"><span class="co">#&gt; --&gt; done</span></a>
-<a class="sourceLine" id="cb67-13" data-line-number="13"><span class="co">#&gt; --&gt; obtaining model results...</span></a>
-<a class="sourceLine" id="cb67-14" data-line-number="14"><span class="co">#&gt; --&gt; done</span></a>
-<a class="sourceLine" id="cb67-15" data-line-number="15"><span class="co">#&gt; --&gt; collecting data...</span></a>
-<a class="sourceLine" id="cb67-16" data-line-number="16"><span class="co">#&gt; --&gt; done</span></a>
-<a class="sourceLine" id="cb67-17" data-line-number="17"><span class="co">#&gt; -&gt; Done</span></a></code></pre></div>
+<a class="sourceLine" id="cb67-7" data-line-number="7"><span class="st">  </span><span class="kw">get_tidy_association</span>(<span class="dt">p_adjust =</span> <span class="ot">TRUE</span>) <span class="co"># adjust p value with FDR</span></a></code></pre></div>
 <blockquote>
 <p>Association of signature exposures with other features was performed using one of two procedures: for a continuous association variable (including ordinal variable), pearson correaltion was performed; for a binary association variable, samples were divided into two groups and Mann-Whitney U-test was performed to test for differences in signature exposure medians between the two groups.</p>
 </blockquote>
@@ -1450,16 +1422,7 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb70-3" data-line-number="3">  <span class="dt">cols_to_features =</span> cols_to_mutated_genes,</a>
 <a class="sourceLine" id="cb70-4" data-line-number="4">  <span class="dt">type =</span> <span class="st">&quot;ca&quot;</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span></a>
 <a class="sourceLine" id="cb70-5" data-line-number="5">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb70-6" data-line-number="6"><span class="st">  </span><span class="kw">get_tidy_association</span>(<span class="dt">p_adjust =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb70-7" data-line-number="7"><span class="co">#&gt; -&gt; Detecting and transforming possibly ordinal variables...</span></a>
-<a class="sourceLine" id="cb70-8" data-line-number="8"><span class="co">#&gt; -&gt; Calculating correlations for categorical variables using wilcox.test...</span></a>
-<a class="sourceLine" id="cb70-9" data-line-number="9"><span class="co">#&gt; --&gt; building test models, be patient...</span></a>
-<a class="sourceLine" id="cb70-10" data-line-number="10"><span class="co">#&gt; --&gt; done</span></a>
-<a class="sourceLine" id="cb70-11" data-line-number="11"><span class="co">#&gt; --&gt; obtaining model results...</span></a>
-<a class="sourceLine" id="cb70-12" data-line-number="12"><span class="co">#&gt; --&gt; done</span></a>
-<a class="sourceLine" id="cb70-13" data-line-number="13"><span class="co">#&gt; --&gt; collecting data...</span></a>
-<a class="sourceLine" id="cb70-14" data-line-number="14"><span class="co">#&gt; --&gt; done</span></a>
-<a class="sourceLine" id="cb70-15" data-line-number="15"><span class="co">#&gt; -&gt; Done</span></a></code></pre></div>
+<a class="sourceLine" id="cb70-6" data-line-number="6"><span class="st">  </span><span class="kw">get_tidy_association</span>(<span class="dt">p_adjust =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1">sum_genes &lt;-<span class="st"> </span>tidy_data.seqz.gene <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb71-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(p <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb71-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(</a>
@@ -1504,16 +1467,7 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb74-3" data-line-number="3">  <span class="dt">cols_to_features =</span> cols_to_mutated_pathways,</a>
 <a class="sourceLine" id="cb74-4" data-line-number="4">  <span class="dt">type =</span> <span class="st">&quot;ca&quot;</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span></a>
 <a class="sourceLine" id="cb74-5" data-line-number="5">) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb74-6" data-line-number="6"><span class="st">  </span><span class="kw">get_tidy_association</span>(<span class="dt">p_adjust =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb74-7" data-line-number="7"><span class="co">#&gt; -&gt; Detecting and transforming possibly ordinal variables...</span></a>
-<a class="sourceLine" id="cb74-8" data-line-number="8"><span class="co">#&gt; -&gt; Calculating correlations for categorical variables using wilcox.test...</span></a>
-<a class="sourceLine" id="cb74-9" data-line-number="9"><span class="co">#&gt; --&gt; building test models, be patient...</span></a>
-<a class="sourceLine" id="cb74-10" data-line-number="10"><span class="co">#&gt; --&gt; done</span></a>
-<a class="sourceLine" id="cb74-11" data-line-number="11"><span class="co">#&gt; --&gt; obtaining model results...</span></a>
-<a class="sourceLine" id="cb74-12" data-line-number="12"><span class="co">#&gt; --&gt; done</span></a>
-<a class="sourceLine" id="cb74-13" data-line-number="13"><span class="co">#&gt; --&gt; collecting data...</span></a>
-<a class="sourceLine" id="cb74-14" data-line-number="14"><span class="co">#&gt; --&gt; done</span></a>
-<a class="sourceLine" id="cb74-15" data-line-number="15"><span class="co">#&gt; -&gt; Done</span></a></code></pre></div>
+<a class="sourceLine" id="cb74-6" data-line-number="6"><span class="st">  </span><span class="kw">get_tidy_association</span>(<span class="dt">p_adjust =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" data-line-number="1">sum_pathways &lt;-<span class="st"> </span>tidy_data.seqz.pathways <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb75-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(p <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb75-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(</a>
@@ -1559,25 +1513,20 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb79-5" data-line-number="5">  <span class="dt">method =</span> <span class="st">&quot;pearson&quot;</span></a>
 <a class="sourceLine" id="cb79-6" data-line-number="6">) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb79-7" data-line-number="7"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_if</span>(is.numeric, dplyr<span class="op">::</span>coalesce, <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb79-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb79-9" data-line-number="9"><span class="co">#&gt; Correlation method: &#39;pearson&#39;</span></a>
-<a class="sourceLine" id="cb79-10" data-line-number="10"><span class="co">#&gt; Missing treated using: &#39;pairwise.complete.obs&#39;</span></a>
-<a class="sourceLine" id="cb79-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb79-12" data-line-number="12"><span class="co">## Avoid corrr error</span></a>
-<a class="sourceLine" id="cb79-13" data-line-number="13"><span class="co">## https://github.com/tidymodels/corrr/issues/86</span></a>
-<a class="sourceLine" id="cb79-14" data-line-number="14"><span class="co">## https://github.com/tidymodels/corrr/issues/34</span></a>
-<a class="sourceLine" id="cb79-15" data-line-number="15">res.cor[, <span class="dv">-1</span>] &lt;-<span class="st"> </span>res.cor[, <span class="dv">-1</span>] <span class="op">*</span><span class="st"> </span><span class="fl">0.99</span></a>
-<a class="sourceLine" id="cb79-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb79-17" data-line-number="17">p &lt;-<span class="st"> </span>res.cor <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb79-18" data-line-number="18"><span class="st">  </span><span class="kw">network_plot</span>(</a>
-<a class="sourceLine" id="cb79-19" data-line-number="19">    <span class="dt">min_cor =</span> <span class="fl">0.2</span>,</a>
-<a class="sourceLine" id="cb79-20" data-line-number="20">    <span class="dt">colours =</span> <span class="kw">rev</span>(<span class="kw">c</span>(<span class="st">&quot;indianred2&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;skyblue1&quot;</span>))</a>
-<a class="sourceLine" id="cb79-21" data-line-number="21">  )</a>
-<a class="sourceLine" id="cb79-22" data-line-number="22"></a>
-<a class="sourceLine" id="cb79-23" data-line-number="23"><span class="co"># png(&quot;corrr_network.png&quot;, width = 7, height = 7, res = 300)</span></a>
-<a class="sourceLine" id="cb79-24" data-line-number="24">p <span class="op">+</span><span class="st"> </span><span class="kw">scale_size</span>(<span class="dt">range =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb79-25" data-line-number="25"><span class="co">#&gt; Scale for &#39;size&#39; is already present. Adding another scale for &#39;size&#39;, which</span></a>
-<a class="sourceLine" id="cb79-26" data-line-number="26"><span class="co">#&gt; will replace the existing scale.</span></a></code></pre></div>
+<a class="sourceLine" id="cb79-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb79-9" data-line-number="9"><span class="co">## Avoid corrr error</span></a>
+<a class="sourceLine" id="cb79-10" data-line-number="10"><span class="co">## https://github.com/tidymodels/corrr/issues/86</span></a>
+<a class="sourceLine" id="cb79-11" data-line-number="11"><span class="co">## https://github.com/tidymodels/corrr/issues/34</span></a>
+<a class="sourceLine" id="cb79-12" data-line-number="12">res.cor[, <span class="dv">-1</span>] &lt;-<span class="st"> </span>res.cor[, <span class="dv">-1</span>] <span class="op">*</span><span class="st"> </span><span class="fl">0.99</span></a>
+<a class="sourceLine" id="cb79-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb79-14" data-line-number="14">p &lt;-<span class="st"> </span>res.cor <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb79-15" data-line-number="15"><span class="st">  </span><span class="kw">network_plot</span>(</a>
+<a class="sourceLine" id="cb79-16" data-line-number="16">    <span class="dt">min_cor =</span> <span class="fl">0.2</span>,</a>
+<a class="sourceLine" id="cb79-17" data-line-number="17">    <span class="dt">colours =</span> <span class="kw">rev</span>(<span class="kw">c</span>(<span class="st">&quot;indianred2&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;skyblue1&quot;</span>))</a>
+<a class="sourceLine" id="cb79-18" data-line-number="18">  )</a>
+<a class="sourceLine" id="cb79-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb79-20" data-line-number="20"><span class="co"># png(&quot;corrr_network.png&quot;, width = 7, height = 7, res = 300)</span></a>
+<a class="sourceLine" id="cb79-21" data-line-number="21">p <span class="op">+</span><span class="st"> </span><span class="kw">scale_size</span>(<span class="dt">range =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="dv">2</span>))</a></code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-65-1.png" width="2400" /></p>
 <div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" data-line-number="1"><span class="co"># ggsave(&quot;corrr_network.pdf&quot;, plot = p + scale_size(range=c(0.1, 2)))</span></a>
 <a class="sourceLine" id="cb80-2" data-line-number="2"><span class="co"># dev.off()</span></a></code></pre></div>
@@ -1609,16 +1558,7 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb81-18" data-line-number="18">  ) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb81-19" data-line-number="19"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">unnest</span>(<span class="st">&quot;data&quot;</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb81-20" data-line-number="20"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(feature <span class="op">==</span><span class="st"> &quot;PSA&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb81-21" data-line-number="21"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">feature =</span> Study)</a>
-<a class="sourceLine" id="cb81-22" data-line-number="22"><span class="co">#&gt; -&gt; Detecting and transforming possibly ordinal variables...</span></a>
-<a class="sourceLine" id="cb81-23" data-line-number="23"><span class="co">#&gt; -&gt; Calculating correlations for continuous variables using pearson...</span></a>
-<a class="sourceLine" id="cb81-24" data-line-number="24"><span class="co">#&gt; -&gt; Done</span></a>
-<a class="sourceLine" id="cb81-25" data-line-number="25"><span class="co">#&gt; -&gt; Detecting and transforming possibly ordinal variables...</span></a>
-<a class="sourceLine" id="cb81-26" data-line-number="26"><span class="co">#&gt; -&gt; Calculating correlations for continuous variables using pearson...</span></a>
-<a class="sourceLine" id="cb81-27" data-line-number="27"><span class="co">#&gt; -&gt; Done</span></a>
-<a class="sourceLine" id="cb81-28" data-line-number="28"><span class="co">#&gt; -&gt; Detecting and transforming possibly ordinal variables...</span></a>
-<a class="sourceLine" id="cb81-29" data-line-number="29"><span class="co">#&gt; -&gt; Calculating correlations for continuous variables using pearson...</span></a>
-<a class="sourceLine" id="cb81-30" data-line-number="30"><span class="co">#&gt; -&gt; Done</span></a></code></pre></div>
+<a class="sourceLine" id="cb81-21" data-line-number="21"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">feature =</span> Study)</a></code></pre></div>
 <div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" data-line-number="1"><span class="kw">show_sig_feature_corrplot</span>(df.seqz.psa, <span class="dt">p_val =</span> <span class="dv">1</span>, <span class="dt">breaks_count =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">150</span>, <span class="dv">200</span>), <span class="dt">ylab =</span> <span class="st">&quot;PSA&quot;</span>)</a></code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-67-1.png" width="2700" /></p>
 <p>Alought we can observe the statistically significant correlation between signatures and PSA, the results are inconsistent across different studies. This may be explained by the dynamic property of PSA while not the sample type due to most of them are primary.</p>
@@ -1916,6 +1856,15 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb108-18" data-line-number="18">)</a></code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-93-1.png" width="4200" /></p>
 </div>
+<div id="selected-cases" class="section level3">
+<h3>Selected cases</h3>
+<p>Select one sample for one case above.</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" data-line-number="1"><span class="kw">show_cn_profile</span>(</a>
+<a class="sourceLine" id="cb109-2" data-line-number="2">  <span class="dt">data =</span> CNV.seqz, <span class="dt">chrs =</span> <span class="kw">paste0</span>(<span class="st">&quot;chr&quot;</span>, <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">22</span>, <span class="st">&quot;X&quot;</span>)), <span class="dt">nrow =</span> <span class="dv">6</span>, <span class="dt">ncol =</span> <span class="dv">1</span>, <span class="dt">show_title =</span> T,</a>
+<a class="sourceLine" id="cb109-3" data-line-number="3">  <span class="dt">samples =</span> <span class="kw">c</span>(<span class="st">&quot;5115056-SRR8311885&quot;</span>, <span class="st">&quot;5115615-SRR8311749&quot;</span>, <span class="st">&quot;TCGA-KK-A7B4-01&quot;</span>, <span class="st">&quot;TCGA-KK-A59X-01&quot;</span>, <span class="st">&quot;TCGA-KC-A7FE-01&quot;</span>, <span class="st">&quot;1115265-SRR8304838&quot;</span>)</a>
+<a class="sourceLine" id="cb109-4" data-line-number="4">)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-94-1.png" width="2100" /></p>
+</div>
 </div>
 </div>
 <div id="survival-analysis" class="section level1">
@@ -1924,127 +1873,127 @@ $(document).ready(function () {
 <div id="prepare-1" class="section level2">
 <h2>Prepare</h2>
 <p>Load package <strong>ezcox</strong> for batch Cox analysis.</p>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" data-line-number="1"><span class="kw">library</span>(ezcox)</a></code></pre></div>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" data-line-number="1"><span class="kw">library</span>(ezcox)</a></code></pre></div>
 <p>Load the data.</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" data-line-number="1">df.seqz &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_Merge_Info_CNV_from_sequenza.RData&quot;</span>)</a>
-<a class="sourceLine" id="cb110-2" data-line-number="2">surv_df &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../data/PRAD_Survival.rds&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" data-line-number="1">df.seqz &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_Merge_Info_CNV_from_sequenza.RData&quot;</span>)</a>
+<a class="sourceLine" id="cb111-2" data-line-number="2">surv_df &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../data/PRAD_Survival.rds&quot;</span>)</a></code></pre></div>
 <p>Clean the data to generate a data table for survival analysis.</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" data-line-number="1">range01 &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</a>
-<a class="sourceLine" id="cb111-2" data-line-number="2">  (x <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(x, ...)) <span class="op">/</span><span class="st"> </span>(<span class="kw">max</span>(x, ...) <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(x, ...))</a>
-<a class="sourceLine" id="cb111-3" data-line-number="3">}</a>
-<a class="sourceLine" id="cb111-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb111-5" data-line-number="5">cols_to_sigs.seqz &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;CN_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="kw">paste0</span>(<span class="st">&quot;SBS_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb111-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb111-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb111-8" data-line-number="8">surv_dt &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">inner_join</span>(df.seqz <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb111-9" data-line-number="9"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(</a>
-<a class="sourceLine" id="cb111-10" data-line-number="10">    <span class="st">&quot;Study&quot;</span>, <span class="st">&quot;subject_id&quot;</span>, <span class="st">&quot;tumor_body_site&quot;</span>,</a>
-<a class="sourceLine" id="cb111-11" data-line-number="11">    <span class="st">&quot;tumor_Run&quot;</span>, <span class="st">&quot;normal_Run&quot;</span>, <span class="st">&quot;CNV_ID&quot;</span>,</a>
-<a class="sourceLine" id="cb111-12" data-line-number="12">    <span class="st">&quot;Fusion&quot;</span>, <span class="st">&quot;sample_type&quot;</span></a>
-<a class="sourceLine" id="cb111-13" data-line-number="13">  )),</a>
-<a class="sourceLine" id="cb111-14" data-line-number="14">surv_df,</a>
-<a class="sourceLine" id="cb111-15" data-line-number="15"><span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;PatientID&quot;</span> =<span class="st"> &quot;sample&quot;</span>)</a>
-<a class="sourceLine" id="cb111-16" data-line-number="16">)</a>
-<a class="sourceLine" id="cb111-17" data-line-number="17"></a>
-<a class="sourceLine" id="cb111-18" data-line-number="18">dup_ids &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">duplicated</span>(surv_dt<span class="op">$</span>PatientID))</a>
-<a class="sourceLine" id="cb111-19" data-line-number="19"><span class="co"># Remove duplicated records</span></a>
-<a class="sourceLine" id="cb111-20" data-line-number="20">surv_dt &lt;-<span class="st"> </span>surv_dt[<span class="op">-</span>dup_ids, ]</a>
-<a class="sourceLine" id="cb111-21" data-line-number="21"></a>
-<a class="sourceLine" id="cb111-22" data-line-number="22"><span class="co"># Scale the signature exposure to 0-20.</span></a>
-<a class="sourceLine" id="cb111-23" data-line-number="23"><span class="co"># To better understand the effect of signature exposure on clinical events,</span></a>
-<a class="sourceLine" id="cb111-24" data-line-number="24"><span class="co"># here we scale them into range 0-20. 1 increase means 5% increase of signature exposure.</span></a>
-<a class="sourceLine" id="cb111-25" data-line-number="25"><span class="co">#</span></a>
-<a class="sourceLine" id="cb111-26" data-line-number="26"><span class="co"># Scale the CNA burden to 0-20.</span></a>
-<a class="sourceLine" id="cb111-27" data-line-number="27">surv_dt &lt;-<span class="st"> </span>surv_dt <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb111-28" data-line-number="28"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb111-29" data-line-number="29">    <span class="dt">cna_burden =</span> <span class="dv">20</span> <span class="op">*</span><span class="st"> </span>cna_burden,</a>
-<a class="sourceLine" id="cb111-30" data-line-number="30">    <span class="dt">Stage =</span> <span class="kw">as.character</span>(Stage) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;T2&quot;</span>, <span class="st">&quot;T3&quot;</span>, <span class="st">&quot;T4&quot;</span>))</a>
-<a class="sourceLine" id="cb111-31" data-line-number="31">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb111-32" data-line-number="32"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(cols_to_sigs.seqz, <span class="op">~</span><span class="st"> </span><span class="dv">20</span> <span class="op">*</span><span class="st"> </span><span class="kw">range01</span>(., <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb111-33" data-line-number="33"></a>
-<a class="sourceLine" id="cb111-34" data-line-number="34"><span class="kw">saveRDS</span>(surv_dt, <span class="dt">file =</span> <span class="st">&quot;../output/PRAD_merged_survival_dt_seqz.rds&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" data-line-number="1">range01 &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</a>
+<a class="sourceLine" id="cb112-2" data-line-number="2">  (x <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(x, ...)) <span class="op">/</span><span class="st"> </span>(<span class="kw">max</span>(x, ...) <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(x, ...))</a>
+<a class="sourceLine" id="cb112-3" data-line-number="3">}</a>
+<a class="sourceLine" id="cb112-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb112-5" data-line-number="5">cols_to_sigs.seqz &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;CN_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="kw">paste0</span>(<span class="st">&quot;SBS_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb112-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb112-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb112-8" data-line-number="8">surv_dt &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">inner_join</span>(df.seqz <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb112-9" data-line-number="9"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb112-10" data-line-number="10">    <span class="st">&quot;Study&quot;</span>, <span class="st">&quot;subject_id&quot;</span>, <span class="st">&quot;tumor_body_site&quot;</span>,</a>
+<a class="sourceLine" id="cb112-11" data-line-number="11">    <span class="st">&quot;tumor_Run&quot;</span>, <span class="st">&quot;normal_Run&quot;</span>, <span class="st">&quot;CNV_ID&quot;</span>,</a>
+<a class="sourceLine" id="cb112-12" data-line-number="12">    <span class="st">&quot;Fusion&quot;</span>, <span class="st">&quot;sample_type&quot;</span></a>
+<a class="sourceLine" id="cb112-13" data-line-number="13">  )),</a>
+<a class="sourceLine" id="cb112-14" data-line-number="14">surv_df,</a>
+<a class="sourceLine" id="cb112-15" data-line-number="15"><span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;PatientID&quot;</span> =<span class="st"> &quot;sample&quot;</span>)</a>
+<a class="sourceLine" id="cb112-16" data-line-number="16">)</a>
+<a class="sourceLine" id="cb112-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb112-18" data-line-number="18">dup_ids &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">duplicated</span>(surv_dt<span class="op">$</span>PatientID))</a>
+<a class="sourceLine" id="cb112-19" data-line-number="19"><span class="co"># Remove duplicated records</span></a>
+<a class="sourceLine" id="cb112-20" data-line-number="20">surv_dt &lt;-<span class="st"> </span>surv_dt[<span class="op">-</span>dup_ids, ]</a>
+<a class="sourceLine" id="cb112-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb112-22" data-line-number="22"><span class="co"># Scale the signature exposure to 0-20.</span></a>
+<a class="sourceLine" id="cb112-23" data-line-number="23"><span class="co"># To better understand the effect of signature exposure on clinical events,</span></a>
+<a class="sourceLine" id="cb112-24" data-line-number="24"><span class="co"># here we scale them into range 0-20. 1 increase means 5% increase of signature exposure.</span></a>
+<a class="sourceLine" id="cb112-25" data-line-number="25"><span class="co">#</span></a>
+<a class="sourceLine" id="cb112-26" data-line-number="26"><span class="co"># Scale the CNA burden to 0-20.</span></a>
+<a class="sourceLine" id="cb112-27" data-line-number="27">surv_dt &lt;-<span class="st"> </span>surv_dt <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb112-28" data-line-number="28"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb112-29" data-line-number="29">    <span class="dt">cna_burden =</span> <span class="dv">20</span> <span class="op">*</span><span class="st"> </span>cna_burden,</a>
+<a class="sourceLine" id="cb112-30" data-line-number="30">    <span class="dt">Stage =</span> <span class="kw">as.character</span>(Stage) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;T2&quot;</span>, <span class="st">&quot;T3&quot;</span>, <span class="st">&quot;T4&quot;</span>))</a>
+<a class="sourceLine" id="cb112-31" data-line-number="31">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb112-32" data-line-number="32"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(cols_to_sigs.seqz, <span class="op">~</span><span class="st"> </span><span class="dv">20</span> <span class="op">*</span><span class="st"> </span><span class="kw">range01</span>(., <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb112-33" data-line-number="33"></a>
+<a class="sourceLine" id="cb112-34" data-line-number="34"><span class="kw">saveRDS</span>(surv_dt, <span class="dt">file =</span> <span class="st">&quot;../output/PRAD_merged_survival_dt_seqz.rds&quot;</span>)</a></code></pre></div>
 </div>
 <div id="os-analysis-fo-signatures" class="section level2">
 <h2>OS analysis fo signatures</h2>
-<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" data-line-number="1"><span class="co">############</span></a>
-<a class="sourceLine" id="cb112-2" data-line-number="2">surv_dt &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_merged_survival_dt_seqz.rds&quot;</span>)</a>
-<a class="sourceLine" id="cb112-3" data-line-number="3">cols_to_sigs.seqz &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;CN_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="kw">paste0</span>(<span class="st">&quot;SBS_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb112-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb112-5" data-line-number="5"><span class="co"># Unvariable analysis</span></a>
-<a class="sourceLine" id="cb112-6" data-line-number="6"><span class="kw">show_forest</span>(surv_dt,</a>
-<a class="sourceLine" id="cb112-7" data-line-number="7">  <span class="dt">covariates =</span> cols_to_sigs.seqz,</a>
-<a class="sourceLine" id="cb112-8" data-line-number="8">  <span class="dt">time =</span> <span class="st">&quot;OS.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;OS&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span></a>
-<a class="sourceLine" id="cb112-9" data-line-number="9">)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-97-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" data-line-number="1"><span class="co">############</span></a>
+<a class="sourceLine" id="cb113-2" data-line-number="2">surv_dt &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file =</span> <span class="st">&quot;../output/PRAD_merged_survival_dt_seqz.rds&quot;</span>)</a>
+<a class="sourceLine" id="cb113-3" data-line-number="3">cols_to_sigs.seqz &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;CN_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="kw">paste0</span>(<span class="st">&quot;SBS_Sig&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb113-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb113-5" data-line-number="5"><span class="co"># Unvariable analysis</span></a>
+<a class="sourceLine" id="cb113-6" data-line-number="6"><span class="kw">show_forest</span>(surv_dt,</a>
+<a class="sourceLine" id="cb113-7" data-line-number="7">  <span class="dt">covariates =</span> cols_to_sigs.seqz,</a>
+<a class="sourceLine" id="cb113-8" data-line-number="8">  <span class="dt">time =</span> <span class="st">&quot;OS.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;OS&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb113-9" data-line-number="9">)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-98-1.png" width="2400" /></p>
 </div>
 <div id="pfs-analysis-for-signatures" class="section level2">
 <h2>PFS analysis for signatures</h2>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" data-line-number="1"><span class="kw">show_forest</span>(surv_dt,</a>
-<a class="sourceLine" id="cb113-2" data-line-number="2">  <span class="dt">covariates =</span> cols_to_sigs.seqz,</a>
-<a class="sourceLine" id="cb113-3" data-line-number="3">  <span class="dt">time =</span> <span class="st">&quot;PFI.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;PFI&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span></a>
-<a class="sourceLine" id="cb113-4" data-line-number="4">)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-98-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" data-line-number="1"><span class="kw">show_forest</span>(surv_dt,</a>
+<a class="sourceLine" id="cb114-2" data-line-number="2">  <span class="dt">covariates =</span> cols_to_sigs.seqz,</a>
+<a class="sourceLine" id="cb114-3" data-line-number="3">  <span class="dt">time =</span> <span class="st">&quot;PFI.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;PFI&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb114-4" data-line-number="4">)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-99-1.png" width="2400" /></p>
 </div>
 <div id="os-analysis-for-features" class="section level2">
 <h2>OS analysis for features</h2>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" data-line-number="1">cols_to_features &lt;-<span class="st"> </span><span class="kw">c</span>(</a>
-<a class="sourceLine" id="cb114-2" data-line-number="2">  <span class="st">&quot;Age&quot;</span>, <span class="st">&quot;Stage&quot;</span>, <span class="st">&quot;GleasonScore&quot;</span>,</a>
-<a class="sourceLine" id="cb114-3" data-line-number="3">  <span class="st">&quot;total_mutation&quot;</span>, <span class="st">&quot;INDELs&quot;</span>, <span class="st">&quot;n_driver&quot;</span>, <span class="st">&quot;Ti_fraction&quot;</span>, <span class="st">&quot;Tv_fraction&quot;</span>,</a>
-<a class="sourceLine" id="cb114-4" data-line-number="4">  <span class="st">&quot;n_of_cnv&quot;</span>, <span class="st">&quot;n_of_amp&quot;</span>, <span class="st">&quot;n_of_del&quot;</span>, <span class="st">&quot;n_of_vchr&quot;</span>, <span class="st">&quot;cna_burden&quot;</span>,</a>
-<a class="sourceLine" id="cb114-5" data-line-number="5">  <span class="st">&quot;MATH&quot;</span>, <span class="st">&quot;cluster&quot;</span>, <span class="st">&quot;purity&quot;</span>, <span class="st">&quot;ploidy&quot;</span></a>
-<a class="sourceLine" id="cb114-6" data-line-number="6">)</a>
-<a class="sourceLine" id="cb114-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb114-8" data-line-number="8"><span class="kw">show_forest</span>(surv_dt,</a>
-<a class="sourceLine" id="cb114-9" data-line-number="9">  <span class="dt">covariates =</span> cols_to_features, <span class="dt">controls =</span> <span class="ot">NULL</span>,</a>
-<a class="sourceLine" id="cb114-10" data-line-number="10">  <span class="dt">time =</span> <span class="st">&quot;OS.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;OS&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span>, <span class="dt">limits =</span> <span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.5</span>, <span class="dv">10</span>))</a>
-<a class="sourceLine" id="cb114-11" data-line-number="11">)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-99-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" data-line-number="1">cols_to_features &lt;-<span class="st"> </span><span class="kw">c</span>(</a>
+<a class="sourceLine" id="cb115-2" data-line-number="2">  <span class="st">&quot;Age&quot;</span>, <span class="st">&quot;Stage&quot;</span>, <span class="st">&quot;GleasonScore&quot;</span>,</a>
+<a class="sourceLine" id="cb115-3" data-line-number="3">  <span class="st">&quot;total_mutation&quot;</span>, <span class="st">&quot;INDELs&quot;</span>, <span class="st">&quot;n_driver&quot;</span>, <span class="st">&quot;Ti_fraction&quot;</span>, <span class="st">&quot;Tv_fraction&quot;</span>,</a>
+<a class="sourceLine" id="cb115-4" data-line-number="4">  <span class="st">&quot;n_of_cnv&quot;</span>, <span class="st">&quot;n_of_amp&quot;</span>, <span class="st">&quot;n_of_del&quot;</span>, <span class="st">&quot;n_of_vchr&quot;</span>, <span class="st">&quot;cna_burden&quot;</span>,</a>
+<a class="sourceLine" id="cb115-5" data-line-number="5">  <span class="st">&quot;MATH&quot;</span>, <span class="st">&quot;cluster&quot;</span>, <span class="st">&quot;purity&quot;</span>, <span class="st">&quot;ploidy&quot;</span></a>
+<a class="sourceLine" id="cb115-6" data-line-number="6">)</a>
+<a class="sourceLine" id="cb115-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb115-8" data-line-number="8"><span class="kw">show_forest</span>(surv_dt,</a>
+<a class="sourceLine" id="cb115-9" data-line-number="9">  <span class="dt">covariates =</span> cols_to_features, <span class="dt">controls =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb115-10" data-line-number="10">  <span class="dt">time =</span> <span class="st">&quot;OS.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;OS&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span>, <span class="dt">limits =</span> <span class="kw">log</span>(<span class="kw">c</span>(<span class="fl">0.5</span>, <span class="dv">10</span>))</a>
+<a class="sourceLine" id="cb115-11" data-line-number="11">)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-100-1.png" width="2400" /></p>
 </div>
 <div id="pfs-analysis-for-features" class="section level2">
 <h2>PFS analysis for features</h2>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" data-line-number="1"><span class="kw">show_forest</span>(surv_dt,</a>
-<a class="sourceLine" id="cb115-2" data-line-number="2">  <span class="dt">covariates =</span> cols_to_features, <span class="dt">controls =</span> <span class="ot">NULL</span>,</a>
-<a class="sourceLine" id="cb115-3" data-line-number="3">  <span class="dt">time =</span> <span class="st">&quot;PFI.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;PFI&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span>, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="kw">log</span>(<span class="fl">0.5</span>), <span class="kw">log</span>(<span class="dv">5</span>))</a>
-<a class="sourceLine" id="cb115-4" data-line-number="4">)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-100-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" data-line-number="1"><span class="kw">show_forest</span>(surv_dt,</a>
+<a class="sourceLine" id="cb116-2" data-line-number="2">  <span class="dt">covariates =</span> cols_to_features, <span class="dt">controls =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb116-3" data-line-number="3">  <span class="dt">time =</span> <span class="st">&quot;PFI.time&quot;</span>, <span class="dt">status =</span> <span class="st">&quot;PFI&quot;</span>, <span class="dt">merge_models =</span> <span class="ot">TRUE</span>, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="kw">log</span>(<span class="fl">0.5</span>), <span class="kw">log</span>(<span class="dv">5</span>))</a>
+<a class="sourceLine" id="cb116-4" data-line-number="4">)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-101-1.png" width="2400" /></p>
 </div>
 </div>
 <div id="variation-summary" class="section level1">
 <h1>Variation Summary</h1>
 <p>This part discribes some big pictures of genomic variations in prostate cancers. They are not directly related to the core analyses previously reported.</p>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" data-line-number="1"><span class="kw">library</span>(sigminer)</a>
-<a class="sourceLine" id="cb116-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb116-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb116-4" data-line-number="4"><span class="kw">load</span>(<span class="st">&quot;../output/CNV.seqz.RData&quot;</span>)</a>
-<a class="sourceLine" id="cb116-5" data-line-number="5"><span class="kw">load</span>(<span class="st">&quot;../output/CNV.seqz.tally.W.RData&quot;</span>)</a>
-<a class="sourceLine" id="cb116-6" data-line-number="6"><span class="kw">load</span>(<span class="st">&quot;../output/PRAD_TCGA_plus_dbGap_Maf.RData&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" data-line-number="1"><span class="kw">library</span>(sigminer)</a>
+<a class="sourceLine" id="cb117-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb117-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb117-4" data-line-number="4"><span class="kw">load</span>(<span class="st">&quot;../output/CNV.seqz.RData&quot;</span>)</a>
+<a class="sourceLine" id="cb117-5" data-line-number="5"><span class="kw">load</span>(<span class="st">&quot;../output/CNV.seqz.tally.W.RData&quot;</span>)</a>
+<a class="sourceLine" id="cb117-6" data-line-number="6"><span class="kw">load</span>(<span class="st">&quot;../output/PRAD_TCGA_plus_dbGap_Maf.RData&quot;</span>)</a></code></pre></div>
 <div id="oncoplot" class="section level2">
 <h2>Oncoplot</h2>
 <p>TODO: add GISTIC/MutSig, etc. data (plots ref to <a href="http://bioconductor.org/packages/release/bioc/vignettes/maftools/inst/doc/oncoplots.html" class="uri">http://bioconductor.org/packages/release/bioc/vignettes/maftools/inst/doc/oncoplots.html</a>)</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" data-line-number="1"><span class="kw">oncoplot</span>(<span class="dt">maf =</span> Maf, <span class="dt">top =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-102-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" data-line-number="1"><span class="kw">oncoplot</span>(<span class="dt">maf =</span> Maf, <span class="dt">top =</span> <span class="dv">10</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-103-1.png" width="2400" /></p>
 </div>
 <div id="summary-plots" class="section level2">
 <h2>Summary plots</h2>
 <div id="sbs-2" class="section level3">
 <h3>SBS</h3>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" data-line-number="1"><span class="kw">library</span>(maftools)</a></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" data-line-number="1"><span class="kw">library</span>(maftools)</a></code></pre></div>
 <div id="maf-summary" class="section level4">
 <h4>MAF summary</h4>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" data-line-number="1"><span class="kw">plotmafSummary</span>(<span class="dt">maf =</span> Maf, <span class="dt">rmOutlier =</span> <span class="ot">TRUE</span>, <span class="dt">addStat =</span> <span class="st">&quot;median&quot;</span>, <span class="dt">dashboard =</span> <span class="ot">TRUE</span>, <span class="dt">titvRaw =</span> <span class="ot">FALSE</span>, <span class="dt">log_scale =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-104-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" data-line-number="1"><span class="kw">plotmafSummary</span>(<span class="dt">maf =</span> Maf, <span class="dt">rmOutlier =</span> <span class="ot">TRUE</span>, <span class="dt">addStat =</span> <span class="st">&quot;median&quot;</span>, <span class="dt">dashboard =</span> <span class="ot">TRUE</span>, <span class="dt">titvRaw =</span> <span class="ot">FALSE</span>, <span class="dt">log_scale =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-105-1.png" width="2400" /></p>
 </div>
 <div id="transition-and-transversions" class="section level4">
 <h4>Transition and Transversions</h4>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" data-line-number="1">maf.titv &lt;-<span class="st"> </span><span class="kw">titv</span>(<span class="dt">maf =</span> Maf, <span class="dt">plot =</span> <span class="ot">FALSE</span>, <span class="dt">useSyn =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb120-2" data-line-number="2"><span class="co"># plot titv summary</span></a>
-<a class="sourceLine" id="cb120-3" data-line-number="3"><span class="kw">plotTiTv</span>(<span class="dt">res =</span> maf.titv)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-105-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" data-line-number="1">maf.titv &lt;-<span class="st"> </span><span class="kw">titv</span>(<span class="dt">maf =</span> Maf, <span class="dt">plot =</span> <span class="ot">FALSE</span>, <span class="dt">useSyn =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb121-2" data-line-number="2"><span class="co"># plot titv summary</span></a>
+<a class="sourceLine" id="cb121-3" data-line-number="3"><span class="kw">plotTiTv</span>(<span class="dt">res =</span> maf.titv)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-106-1.png" width="2400" /></p>
 </div>
 <div id="somatic-interactions" class="section level4">
 <h4>Somatic Interactions</h4>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" data-line-number="1"><span class="kw">somaticInteractions</span>(<span class="dt">maf =</span> Maf, <span class="dt">top =</span> <span class="dv">25</span>, <span class="dt">pvalue =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>))</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-106-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" data-line-number="1"><span class="kw">somaticInteractions</span>(<span class="dt">maf =</span> Maf, <span class="dt">top =</span> <span class="dv">25</span>, <span class="dt">pvalue =</span> <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>))</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-107-1.png" width="2400" /></p>
 <pre><code>#&gt;       gene1  gene2       pValue  oddsRatio  00 11 01 10              Event
 #&gt;   1: ABCA13  KMT2C 5.107880e-08 10.2128843 896 13 42 27       Co_Occurence
 #&gt;   2:   RYR3 ABCA13 1.510688e-05  9.8852463 915  8 32 23       Co_Occurence
@@ -2066,22 +2015,22 @@ $(document).ready(function () {
 <h3>Copy number</h3>
 <div id="copy-number-segment-distribution" class="section level4">
 <h4>Copy number segment distribution</h4>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" data-line-number="1"><span class="kw">show_cn_distribution</span>(CNV.seqz, <span class="dt">mode =</span> <span class="st">&quot;ld&quot;</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-107-1.png" width="2400" /></p>
-<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb124-1" data-line-number="1"><span class="kw">show_cn_distribution</span>(CNV.seqz, <span class="dt">mode =</span> <span class="st">&quot;cd&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb124-1" data-line-number="1"><span class="kw">show_cn_distribution</span>(CNV.seqz, <span class="dt">mode =</span> <span class="st">&quot;ld&quot;</span>)</a></code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-108-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" data-line-number="1"><span class="kw">show_cn_distribution</span>(CNV.seqz, <span class="dt">mode =</span> <span class="st">&quot;cd&quot;</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-109-1.png" width="2400" /></p>
 </div>
 <div id="feature-distribution" class="section level4">
 <h4>Feature distribution</h4>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" data-line-number="1"><span class="kw">show_cn_features</span>(CNV.seqz.tally.W<span class="op">$</span>features, <span class="dt">method =</span> <span class="st">&quot;W&quot;</span>, <span class="dt">log_y =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-109-1.png" width="3000" /></p>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb126-1" data-line-number="1"><span class="kw">show_cn_features</span>(CNV.seqz.tally.W<span class="op">$</span>features, <span class="dt">method =</span> <span class="st">&quot;W&quot;</span>, <span class="dt">log_y =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-110-1.png" width="3000" /></p>
 </div>
 <div id="component-distribution" class="section level4">
 <h4>Component distribution</h4>
-<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb126-1" data-line-number="1"><span class="kw">show_cn_components</span>(CNV.seqz.tally.W<span class="op">$</span>parameters, <span class="dt">method =</span> <span class="st">&quot;W&quot;</span>, <span class="dt">log_y =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-110-1.png" width="3000" /></p>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" data-line-number="1"><span class="kw">show_cn_components</span>(CNV.seqz.tally.W<span class="op">$</span>parameters, <span class="dt">method =</span> <span class="st">&quot;W&quot;</span>, <span class="dt">log_y =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-111-1.png" width="3000" /></p>
 <p>Data details can be viewed as a table:</p>
-<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" data-line-number="1">DT<span class="op">::</span><span class="kw">datatable</span>(CNV.seqz.tally.W<span class="op">$</span>parameters)</a></code></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb128-1" data-line-number="1">DT<span class="op">::</span><span class="kw">datatable</span>(CNV.seqz.tally.W<span class="op">$</span>parameters)</a></code></pre></div>
 <div id="htmlwidget-604d5338210fce6527ad" style="width:100%;height:auto;" class="datatables html-widget"></div>
 <script type="application/json" data-for="htmlwidget-604d5338210fce6527ad">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80"],["BP10MB","BP10MB","BP10MB","BP10MB","BP10MB","BP10MB","BP10MB","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","BPArm","CN","CN","CN","CN","CN","CN","CN","CNCP","CNCP","CNCP","CNCP","CNCP","CNCP","CNCP","OsCN","OsCN","OsCN","OsCN","OsCN","OsCN","OsCN","SS","SS","SS","SS","SS","SS","SS","SS","NC50","NC50","NC50","NC50","NC50","NC50","NC50","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr","BoChr"],["BP10MB[0]","BP10MB[1]","BP10MB[2]","BP10MB[3]","BP10MB[4]","BP10MB[5]","BP10MB[&gt;5]","BPArm[0]","BPArm[1]","BPArm[2]","BPArm[3]","BPArm[4]","BPArm[5]","BPArm[6]","BPArm[7]","BPArm[8]","BPArm[9]","BPArm[10]","BPArm[&gt;10 &amp; &lt;=20]","BPArm[&gt;20 &amp; &lt;=30]","BPArm[&gt;30]","CN[0]","CN[1]","CN[2]","CN[3]","CN[4]","CN[&gt;4 &amp; &lt;=8]","CN[&gt;8]","CNCP[0]","CNCP[1]","CNCP[2]","CNCP[3]","CNCP[4]","CNCP[&gt;4 &amp; &lt;=8]","CNCP[&gt;8]","OsCN[0]","OsCN[1]","OsCN[2]","OsCN[3]","OsCN[4]","OsCN[&gt;4 &amp; &lt;=10]","OsCN[&gt;10]","SS[&lt;=2]","SS[&gt;2 &amp; &lt;=3]","SS[&gt;3 &amp; &lt;=4]","SS[&gt;4 &amp; &lt;=5]","SS[&gt;5 &amp; &lt;=6]","SS[&gt;6 &amp; &lt;=7]","SS[&gt;7 &amp; &lt;=8]","SS[&gt;8]","NC50[&lt;=2]","NC50[3]","NC50[4]","NC50[5]","NC50[6]","NC50[7]","NC50[&gt;7]","BoChr[1]","BoChr[2]","BoChr[3]","BoChr[4]","BoChr[5]","BoChr[6]","BoChr[7]","BoChr[8]","BoChr[9]","BoChr[10]","BoChr[11]","BoChr[12]","BoChr[13]","BoChr[14]","BoChr[15]","BoChr[16]","BoChr[17]","BoChr[18]","BoChr[19]","BoChr[20]","BoChr[21]","BoChr[22]","BoChr[23]"],["point","point","point","point","point","point","range","point","point","point","point","point","point","point","point","point","point","point","range","range","range","point","point","point","point","point","range","range","point","point","point","point","point","range","range","point","point","point","point","point","range","range","range","range","range","range","range","range","range","range","range","point","point","point","point","point","range","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point","point"],[0,1,2,3,4,5,5,0,1,2,3,4,5,6,7,8,9,10,10,20,30,0,1,2,3,4,4,8,0,1,2,3,4,4,8,0,1,2,3,4,4,10,null,2,3,4,5,6,7,8,null,3,4,5,6,7,7,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],[0,1,2,3,4,5,null,0,1,2,3,4,5,6,7,8,9,10,20,30,null,0,1,2,3,4,8,null,0,1,2,3,4,8,null,0,1,2,3,4,10,null,2,3,4,5,6,7,8,null,2,3,4,5,6,7,null,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],[262755,22436,12074,2349,1277,374,449,27296,4763,5737,1896,1836,901,824,432,358,226,186,466,50,5,1464,7431,31755,11911,13087,15272,5372,8350,29323,15725,5661,3477,5024,4594,31108,7283,834,601,129,174,6,202,1995,2478,4829,10672,22165,36157,7794,89,111,141,163,160,207,66,4303,2673,2991,2359,2485,3587,3805,2969,2299,2654,2531,2294,1405,1563,1175,2515,3060,1291,2210,1853,1209,1443,816]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>feature<\/th>\n      <th>component<\/th>\n      <th>label<\/th>\n      <th>min<\/th>\n      <th>max<\/th>\n      <th>n_obs<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[4,5,6]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <blockquote>
@@ -2098,65 +2047,65 @@ $(document).ready(function () {
 <h2>FACETS results</h2>
 <p>We used 2 methods (Sequenza and FACETS) for copy number calling. However, only Sequenza was used for previous downstream analyses due to the fact that FACETS generated some unreasonable copy number profile for a few samples. We will talk it here.</p>
 <p>Let’s load the packages and signature data from FACETS and Sequenza.</p>
-<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb128-1" data-line-number="1"><span class="kw">library</span>(sigminer)</a>
-<a class="sourceLine" id="cb128-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb128-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb128-4" data-line-number="4"><span class="kw">load</span>(<span class="st">&quot;../output/Sig.CNV.facets.W.RData&quot;</span>)</a>
-<a class="sourceLine" id="cb128-5" data-line-number="5"><span class="kw">load</span>(<span class="st">&quot;../output/Sig.CNV.seqz.W.RData&quot;</span>)</a>
-<a class="sourceLine" id="cb128-6" data-line-number="6"><span class="kw">load</span>(<span class="st">&quot;../output/EST.facets.W.all.RData&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" data-line-number="1"><span class="kw">library</span>(sigminer)</a>
+<a class="sourceLine" id="cb129-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb129-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb129-4" data-line-number="4"><span class="kw">load</span>(<span class="st">&quot;../output/Sig.CNV.facets.W.RData&quot;</span>)</a>
+<a class="sourceLine" id="cb129-5" data-line-number="5"><span class="kw">load</span>(<span class="st">&quot;../output/Sig.CNV.seqz.W.RData&quot;</span>)</a>
+<a class="sourceLine" id="cb129-6" data-line-number="6"><span class="kw">load</span>(<span class="st">&quot;../output/EST.facets.W.all.RData&quot;</span>)</a></code></pre></div>
 <p>According to the estimation of signature number, 6 signatures were extracted.</p>
-<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" data-line-number="1">p &lt;-<span class="st"> </span><span class="kw">show_sig_number_survey</span>(EST.facets.W.all, <span class="dt">right_y =</span> <span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb129-2" data-line-number="2"><span class="kw">add_h_arrow</span>(p, <span class="dt">x =</span> <span class="fl">6.1</span>, <span class="dt">y =</span> <span class="fl">0.986</span>, <span class="dt">seg_len =</span> <span class="fl">0.5</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-113-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" data-line-number="1">p &lt;-<span class="st"> </span><span class="kw">show_sig_number_survey</span>(EST.facets.W.all, <span class="dt">right_y =</span> <span class="ot">NULL</span>)</a>
+<a class="sourceLine" id="cb130-2" data-line-number="2"><span class="kw">add_h_arrow</span>(p, <span class="dt">x =</span> <span class="fl">6.2</span>, <span class="dt">y =</span> <span class="fl">0.986</span>, <span class="dt">seg_len =</span> <span class="fl">0.5</span>, <span class="dt">space =</span> <span class="fl">0.2</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-114-1.png" width="1200" /></p>
 <p>The result signatures are shown as the below.</p>
-<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" data-line-number="1"><span class="kw">show_sig_profile</span>(Sig.CNV.facets.W, <span class="dt">style =</span> <span class="st">&quot;cosmic&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;W&quot;</span>, <span class="dt">normalize =</span> <span class="st">&quot;feature&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb130-2" data-line-number="2"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">caption =</span> <span class="st">&quot;Signatures from FACETS&quot;</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-114-1.png" width="3600" /></p>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" data-line-number="1"><span class="kw">show_sig_profile</span>(Sig.CNV.facets.W, <span class="dt">style =</span> <span class="st">&quot;cosmic&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;W&quot;</span>, <span class="dt">normalize =</span> <span class="st">&quot;feature&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb131-2" data-line-number="2"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">caption =</span> <span class="st">&quot;Signatures from FACETS&quot;</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-115-1.png" width="3600" /></p>
 <p>FACETS result has one special and extra signature (<strong>Sig1</strong>) when compared to <a href="#copy-number-signature-profile">Sequenza result</a>. The <strong>Sig1</strong> shows copy number segments with high percentage of component “copy number value = 0”.</p>
 <blockquote>
 <p>Other signatures are not identical but very similar in most features beteween FACETS and Sequenza results.</p>
 </blockquote>
 <p>We check some samples with <strong>Sig1</strong> enriched.</p>
-<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" data-line-number="1">cn_groups &lt;-<span class="st"> </span><span class="kw">get_groups</span>(Sig.CNV.facets.W, <span class="dt">method =</span> <span class="st">&quot;consensus&quot;</span>, <span class="dt">match_consensus =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb131-2" data-line-number="2"><span class="co">#&gt; =&gt; Obtaining clusters from the hierarchical clustering of the consensus matrix...</span></a>
-<a class="sourceLine" id="cb131-3" data-line-number="3"><span class="co">#&gt; =&gt; Finding the dominant signature of each group...</span></a>
-<a class="sourceLine" id="cb131-4" data-line-number="4"><span class="co">#&gt; =&gt; Generating a table of group and dominant signature:</span></a>
-<a class="sourceLine" id="cb131-5" data-line-number="5"><span class="co">#&gt;    </span></a>
-<a class="sourceLine" id="cb131-6" data-line-number="6"><span class="co">#&gt;     Sig1 Sig2 Sig3 Sig4 Sig5 Sig6</span></a>
-<a class="sourceLine" id="cb131-7" data-line-number="7"><span class="co">#&gt;   1    0    0   27    1    0    0</span></a>
-<a class="sourceLine" id="cb131-8" data-line-number="8"><span class="co">#&gt;   2   19    2    0    7    0    0</span></a>
-<a class="sourceLine" id="cb131-9" data-line-number="9"><span class="co">#&gt;   3    0   92    1    2    0    0</span></a>
-<a class="sourceLine" id="cb131-10" data-line-number="10"><span class="co">#&gt;   4    7   52    8   59    9    5</span></a>
-<a class="sourceLine" id="cb131-11" data-line-number="11"><span class="co">#&gt;   5    0    0    0  188    0    0</span></a>
-<a class="sourceLine" id="cb131-12" data-line-number="12"><span class="co">#&gt;   6    5    2    0  155    0  292</span></a>
-<a class="sourceLine" id="cb131-13" data-line-number="13"><span class="co">#&gt; =&gt; Assigning a group to a signature with the maxium fraction (stored in &#39;map_table&#39; attr)...</span></a>
-<a class="sourceLine" id="cb131-14" data-line-number="14"><span class="co">#&gt; =&gt; Summarizing...</span></a>
-<a class="sourceLine" id="cb131-15" data-line-number="15"><span class="co">#&gt;  group #1: 28 samples with Sig3 enriched.</span></a>
-<a class="sourceLine" id="cb131-16" data-line-number="16"><span class="co">#&gt;  group #2: 28 samples with Sig1 enriched.</span></a>
-<a class="sourceLine" id="cb131-17" data-line-number="17"><span class="co">#&gt;  group #3: 95 samples with Sig2 enriched.</span></a>
-<a class="sourceLine" id="cb131-18" data-line-number="18"><span class="co">#&gt;  group #4: 140 samples with Sig4 enriched.</span></a>
-<a class="sourceLine" id="cb131-19" data-line-number="19"><span class="co">#&gt;  group #5: 188 samples with Sig4 enriched.</span></a>
-<a class="sourceLine" id="cb131-20" data-line-number="20"><span class="co">#&gt;  group #6: 454 samples with Sig6 enriched.</span></a>
-<a class="sourceLine" id="cb131-21" data-line-number="21">cn_expo &lt;-<span class="st"> </span><span class="kw">get_sig_exposure</span>(Sig.CNV.facets.W, <span class="dt">type =</span> <span class="st">&quot;relative&quot;</span>)</a>
-<a class="sourceLine" id="cb131-22" data-line-number="22"><span class="co"># Focus on Sig1</span></a>
-<a class="sourceLine" id="cb131-23" data-line-number="23">df &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">left_join</span>(cn_groups, cn_expo)</a>
-<a class="sourceLine" id="cb131-24" data-line-number="24"><span class="co">#&gt; Joining, by = &quot;sample&quot;</span></a>
-<a class="sourceLine" id="cb131-25" data-line-number="25"><span class="kw">load</span>(<span class="st">&quot;../output/CNV.facets.RData&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb132-1" data-line-number="1">samps_to_show &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb132-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(enrich_sig <span class="op">==</span><span class="st"> &quot;Sig1&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb132-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(dplyr<span class="op">::</span><span class="kw">desc</span>(Sig1)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb132-4" data-line-number="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb132-5" data-line-number="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">pull</span>(sample)</a>
-<a class="sourceLine" id="cb132-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb132-7" data-line-number="7">samps_to_show</a>
-<a class="sourceLine" id="cb132-8" data-line-number="8"><span class="co">#&gt; [1] &quot;915-1115081&quot;        &quot;141-6&quot;              &quot;447-STID0000003036&quot;</span></a>
-<a class="sourceLine" id="cb132-9" data-line-number="9"><span class="co">#&gt; [4] &quot;915-5115031&quot;        &quot;141-25&quot;             &quot;915-1115090&quot;</span></a>
-<a class="sourceLine" id="cb132-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb132-11" data-line-number="11"><span class="kw">show_cn_profile</span>(</a>
-<a class="sourceLine" id="cb132-12" data-line-number="12">  <span class="dt">data =</span> CNV.facets, <span class="dt">chrs =</span> <span class="kw">paste0</span>(<span class="st">&quot;chr&quot;</span>, <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">22</span>, <span class="st">&quot;X&quot;</span>)), <span class="dt">nrow =</span> <span class="dv">3</span>, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">show_title =</span> T,</a>
-<a class="sourceLine" id="cb132-13" data-line-number="13">  <span class="dt">samples =</span> samps_to_show</a>
-<a class="sourceLine" id="cb132-14" data-line-number="14">)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-116-1.png" width="4200" /></p>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb132-1" data-line-number="1">cn_groups &lt;-<span class="st"> </span><span class="kw">get_groups</span>(Sig.CNV.facets.W, <span class="dt">method =</span> <span class="st">&quot;consensus&quot;</span>, <span class="dt">match_consensus =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb132-2" data-line-number="2"><span class="co">#&gt; =&gt; Obtaining clusters from the hierarchical clustering of the consensus matrix...</span></a>
+<a class="sourceLine" id="cb132-3" data-line-number="3"><span class="co">#&gt; =&gt; Finding the dominant signature of each group...</span></a>
+<a class="sourceLine" id="cb132-4" data-line-number="4"><span class="co">#&gt; =&gt; Generating a table of group and dominant signature:</span></a>
+<a class="sourceLine" id="cb132-5" data-line-number="5"><span class="co">#&gt;    </span></a>
+<a class="sourceLine" id="cb132-6" data-line-number="6"><span class="co">#&gt;     Sig1 Sig2 Sig3 Sig4 Sig5 Sig6</span></a>
+<a class="sourceLine" id="cb132-7" data-line-number="7"><span class="co">#&gt;   1    0    0   27    1    0    0</span></a>
+<a class="sourceLine" id="cb132-8" data-line-number="8"><span class="co">#&gt;   2   19    2    0    7    0    0</span></a>
+<a class="sourceLine" id="cb132-9" data-line-number="9"><span class="co">#&gt;   3    0   92    1    2    0    0</span></a>
+<a class="sourceLine" id="cb132-10" data-line-number="10"><span class="co">#&gt;   4    7   52    8   59    9    5</span></a>
+<a class="sourceLine" id="cb132-11" data-line-number="11"><span class="co">#&gt;   5    0    0    0  188    0    0</span></a>
+<a class="sourceLine" id="cb132-12" data-line-number="12"><span class="co">#&gt;   6    5    2    0  155    0  292</span></a>
+<a class="sourceLine" id="cb132-13" data-line-number="13"><span class="co">#&gt; =&gt; Assigning a group to a signature with the maxium fraction (stored in &#39;map_table&#39; attr)...</span></a>
+<a class="sourceLine" id="cb132-14" data-line-number="14"><span class="co">#&gt; =&gt; Summarizing...</span></a>
+<a class="sourceLine" id="cb132-15" data-line-number="15"><span class="co">#&gt;  group #1: 28 samples with Sig3 enriched.</span></a>
+<a class="sourceLine" id="cb132-16" data-line-number="16"><span class="co">#&gt;  group #2: 28 samples with Sig1 enriched.</span></a>
+<a class="sourceLine" id="cb132-17" data-line-number="17"><span class="co">#&gt;  group #3: 95 samples with Sig2 enriched.</span></a>
+<a class="sourceLine" id="cb132-18" data-line-number="18"><span class="co">#&gt;  group #4: 140 samples with Sig4 enriched.</span></a>
+<a class="sourceLine" id="cb132-19" data-line-number="19"><span class="co">#&gt;  group #5: 188 samples with Sig4 enriched.</span></a>
+<a class="sourceLine" id="cb132-20" data-line-number="20"><span class="co">#&gt;  group #6: 454 samples with Sig6 enriched.</span></a>
+<a class="sourceLine" id="cb132-21" data-line-number="21">cn_expo &lt;-<span class="st"> </span><span class="kw">get_sig_exposure</span>(Sig.CNV.facets.W, <span class="dt">type =</span> <span class="st">&quot;relative&quot;</span>)</a>
+<a class="sourceLine" id="cb132-22" data-line-number="22"><span class="co"># Focus on Sig1</span></a>
+<a class="sourceLine" id="cb132-23" data-line-number="23">df &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">left_join</span>(cn_groups, cn_expo)</a>
+<a class="sourceLine" id="cb132-24" data-line-number="24"><span class="co">#&gt; Joining, by = &quot;sample&quot;</span></a>
+<a class="sourceLine" id="cb132-25" data-line-number="25"><span class="kw">load</span>(<span class="st">&quot;../output/CNV.facets.RData&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" data-line-number="1">samps_to_show &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb133-2" data-line-number="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(enrich_sig <span class="op">==</span><span class="st"> &quot;Sig1&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb133-3" data-line-number="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(dplyr<span class="op">::</span><span class="kw">desc</span>(Sig1)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb133-4" data-line-number="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb133-5" data-line-number="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">pull</span>(sample)</a>
+<a class="sourceLine" id="cb133-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb133-7" data-line-number="7">samps_to_show</a>
+<a class="sourceLine" id="cb133-8" data-line-number="8"><span class="co">#&gt; [1] &quot;915-1115081&quot;        &quot;141-6&quot;              &quot;447-STID0000003036&quot;</span></a>
+<a class="sourceLine" id="cb133-9" data-line-number="9"><span class="co">#&gt; [4] &quot;915-5115031&quot;        &quot;141-25&quot;             &quot;915-1115090&quot;</span></a>
+<a class="sourceLine" id="cb133-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb133-11" data-line-number="11"><span class="kw">show_cn_profile</span>(</a>
+<a class="sourceLine" id="cb133-12" data-line-number="12">  <span class="dt">data =</span> CNV.facets, <span class="dt">chrs =</span> <span class="kw">paste0</span>(<span class="st">&quot;chr&quot;</span>, <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">22</span>, <span class="st">&quot;X&quot;</span>)), <span class="dt">nrow =</span> <span class="dv">3</span>, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">show_title =</span> T,</a>
+<a class="sourceLine" id="cb133-13" data-line-number="13">  <span class="dt">samples =</span> samps_to_show</a>
+<a class="sourceLine" id="cb133-14" data-line-number="14">)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-117-1.png" width="4200" /></p>
 <p>We can observe that the samples with <strong>Sig1</strong> enriched have many homozygous deletions, this is unreasonable. I made a communication with the author of FACETS (<a href="https://github.com/mskcc/facets/issues/147">issue link</a>),</p>
 <blockquote>
 <p>So only logical explanation is homozygous deletion. However they are too many of them and so I believe this is assay artifact rather than real.</p>
@@ -2169,9 +2118,9 @@ $(document).ready(function () {
 <p>In section <a href="#tally-variation-records">“Tally variation records”</a>, I said that our method (defined as “Wang” or “W”) has some advantages over the method used in Macintyre et al (defined as “Macintyre” or “M”).</p>
 <p>I will talk the details here.</p>
 <p>Firsty let’s load the results from “M” method (the code to generate the data can be found <a href="https://github.com/ShixiangWang/prad_signature/blob/master/analysis/src/02-identify-copynumber-signatures.R">here</a>).</p>
-<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" data-line-number="1"><span class="kw">load</span>(<span class="st">&quot;../output/Sig.CNV.seqz.M.RData&quot;</span>)</a>
-<a class="sourceLine" id="cb133-2" data-line-number="2"><span class="kw">load</span>(<span class="st">&quot;../output/EST.seqz.M.RData&quot;</span>)</a>
-<a class="sourceLine" id="cb133-3" data-line-number="3"><span class="kw">load</span>(<span class="st">&quot;../output/CNV.seqz.tally.M.RData&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb134-1" data-line-number="1"><span class="kw">load</span>(<span class="st">&quot;../output/Sig.CNV.seqz.M.RData&quot;</span>)</a>
+<a class="sourceLine" id="cb134-2" data-line-number="2"><span class="kw">load</span>(<span class="st">&quot;../output/EST.seqz.M.RData&quot;</span>)</a>
+<a class="sourceLine" id="cb134-3" data-line-number="3"><span class="kw">load</span>(<span class="st">&quot;../output/CNV.seqz.tally.M.RData&quot;</span>)</a></code></pre></div>
 <div id="sample-by-component-matrix-generation" class="section level3">
 <h3>Sample-by-component matrix generation</h3>
 <p>The key difference between method “W” and method “M” is the way to generate the sample-by-component matrix.</p>
@@ -2191,14 +2140,15 @@ $(document).ready(function () {
 <div id="copy-number-signatures-from-m-method" class="section level3">
 <h3>Copy number signatures from “M” method</h3>
 <p>We still use the cophenetic plot for deciding on the signature number.</p>
-<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb134-1" data-line-number="1"><span class="kw">show_sig_number_survey</span>(EST.seqz.M, <span class="dt">right_y =</span> <span class="ot">NULL</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-118-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb135-1" data-line-number="1">p &lt;-<span class="st"> </span><span class="kw">show_sig_number_survey</span>(EST.seqz.M, <span class="dt">right_y =</span> <span class="ot">NULL</span>)</a>
+<a class="sourceLine" id="cb135-2" data-line-number="2"><span class="kw">add_h_arrow</span>(p, <span class="dt">x =</span> <span class="fl">4.2</span>, <span class="dt">y =</span> <span class="fl">0.991</span>, <span class="dt">seg_len =</span> <span class="fl">0.5</span>, <span class="dt">space =</span> <span class="fl">0.2</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-119-1.png" width="1200" /></p>
 <p>We selected 4 signatures. Let’s see their signature profile.</p>
-<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb135-1" data-line-number="1"><span class="kw">show_sig_profile</span>(Sig.CNV.seqz.M,</a>
-<a class="sourceLine" id="cb135-2" data-line-number="2">  <span class="dt">normalize =</span> <span class="st">&quot;column&quot;</span>, <span class="dt">style =</span> <span class="st">&quot;cosmic&quot;</span>,</a>
-<a class="sourceLine" id="cb135-3" data-line-number="3">  <span class="dt">paint_axis_text =</span> <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb135-4" data-line-number="4">)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-119-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" data-line-number="1"><span class="kw">show_sig_profile</span>(Sig.CNV.seqz.M,</a>
+<a class="sourceLine" id="cb136-2" data-line-number="2">  <span class="dt">normalize =</span> <span class="st">&quot;column&quot;</span>, <span class="dt">style =</span> <span class="st">&quot;cosmic&quot;</span>,</a>
+<a class="sourceLine" id="cb136-3" data-line-number="3">  <span class="dt">paint_axis_text =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb136-4" data-line-number="4">)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-120-1.png" width="2400" /></p>
 <p>This is a bar plot similar to the one reported by Macintyre et al.</p>
 <p>This plot raises some issues.</p>
 <div id="issue-1" class="section level4">
@@ -2206,44 +2156,44 @@ $(document).ready(function () {
 <p>The matrix used to generate the plot is column normalized, so <strong>the heights of bar cannot be compared with each other</strong>.</p>
 <p>For example, firstly we see the <strong>Sig1</strong>, we may conclude that <strong>component “bp10MB2” has more contributions than component “bp10MB1”</strong>. But if we see the raw matrix, we can see that this is wrong!</p>
 <p>We cannot compare two or more componets in a row when we normalize the data by column! The plot above may misguide the readers. For the plot above, we can only compare the same component across all signatures. For example, we can conclude that <strong>Sig4</strong> captures the majority of component <strong>“segsize12”</strong> and <strong>“segsize11”</strong>.</p>
-<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" data-line-number="1"><span class="kw">show_sig_profile</span>(Sig.CNV.seqz.M,</a>
-<a class="sourceLine" id="cb136-2" data-line-number="2">  <span class="dt">normalize =</span> <span class="st">&quot;raw&quot;</span>, <span class="dt">style =</span> <span class="st">&quot;cosmic&quot;</span>,</a>
-<a class="sourceLine" id="cb136-3" data-line-number="3">  <span class="dt">paint_axis_text =</span> <span class="ot">FALSE</span></a>
-<a class="sourceLine" id="cb136-4" data-line-number="4">)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-120-1.png" width="2400" /></p>
-<p>To avoid misguiding readers, gradient colors may work. Also, we must tell readers in text that we should compare one component in a column insteads two or more componets in a row.</p>
 <div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb137-1" data-line-number="1"><span class="kw">show_sig_profile</span>(Sig.CNV.seqz.M,</a>
-<a class="sourceLine" id="cb137-2" data-line-number="2">  <span class="dt">normalize =</span> <span class="st">&quot;column&quot;</span>, <span class="dt">style =</span> <span class="st">&quot;cosmic&quot;</span>,</a>
-<a class="sourceLine" id="cb137-3" data-line-number="3">  <span class="dt">paint_axis_text =</span> <span class="ot">FALSE</span>, <span class="dt">set_gradient_color =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb137-2" data-line-number="2">  <span class="dt">normalize =</span> <span class="st">&quot;raw&quot;</span>, <span class="dt">style =</span> <span class="st">&quot;cosmic&quot;</span>,</a>
+<a class="sourceLine" id="cb137-3" data-line-number="3">  <span class="dt">paint_axis_text =</span> <span class="ot">FALSE</span></a>
 <a class="sourceLine" id="cb137-4" data-line-number="4">)</a></code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-121-1.png" width="2400" /></p>
+<p>To avoid misguiding readers, gradient colors may work. Also, we must tell readers in text that we should compare one component in a column insteads two or more componets in a row.</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb138-1" data-line-number="1"><span class="kw">show_sig_profile</span>(Sig.CNV.seqz.M,</a>
+<a class="sourceLine" id="cb138-2" data-line-number="2">  <span class="dt">normalize =</span> <span class="st">&quot;column&quot;</span>, <span class="dt">style =</span> <span class="st">&quot;cosmic&quot;</span>,</a>
+<a class="sourceLine" id="cb138-3" data-line-number="3">  <span class="dt">paint_axis_text =</span> <span class="ot">FALSE</span>, <span class="dt">set_gradient_color =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb138-4" data-line-number="4">)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-122-1.png" width="2400" /></p>
 </div>
 <div id="issue-2" class="section level4">
 <h4>Issue 2</h4>
 <p>From plot above, we can only see different components, but we cannot see the meaning of each component. For method “M”, each component represents a distribution.</p>
 <p>For example, what’s the meaning of the component “copynumber2”? To fix this issue, we tried adding the key parameter value in the plot.</p>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb138-1" data-line-number="1"><span class="kw">show_sig_profile</span>(Sig.CNV.seqz.M,</a>
-<a class="sourceLine" id="cb138-2" data-line-number="2">  <span class="dt">normalize =</span> <span class="st">&quot;column&quot;</span>, <span class="dt">style =</span> <span class="st">&quot;cosmic&quot;</span>,</a>
-<a class="sourceLine" id="cb138-3" data-line-number="3">  <span class="dt">paint_axis_text =</span> <span class="ot">FALSE</span>, <span class="dt">set_gradient_color =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb138-4" data-line-number="4">  <span class="dt">params =</span> CNV.seqz.tally.M<span class="op">$</span>parameters, <span class="dt">y_expand =</span> <span class="fl">1.5</span></a>
-<a class="sourceLine" id="cb138-5" data-line-number="5">)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-122-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb139-1" data-line-number="1"><span class="kw">show_sig_profile</span>(Sig.CNV.seqz.M,</a>
+<a class="sourceLine" id="cb139-2" data-line-number="2">  <span class="dt">normalize =</span> <span class="st">&quot;column&quot;</span>, <span class="dt">style =</span> <span class="st">&quot;cosmic&quot;</span>,</a>
+<a class="sourceLine" id="cb139-3" data-line-number="3">  <span class="dt">paint_axis_text =</span> <span class="ot">FALSE</span>, <span class="dt">set_gradient_color =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb139-4" data-line-number="4">  <span class="dt">params =</span> CNV.seqz.tally.M<span class="op">$</span>parameters, <span class="dt">y_expand =</span> <span class="fl">1.5</span></a>
+<a class="sourceLine" id="cb139-5" data-line-number="5">)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-123-1.png" width="2400" /></p>
 <p>According to the text just added, we can see that component “copynumber2” represents a Gaussian distribution with mean is 2; component “copynumber1” represents a Gaussian distribution with mean is 0.84.</p>
 </div>
 <div id="issue-3" class="section level4">
 <h4>Issue 3</h4>
 <p>Even with the plot above, we cannot know the dispersion of each component. All distributions with weight for each copy number feature can be viewed as the below.</p>
-<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb139-1" data-line-number="1"><span class="kw">show_cn_components</span>(CNV.seqz.tally.M<span class="op">$</span>parameters, <span class="dt">show_weights =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-123-1.png" width="2400" /></p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb140-1" data-line-number="1"><span class="kw">show_cn_components</span>(CNV.seqz.tally.M<span class="op">$</span>parameters, <span class="dt">show_weights =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-124-1.png" width="2400" /></p>
 </div>
 </div>
 <div id="why-we-created-method-w" class="section level3">
 <h3>Why we created method “W”</h3>
 <p>Here, I want to talk something more.</p>
 <p>If we take case of all available values for each features, we would notice that there are only limited choices. Let’s visualize them.</p>
-<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb140-1" data-line-number="1"><span class="kw">load</span>(<span class="st">&quot;../output/CNV.seqz.tally.W.RData&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb141-1" data-line-number="1"><span class="kw">show_cn_features</span>(CNV.seqz.tally.W<span class="op">$</span>features[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>], <span class="dt">method =</span> <span class="st">&quot;W&quot;</span>, <span class="dt">log_y =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-125-1.png" width="1800" /></p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb141-1" data-line-number="1"><span class="kw">load</span>(<span class="st">&quot;../output/CNV.seqz.tally.W.RData&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb142-1" data-line-number="1"><span class="kw">show_cn_features</span>(CNV.seqz.tally.W<span class="op">$</span>features[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>], <span class="dt">method =</span> <span class="st">&quot;W&quot;</span>, <span class="dt">log_y =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="index_files/figure-html/unnamed-chunk-126-1.png" width="1800" /></p>
 <p>Naturally we can divide them into categories and get a fixed number of components. It would be easy to read, understand and compare. Look back this part, why we choose a complicated method with many drawbacks instead of a simple one?</p>
 </div>
 </div>
@@ -2309,7 +2259,7 @@ $(document).ready(function () {
 <p class="author"><span class="glyphicon glyphicon-user"></span> Xuan Wang</p>
 <p class="author"><span class="glyphicon glyphicon-user"></span> Minfang Song</p>
 <p class="author"><span class="glyphicon glyphicon-user"></span> Xue-Song Liu (Corresponding author)</p>
-<p class="date"><span class="glyphicon glyphicon-calendar"></span> 2020-02-10</p>
+<p class="date"><span class="glyphicon glyphicon-calendar"></span> 2020-02-12</p>
 </div>
 
 
