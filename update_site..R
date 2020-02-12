@@ -17,5 +17,5 @@ if (!dir.exists("analysis")) {
 
   file.copy(c(index_html, index_files, fig_files), to = output_dir, recursive = TRUE)
   #file.remove(index_html)
-  unlink(x = c(index_html, index_files), recursive = TRUE)
+  unlink(x = c(index_html, index_files, "analysis/index_cache"), recursive = TRUE)
 }
