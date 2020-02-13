@@ -296,10 +296,7 @@ The result `bam` files were then used for copy number calling and mutation calli
 
 Somatic mutations were detected by following GATK best practice with Mutect2 [@van2013fastq]. 
 
-
-TODO 
-
-#### 1.
+#### 1.call somatic short variants and indel
 
 ```bash
 #PBS -N call-<sample>
@@ -353,7 +350,7 @@ gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp"  Mutec
 fi
 ```
 
-#### 2.
+#### 2.Estimate cross-sample contamination using GetPileupSummaries and CalculateContamination.
 
 ```bash
 #PBS -N getpile_normal_<sample2>
@@ -377,7 +374,7 @@ gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/wangshx/wx/tmp"  GetP
 -O $out/<sample2>-normal.pileups.table
 ```
 
-#### 3.
+#### 3.Estimate cross-sample contamination using GetPileupSummaries and CalculateContamination.
 
 ```bash
 #PBS -N seg_and_cont
@@ -409,7 +406,7 @@ gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/wangshx/wx/tmp"  Calc
 fi
 ```
 
-#### 4.
+#### 4.get tumor artifacts using LearnReadOrientationModel.
 
 ```bash
 #PBS -N flr_<sample>
@@ -427,7 +424,7 @@ java -jar /public/home/liuxs/anaconda3/envs/wes/share/gatk4-4.1.3.0-0/gatk-packa
 -O $out/<sample>-tumor-artifact-prior.tar.gz
 ```
 
-#### 5.
+#### 5.Filter for confident somatic calls using FilterMutectCalls.
 
 ```bash
 #PBS -N filter-<sample>
@@ -454,7 +451,7 @@ gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp" Filter
 --min-allele-fraction 0.05
 ```
 
-#### 6.
+#### 6.get PASS mutation 
 
 ```bash
 #PBS -N call-<sample>
