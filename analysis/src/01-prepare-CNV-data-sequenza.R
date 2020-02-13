@@ -24,6 +24,7 @@ extract_seqz_purity_and_ploidy("/home/wsx/projects/prad_signature/cnv_calling/se
 
 # Transform data to GISTIC input
 # and store as .seg file
-# facets_to_GISTIC2("/public/data/facet/dbGAP_PLUS_TCGA_PRAD_WES_CVAL150/",
-#                   target_path = 'data/PRAD_CNA_hg38.seg',
-#                   rm_samps = "141-10")
+seqz_to_GISTIC2("/home/wsx/projects/prad_signature/cnv_calling/sequenza/seqz_wes_result",
+                  target_path = 'data/PRAD_CNA_hg38_seqz.seg',
+                  rm_samps = "WCMC160-SRR3146971")
+

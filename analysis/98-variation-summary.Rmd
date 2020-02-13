@@ -53,6 +53,28 @@ TODO: add GISTIC/MutSig, etc. data (plots ref to <http://bioconductor.org/packag
 oncoplot(maf = Maf, top = 10)
 ```
 
+```{r, eval=FALSE}
+# GISTIC2 data
+all.lesions <- "/public/tools/GISTIC2/prad1000_results_conf99/all_lesions.conf_99.txt"
+amp.genes <- "/public/tools/GISTIC2/prad1000_results_conf99/amp_genes.conf_99.txt"
+del.genes <- "/public/tools/GISTIC2/prad1000_results_conf99/del_genes.conf_99.txt"
+scores.gis <- "/public/tools/GISTIC2/prad1000_results_conf99/scores.gistic"
+
+# MutSig2CV data
+mutsig <- "../data/prad1000.sig_genes.txt"
+
+maf_plus_gistic <- read.maf(
+  maf = "/public/data/cbioPortal/signature/data_mutations_extended.txt",
+  gisticAllLesionsFile = all.lesions,
+  gisticAmpGenesFile = amp.genes, gisticDelGenesFile = del.genes,
+  gisticScoresFile = scores.gis, isTCGA = FALSE, verbose = FALSE
+)
+
+oncoplot(maf_plus_gistic,
+  mutsig = mutsig, mutsigQval = 0.05, sortByMutation = TRUE,
+  logColBar = TRUE, sepwd_samples = 0, draw_titv = TRUE
+)
+```
 
 
 ## Summary plots
