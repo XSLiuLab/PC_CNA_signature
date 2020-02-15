@@ -489,5 +489,21 @@ vep  --input_file /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/PASS/<sample>-
 --plugin Downstream  --plugin Wildtype \
 --dir_plugins ~/.vep/Plugins 
 ```
+#### 8.vcf to maf
+~~~
+#PBS -N call-<sample>
+#PBS -l nodes=1:ppn=7
+#PBS -l walltime=30:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
 
+source activate neo
+ vcf2maf.pl \
+ --input-vcf /public/home/liuxs/ncbi/dbGaP-16533/mutation/annonatevcf/<sample>.anno.vcf \
+ --output-maf /public/home/liuxs/ncbi/dbGaP-16533/mutation/vcf2maf/<sample>.maf \
+ --ref-fasta /public/home/liuxs/biodata/reference/genome/gdc_hg38/GRCh38.d1.vd1.fa \
+ --tumor-id <sample1> --normal-id <sample2>  --vep-path /public/home/liuxs/anaconda3/envs/neo/bin \
+ --ncbi-build GRCh38
+~~~
 ## Data cleaning
