@@ -114,6 +114,15 @@ oncoplot(maf_plus_gistic,
 ```
 
 
+Remove GISTIC2 data from oncoplot.
+
+```{r, fig.height=12, fig.width=8}
+oncoplot(Maf,
+  mutsig = mutsig, mutsigQval = 0.05, sortByMutation = TRUE,
+  logColBar = TRUE, sepwd_samples = 0, draw_titv = TRUE
+)
+```
+
 ## Summary plots
 
 ### SBS
