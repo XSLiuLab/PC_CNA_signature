@@ -515,7 +515,7 @@ Rscript $out_dir"/3-sequenza.R" <sample> $sseqz_dir/"<sample>.small_filter.seqz.
 
 Somatic mutations were detected by following GATK best practice with Mutect2 [@van2013fastq]. 
 
-#### 1.
+#### 1. call somatic short variants and indel
 
 ```bash
 #PBS -N call-<sample>
@@ -569,7 +569,7 @@ gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp"  Mutec
 fi
 ```
 
-#### 2.
+#### 2. estimate cross-sample contamination using GetPileupSummaries and CalculateContamination.
 
 ```bash
 #PBS -N getpile_normal_<sample2>
@@ -592,8 +592,6 @@ gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/wangshx/wx/tmp"  GetP
 -V $SNP/af-only-gnomad.hg38.vcf.gz \
 -O $out/<sample2>-normal.pileups.table
 ```
-
-#### 3.
 
 ```bash
 #PBS -N seg_and_cont
@@ -625,7 +623,7 @@ gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/wangshx/wx/tmp"  Calc
 fi
 ```
 
-#### 4.
+#### 3. get tumor artifacts using LearnReadOrientationModel.
 
 ```bash
 #PBS -N flr_<sample>
@@ -643,7 +641,7 @@ java -jar /public/home/liuxs/anaconda3/envs/wes/share/gatk4-4.1.3.0-0/gatk-packa
 -O $out/<sample>-tumor-artifact-prior.tar.gz
 ```
 
-#### 5.
+#### 4. filter for confident somatic calls using FilterMutectCalls.
 
 ```bash
 #PBS -N filter-<sample>
@@ -670,7 +668,7 @@ gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp" Filter
 --min-allele-fraction 0.05
 ```
 
-#### 6.
+#### 5. get PASS mutation 
 
 ```bash
 #PBS -N call-<sample>
@@ -685,7 +683,7 @@ vcftools --vcf /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/filter/<sample>.f
   --remove-filtered-all --recode --recode-INFO-all --out /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/PASS/<sample>-SNvs_only
 ```
 
-#### 7. mutation annotation
+#### 6. mutation annotation
 
 This step annotated somatic mutations with VEP [@mclaren2016ensembl].
 
@@ -707,6 +705,25 @@ vep  --input_file /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/PASS/<sample>-
 --transcript_version --cache_version 98 \
 --plugin Downstream  --plugin Wildtype \
 --dir_plugins ~/.vep/Plugins 
+```
+
+#### 7. vcf to maf
+
+```bash
+#PBS -N call-<sample>
+#PBS -l nodes=1:ppn=7
+#PBS -l walltime=30:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate neo
+ vcf2maf.pl \
+ --input-vcf /public/home/liuxs/ncbi/dbGaP-16533/mutation/annonatevcf/<sample>.anno.vcf \
+ --output-maf /public/home/liuxs/ncbi/dbGaP-16533/mutation/vcf2maf/<sample>.maf \
+ --ref-fasta /public/home/liuxs/biodata/reference/genome/gdc_hg38/GRCh38.d1.vd1.fa \
+ --tumor-id <sample1> --normal-id <sample2>  --vep-path /public/home/liuxs/anaconda3/envs/neo/bin \
+ --ncbi-build GRCh38
 ```
 
 ## Data cleaning
