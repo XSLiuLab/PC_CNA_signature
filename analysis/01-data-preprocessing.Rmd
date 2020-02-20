@@ -9,6 +9,7 @@ output:
     mathjax: true
     lightbox: true
     gallery: true
+    toc: 3
 bibliography: ref.bib
 link-citations: yes
 ---
@@ -33,12 +34,12 @@ opts_knit$set(width = 75)
 
 This part focuses on data preprocessing, it contains the following sections:
 
-- Data downloading
-- Data preprocessing
+- [Data downloading](#data-downloading)
+- [Data preprocessing](#data-preprocessing)
   - Pipeline
   - Copy number calling
   - Mutation calling
-- Data cleaning
+- [Data cleaning](#data-cleaning)
 
 ## Data downloading
 
@@ -48,8 +49,8 @@ This section describes where and how we downloaded the data.
 
 Whole exome sequencing raw data were downloaded from the following 6 dbGap studies:
 
-- `phs000178`: this is TCGA prostate cancer cohort, the raw data is `bam` format stored in [GDC portal](https://portal.gdc.cancer.gov/), we
-access them by dbGap permission
+- `phs000178`: this is TCGA prostate cancer cohort, the raw data is `bam` format
+stored in [GDC portal](https://portal.gdc.cancer.gov/), we access them by dbGap permission
 - `phs000447`: `sra` data
 - `phs000554`: `sra` data
 - `phs000909`: `sra` data
@@ -91,7 +92,7 @@ This section describes how we preprocessed the data.
 ### Pipeline
 
 The following diagram shows our upstream workflow. Steps before signature identification are belong to preprocessing.
-The preprocessing pipeline generated the variation records of samples.
+The preprocessing pipeline generates the variation records of samples.
 
 ```{r, out.width = "600px", fig.align="center", echo=FALSE}
 knitr::include_graphics("fig/PRAD_Analysis_Pipeline.png", dpi = 300)
@@ -101,18 +102,18 @@ knitr::include_graphics("fig/PRAD_Analysis_Pipeline.png", dpi = 300)
 
 ### Sequence alignment
 
-For `phs000447`, `phs000554`, `phs000909`, `phs000915` and `phs001141` cohorts, the raw data are in `sra` format.
+For cohorts including `phs000447`, `phs000554`, `phs000909`, `phs000915` and `phs001141`, the raw data are in `sra` format.
 We did sequence alignment to them. To keep in line with TCGA bam data,
-we used the same reference genome (downlowned from [GDC portal](https://portal.gdc.cancer.gov/)) and operation (see [GDC docs](https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/DNA_Seq_Variant_Calling_Pipeline/)).
+we used the same reference genome (downloaded from [GDC portal](https://portal.gdc.cancer.gov/)) and operations (see [GDC docs](https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/DNA_Seq_Variant_Calling_Pipeline/)).
 
-> Of note, the preprocessing was done on Linux server provided by High Performance Computing Service of ShanghaiTech University.
+> Of note, the preprocessing step was done on Linux server provided by High Performance Computing Service of ShanghaiTech University.
 > So the work is presented in PBS scripts. If readers want to reproduce this work, please focus on the key code lines.
 
 The details are described as below.
 
 #### 1. from `sra` to `fastq`
 
-The raw WES downloaded from dbGap database are in `sra` format, we need to convert them into `fastq` format firstly.
+The raw WES data downloaded from dbGap database are in `sra` format, we need to convert them into `fastq` format firstly.
 
 ```bash
 #PBS -N fastq_<sample>
@@ -209,11 +210,11 @@ java -jar -Xmx12G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp \
  I=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/bam/<sample>.bam\
  O=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/bamsort/<sample>.sort.bam\
  SORT_ORDER=coordinate
- ```
+```
 
 #### 6. mark duplications 
 
-Mark duplications with `Picard`.
+This step marked duplications with `Picard`.
 
 ```bash
 #PBS -N rmdump_<sample> 
@@ -233,7 +234,7 @@ java -jar /public/home/liuxs/anaconda3/envs/wes/share/picard-2.20.6-0/picard.jar
  M=/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/markqump/matric/<sample>.sort.addhead.rmdup.metric
 ```
 
-Build index with `samtools`.
+We then built index with `samtools`.
 
 ```bash
 #PBS -N index_<sample>
@@ -251,7 +252,7 @@ samtools index /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/markqump/<sample>.rdup
 
 #### 7. BQSR
 
-A base quality score recalibration (BQSR) step is then performed.
+A base quality score recalibration (BQSR) step was then performed.
 
 ```bash
 #PBS -N bqsr_<sample1>
@@ -288,15 +289,233 @@ The result `bam` files were then used for copy number calling and mutation calli
 
 ### Copy number calling
 
+The absolute copy number profile for each sample was detected by two well known softwares [FACETS](https://github.com/mskcc/facets) [@shen_facets:_2016] and [Sequenza](https://sequenzatools.bitbucket.io/#/home) [@favero2014sequenza].
+
+The code to generate tumor-normal pair for FACETS is [here](https://github.com/ShixiangWang/prad_signature/blob/master/analysis/src/00-generate-samplefile-for-facets-cnv-calling.R), the code to generate tumor-normal pair for Sequenza is [here](https://github.com/ShixiangWang/prad_signature/blob/master/analysis/src/00-generate-samplefile-for-seqz-cnv-calling.R).
+
 #### FACETS
+
+We followed the standard pipeline of FACETS described in [vignette](https://github.com/mskcc/facets/blob/master/vignettes/FACETS.pdf) to call absolute copy number.
+
+##### 1. SNP pileup
+
+This step followed the <https://github.com/mskcc/facets/blob/master/inst/extcode/README.txt>.
+
+For dbGap studies:
+
+```bash
+#PBS -N <sample>_snp
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=10:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+cd /public/home/liuxs/anaconda3/envs/R/lib/R/library/facets/extcode
+source activate R
+
+# <sample1>=tumorbam
+# <sample2>=normalbam
+
+path1="/public/home/liuxs/ncbi/dbGaP-16533/copy/out"
+path2="/public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/bqsrbam"
+path3="/public/home/liuxs/ncbi/dbGaP-21926/dnaseq/BQSR/bqsrbam"
+
+name=<sample1>
+
+if [ -e /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/bqsrbam/$name.sorted.marked.BQSR.bam ]; 
+ then 
+  ./snp-pileup -g -q15 -Q20 -P100 -r25,0 /public/home/liuxs/biodata/reference/genome/hg38/snpvcf/common_all_20180418.vcf.gz\
+  ${path1}/<sample>.out.gz \
+  ${path2}/<sample2>.sorted.marked.BQSR.bam \
+  ${path2}/<sample1>.sorted.marked.BQSR.bam
+ else
+  ./snp-pileup -g -q15 -Q20 -P100 -r25,0 /public/home/liuxs/biodata/reference/genome/hg38/snpvcf/common_all_20180418.vcf.gz\
+ ${path1}/<sample>.out.gz \
+ ${path3}/<sample2>.sorted.marked.BQSR.bam  \
+ ${path3}/<sample1>.sorted.marked.BQSR.bam 
+fi
+```
+
+For TCGA:
+
+```bash
+#PBS -N <sample>_snp
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=10:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+cd /public/home/liuxs/anaconda3/envs/R/lib/R/library/facets/extcode
+source activate R
+
+# <sample1>=tumorbam
+# <sample2>=normalbam
+
+path1="/public/home/liuxs/ncbi/dbGaP-16533/copy/csv"
+path2="/public/home/liuxs/biodata/gdc/links/TCGA_PRAD"
+
+
+./snp-pileup -g -q15 -Q20 -P100 -r25,0 /public/home/liuxs/biodata/reference/genome/hg38/snpvcf/common_all_20180418.vcf.gz ${path1}/<sample>.out.gz ${path2}/<sample2>.bam ${path2}/<sample1>.bam
+```
+
+##### 2. run `facets` package
+
+This is a template R script used for copy number calling.
+
+```r
+#! /usr/bin/env Rscript
+
+library("pctGCdata")
+library("facets")
+set.seed(1234)
+rcmat = readSnpMatrix("/public/home/liuxs/ncbi/dbGaP-16533/copy/out/<sample>.out.gz")
+xx = preProcSample(rcmat,gbuild = "hg38")
+oo=procSample(xx,cval=150)
+fit=emcncf(oo)
+
+#plot 
+pdf("/public/home/liuxs/ncbi/dbGaP-16533/copy/facetdata_150/<sample>.pdf")
+plotSample(x=oo,emfit=fit)
+logRlogORspider(oo$out, oo$dipLogR) 
+while (!is.null(dev.list()))  dev.off()
+# 
+save(fit,file = "/public/home/liuxs/ncbi/dbGaP-16533/copy/facetdata_150/<sample>.Rdata")
+# output purity and ploidy -----
+purity=fit$purity
+purity=round(purity,2)
+ploidy=fit$ploidy
+ploidy=round(ploidy,1)
+output <- paste("<sample>", purity, ploidy, sep = "\t")
+write(output, "/public/home/liuxs/ncbi/dbGaP-16533/copy/facetdata_150/<sample>.txt", append = TRUE)
+```
+
+This is the PBS script used for calling the R script above. 
+
+```bash
+##### submit R script
+#PBS -N R
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=50:00:00
+#PBS -S /bin/bash
+#PBS -q normal_8
+#PBS -j oe
+
+source activate R
+for i in /public/home/liuxs/ncbi/dbGaP-16533/copy/Rdata/re150/pbs_150/*pbs;do Rscript $i;done
+```
+
 
 #### Sequenza
 
-### 8.Mutation calling
+We followed the standard pipeline of Sequenza described in [vignette](https://cran.r-project.org/web/packages/sequenza/vignettes/sequenza.html) to call absolute copy number.
+A modified [copynumber](https://github.com/ShixiangWang/copynumber) package was used to work with hg38 genome build.
+
+##### 1. process a `fasta` file to produce a GC `wiggle` track file
+
+```bash
+source activate python3
+
+ref_file=/public/home/liuxs/biodata/reference/genome/gdc_hg38/GRCh38.d1.vd1.fa
+gc_file=/public/home/wangshx/wangshx/PRAD_Sig/hg38.gc50Base.wig.gz
+
+mkdir -p $(dirname $gc_file)
+# sequenza-utils version: 3.0.0
+sequenza-utils gc_wiggle -w 50 --fasta $ref_file -o $gc_file
+```
+
+##### 2. process `bam` and `wiggle` files to produce a small `seqz` file:
+
+```bash
+#PBS -N PBS_<sample>_seqz
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=70:00:00
+#PBS -S /bin/bash
+#PBS -j oe
+#PBS -q normal_8
+
+source activate python3
+
+ref_file=/public/home/liuxs/biodata/reference/genome/gdc_hg38/GRCh38.d1.vd1.fa
+gc_file=/public/home/wangshx/wangshx/PRAD_Sig/hg38.gc50Base.wig.gz
+
+out_dir=/public/home/wangshx/wangshx/PRAD_Sig
+seqz_dir=$out_dir"/seqz"
+sseqz_dir=$out_dir"/small-seqz"
+
+mkdir -p $seqz_dir
+mkdir -p $sseqz_dir
+
+#tumor=<tumor>
+#normal=<normal>
+
+sequenza-utils bam2seqz -n <normal> -t <tumor> \
+    --fasta $ref_file -gc $gc_file \
+    -o $seqz_dir/"<sample>.seqz.gz"
+
+sequenza-utils seqz_binning --seqz $seqz_dir/"<sample>.seqz.gz" \
+    -w 50 -o $sseqz_dir/"<sample>.small.seqz.gz"
+
+# Only keep chr1-22,X,Y
+zcat $sseqz_dir/"<sample>.small.seqz.gz" | \
+    awk '/^chromosome|chr[12]?[0-9XY]\t/{print}' | \
+    gzip > $sseqz_dir/"<sample>.small_filter.seqz.gz"
+```
+
+##### 3. call copy number in R
+
+This is a template R script used for copy number calling.
+
+```r
+#! /usr/bin/env Rscript
+
+library("sequenza")
+
+args <- commandArgs(TRUE)
+sample_id <- args[1]
+input_file <- args[2]
+out_dir <- args[3]
+
+# https://github.com/ShixiangWang/copynumber
+test <- sequenza.extract(input_file, assembly = "hg38")
+
+CP <- sequenza.fit(test, female = FALSE)
+
+sequenza.results(
+  sequenza.extract = test,
+  cp.table = CP,
+  sample.id = sample_id,
+  out.dir = out_dir,
+  female = FALSE
+)
+
+```
+
+This is a template PBS script used for calling the R script above.
+
+```bash
+#PBS -N PBS_<sample>_seqz
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=70:00:00
+#PBS -S /bin/bash
+#PBS -j oe
+#PBS -q normal_8
+
+source activate R_36
+
+out_dir=/public/home/wangshx/wangshx/PRAD_Sig
+sseqz_dir=$out_dir"/small-seqz"
+res_dir=$out_dir"/seqz_wes_result"
+
+Rscript $out_dir"/3-sequenza.R" <sample> $sseqz_dir/"<sample>.small_filter.seqz.gz" $res_dir
+```
+
+### Mutation calling
 
 Somatic mutations were detected by following GATK best practice with Mutect2 [@van2013fastq]. 
 
-#### 8.1 call somatic short variants and indel
+#### 1. call somatic short variants and indel
 
 ```bash
 #PBS -N call-<sample>
@@ -350,7 +569,7 @@ gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp"  Mutec
 fi
 ```
 
-#### 8.2 estimate cross-sample contamination using GetPileupSummaries and CalculateContamination.
+#### 2. estimate cross-sample contamination using GetPileupSummaries and CalculateContamination.
 
 ```bash
 #PBS -N getpile_normal_<sample2>
@@ -404,7 +623,7 @@ gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/wangshx/wx/tmp"  Calc
 fi
 ```
 
-#### 8.3 get tumor artifacts using LearnReadOrientationModel.
+#### 3. get tumor artifacts using LearnReadOrientationModel.
 
 ```bash
 #PBS -N flr_<sample>
@@ -422,7 +641,7 @@ java -jar /public/home/liuxs/anaconda3/envs/wes/share/gatk4-4.1.3.0-0/gatk-packa
 -O $out/<sample>-tumor-artifact-prior.tar.gz
 ```
 
-#### 8.4 filter for confident somatic calls using FilterMutectCalls.
+#### 4. filter for confident somatic calls using FilterMutectCalls.
 
 ```bash
 #PBS -N filter-<sample>
@@ -449,7 +668,7 @@ gatk --java-options "-Xmx20G -Djava.io.tmpdir=/public/home/liuxs/lhm/tmp" Filter
 --min-allele-fraction 0.05
 ```
 
-#### 8.5 get PASS mutation 
+#### 5. get PASS mutation 
 
 ```bash
 #PBS -N call-<sample>
@@ -464,7 +683,7 @@ vcftools --vcf /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/filter/<sample>.f
   --remove-filtered-all --recode --recode-INFO-all --out /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/PASS/<sample>-SNvs_only
 ```
 
-#### 8.6 mutation annotation
+#### 6. mutation annotation
 
 This step annotated somatic mutations with VEP [@mclaren2016ensembl].
 
@@ -487,8 +706,10 @@ vep  --input_file /public/home/liuxs/ncbi/dbGaP-16533/dnaseq/BQSR/PASS/<sample>-
 --plugin Downstream  --plugin Wildtype \
 --dir_plugins ~/.vep/Plugins 
 ```
-#### vcf to maf
-~~~
+
+#### 7. vcf to maf
+
+```bash
 #PBS -N call-<sample>
 #PBS -l nodes=1:ppn=7
 #PBS -l walltime=30:00:00
@@ -503,5 +724,35 @@ source activate neo
  --ref-fasta /public/home/liuxs/biodata/reference/genome/gdc_hg38/GRCh38.d1.vd1.fa \
  --tumor-id <sample1> --normal-id <sample2>  --vep-path /public/home/liuxs/anaconda3/envs/neo/bin \
  --ncbi-build GRCh38
-~~~
+```
+
 ## Data cleaning
+
+This section describes how we cleaned the data for downstream analysis.
+
+### Phenotype data
+
+2 info tables of SRA runs downloaded from dbGap are stored in [here](https://github.com/ShixiangWang/prad_signature/tree/master/dbGap).
+Phenotype data of dbGap studies are stored in [here](https://github.com/ShixiangWang/prad_signature/tree/master/dbGap/phenotype).
+Phenotype data of some cohorts were also downloaded from original articles and cleaned by hand.
+We then carefully checked and compared all available data, extracted key info and generated tidy datasets
+including sample-pair data used for variation calling and phenotype data used for downstream analysis.
+
+The whole procedure is recorded in [01-tidy_mapping.R](https://github.com/ShixiangWang/prad_signature/blob/master/dbGap/01-tidy_mapping.R), [02-tidy_clinical_data.R](https://github.com/ShixiangWang/prad_signature/blob/master/dbGap/02-tidy_clinical_data.R) and [03-combine_and_clean_IDs.R](https://github.com/ShixiangWang/prad_signature/blob/master/dbGap/03-combine_and_clean_IDs.R).
+
+
+### Survival data
+
+We merged two available clinical datasets from TCGA and `phs000554` with [R script](https://github.com/ShixiangWang/prad_signature/blob/master/analysis/src/01-prepare-survival-data.R).
+
+
+### Variation profile
+
+[Copy number calling](#copy-number-calling) and [mutation calling](#mutation-calling) all generated per-sample results. 
+We go further merged them into one file, respectively.
+
+For results from Sequenza, we merged them with R script [00-generate-samplefile-for-seqz-cnv-calling.R](https://github.com/ShixiangWang/prad_signature/blob/master/analysis/src/00-generate-samplefile-for-seqz-cnv-calling.R).
+
+For results from FACETS, we merged them with R script [00-generate-samplefile-for-facets-cnv-calling.R](https://github.com/ShixiangWang/prad_signature/blob/master/analysis/src/00-generate-samplefile-for-facets-cnv-calling.R).
+
+For results from Mutect2, we merged VCFs into MAF with tool [vcf2maf](https://github.com/mskcc/vcf2maf). TODO: more detail code.

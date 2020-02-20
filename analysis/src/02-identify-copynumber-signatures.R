@@ -40,6 +40,7 @@ ncores <- 20
 ##
 
 # Use classfication method devised by me ("W")
+#  85.984 s
 CNV.seqz.tally.W <- sig_tally(CNV.seqz, method = "W", cores = ncores, feature_setting = CN.features)
 save(CNV.seqz.tally.W, file = "output/CNV.seqz.tally.W.RData")
 

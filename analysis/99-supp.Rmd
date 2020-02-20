@@ -30,3 +30,212 @@ opts_chunk$set(
 )
 opts_knit$set(width = 75)
 ```
+
+This part shows some supplementary analyses and descriptions.
+
+## FACETS results
+
+We used 2 methods (Sequenza and FACETS) for copy number calling.
+However, only Sequenza was used for previous downstream analyses due to
+the fact that FACETS generated some unreasonable copy number profile for a few samples.
+We will talk it here.
+
+Let's load the packages and signature data from FACETS and Sequenza.
+
+```{r}
+library(sigminer)
+library(ggplot2)
+
+load("../output/Sig.CNV.facets.W.RData")
+load("../output/Sig.CNV.seqz.W.RData")
+load("../output/EST.facets.W.all.RData")
+```
+
+According to the estimation of signature number, 6 signatures were extracted.
+
+```{r, fig.height=3, fig.width=4}
+p <- show_sig_number_survey(EST.facets.W.all, right_y = NULL)
+add_h_arrow(p, x = 6.2, y = 0.986, seg_len = 0.5, space = 0.2)
+```
+
+The result signatures are shown as the below.
+
+```{r fig.width=12, fig.height=7}
+show_sig_profile(Sig.CNV.facets.W, style = "cosmic", method = "W", normalize = "feature") +
+  labs(caption = "Signatures from FACETS")
+```
+
+FACETS result has one special and extra signature (**Sig1**) when compared to [Sequenza result](#copy-number-signature-profile).
+The **Sig1** shows copy number segments with high percentage of component "copy number value = 0".
+
+> Other signatures are not identical but very similar in most features beteween FACETS and Sequenza results.
+
+
+We check some samples with **Sig1** enriched.
+
+
+```{r, message=TRUE}
+cn_groups = get_groups(Sig.CNV.facets.W, method = "consensus", match_consensus = TRUE)
+cn_expo = get_sig_exposure(Sig.CNV.facets.W, type = "relative")
+# Focus on Sig1
+df = dplyr::left_join(cn_groups, cn_expo)
+load("../output/CNV.facets.RData")
+```
+
+```{r, message=TRUE, fig.height=6, fig.width=14}
+samps_to_show <- df %>%
+  dplyr::filter(enrich_sig == "Sig1") %>%
+  dplyr::arrange(dplyr::desc(Sig1)) %>%
+  dplyr::slice(1:6) %>%
+  dplyr::pull(sample)
+
+samps_to_show
+
+show_cn_profile(
+  data = CNV.facets, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
+  samples = samps_to_show
+)
+```
+
+We can observe that the samples with **Sig1** enriched have many homozygous deletions, this is unreasonable.
+I made a communication with the author of FACETS ([issue link](https://github.com/mskcc/facets/issues/147)),
+
+>  So only logical explanation is homozygous deletion. However they are too many of them and so I believe this is assay artifact rather than real.
+
+This problem seems to come from the raw data. However, we checked the data and this signature cannot be found
+from the result of Sequenza.
+
+To summary, we used result from Sequenza instead of FACETS for downstream analyses because we found there 
+may be some unknown method problems in FACETS (in general, this method is still reliable).
+
+## Method comparison between Macintyre et al and our study
+
+In section ["Tally variation records"](#tally-variation-records), I said that our method (defined as "Wang" or "W")
+has some advantages over the method used in Macintyre et al (defined as "Macintyre" or "M").
+
+I will talk the details here.
+
+Firsty let's load the results from "M" method (the code to generate the data can be found [here](https://github.com/ShixiangWang/prad_signature/blob/master/analysis/src/02-identify-copynumber-signatures.R)).
+
+```{r}
+load("../output/Sig.CNV.seqz.M.RData")
+load("../output/EST.seqz.M.RData")
+load("../output/CNV.seqz.tally.M.RData")
+```
+
+### Sample-by-component matrix generation
+
+The key difference between method "W" and method "M" is the way to generate the sample-by-component matrix.
+
+- Method "W" defines the components and counts them (details see section ["Tally variation records"](#tally-variation-records)).
+- Method "M" applies mixture modeling to separate the 6 copy number features distributions into mixtures of Poisson or Gaussian distributions. 
+
+Here we found that method "M" has the following drawbacks:
+
+1. the computation needs huge computing resources. For generating the matrix used for NMF algorithm, it
+takes about 5100s (~1.5h) with 20 cores for method "M" while only 86s (~1.5m) with 20 cores for method "W".
+2. the number of component is dependent on the raw data. If we change the sample size or apply the method "M"
+to another cohort, the number of component may change. Method "W" will not be affected by this because it uses a
+fixed number of component.
+3. the distribution parameters for each distribution are not identical for different runs.
+Even for the same data, the result distributions and sample-by-component matrix may change.
+
+At the start of this study, I used the method "M" for all analyses. 
+Finally, we created method "W" based on the
+use and rethinking of method "M" and SBS signature extraction method from previous reports.
+
+Next section, I will talk more problems raised by method "M" from the visualization view.
+
+### Copy number signatures from "M" method
+
+
+We still use the cophenetic plot for deciding on the signature number.
+
+```{r, fig.height=3, fig.width=4}
+p = show_sig_number_survey(EST.seqz.M, right_y = NULL)
+add_h_arrow(p, x = 4.2, y = 0.991, seg_len = 0.5, space = 0.2)
+```
+
+We selected 4 signatures. Let's see their signature profile.
+
+
+```{r}
+show_sig_profile(Sig.CNV.seqz.M, normalize = "column", style = "cosmic", 
+                 paint_axis_text = FALSE)
+```
+
+This is a bar plot similar to the one reported by Macintyre et al.
+
+This plot raises some issues.
+
+#### Issue 1
+
+The matrix used to generate the plot is column normalized, so **the heights of bar cannot be compared with each other**.
+
+For example, firstly we see the **Sig1**, we may conclude that **component "bp10MB2" has more contributions than component "bp10MB1"**. But if we see the raw matrix, we can see that this is wrong!
+
+We cannot compare two or more componets in a row when we normalize the data by column! The plot above may misguide the readers.
+For the plot above, we can only compare the same component across all signatures. For example,
+we can conclude that **Sig4** captures the majority of component **"segsize12"** and **"segsize11"**. 
+
+
+```{r}
+show_sig_profile(Sig.CNV.seqz.M, normalize = "raw", style = "cosmic", 
+                 paint_axis_text = FALSE)
+```
+
+To avoid misguiding readers, gradient colors may work. Also, we must tell readers in text that
+we should compare one component in a column insteads two or more componets in a row.
+
+```{r}
+show_sig_profile(Sig.CNV.seqz.M, normalize = "column", style = "cosmic", 
+                 paint_axis_text = FALSE, set_gradient_color = TRUE)
+```
+
+#### Issue 2
+
+From plot above, we can only see different components, but we cannot see the meaning of each component.
+For method "M", each component represents a distribution. 
+
+For example, what's the meaning of the component "copynumber2"? To fix this issue, we tried adding
+the key parameter value in the plot.
+
+
+```{r}
+show_sig_profile(Sig.CNV.seqz.M, normalize = "column", style = "cosmic", 
+                 paint_axis_text = FALSE, set_gradient_color = TRUE, 
+                 params = CNV.seqz.tally.M$parameters, y_expand = 1.5)
+```
+
+According to the text just added, we can see that component "copynumber2" represents a Gaussian
+distribution with mean is 2; component "copynumber1" represents a Gaussian
+distribution with mean is 0.84. 
+
+#### Issue 3
+
+Even with the plot above, we cannot know the dispersion of each component.
+All distributions with weight for each copy number feature can be viewed as the below.
+
+```{r}
+show_cn_components(CNV.seqz.tally.M$parameters, show_weights = TRUE)
+```
+
+### Why we created method "W"
+
+Here, I want to talk something more.
+
+If we take case of all available values for each features, we would notice that there are only
+limited choices. Let's visualize them.
+
+```{r}
+load("../output/CNV.seqz.tally.W.RData")
+```
+
+```{r, fig.width=6, fig.height=4}
+show_cn_features(CNV.seqz.tally.W$features[1:6], method = "W", log_y = TRUE)
+```
+
+Naturally we can divide them into categories and get a fixed number of components.
+It would be easy to read, understand and compare.
+Look back this part, why we choose a complicated method with many drawbacks instead of a simple one?
+

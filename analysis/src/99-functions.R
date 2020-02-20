@@ -139,6 +139,49 @@ extract_seqz_cnv <- function(target_dir, target_path) {
   readr::write_tsv(res, path = target_path)
 }
 
+
+# FUN: transform sequenza data to GISTIC2 input format --------------------
+
+
+seqz_to_GISTIC2 <- function(target_dir, target_path, rm_X = TRUE, rm_samps = NULL) {
+  SAMPLE <- dir(target_dir, pattern = "_segments.txt") %>%
+    stringr::str_remove("_segments.txt")
+  res <- purrr::map2_df(file.path(
+    target_dir,
+    paste(SAMPLE,
+          "_segments.txt",
+          sep = ""
+    )
+  ), SAMPLE, function(x, y) {
+    message("Processing ", y)
+    df <- readr::read_tsv(x, col_types = readr::cols())
+    df <- df %>%
+      dplyr::select(chromosome, start.pos, end.pos, N.BAF, CNt) %>%
+      dplyr::mutate(sample = y)
+    colnames(df) <- c("chrom", "loc.start", "loc.end", "num.mark", "seg.mean", "ID")
+    df
+  })
+
+  seqz_CNV <- res %>% dplyr::select(ID, dplyr::everything())
+  seqz_CNV$seg.mean <- ifelse(seqz_CNV$seg.mean != 0,
+                              log2(seqz_CNV$seg.mean) - 1, -11
+  ) # set a default minimum seg.mean for which copy number equals 0
+  # -11 comes from PRAD 1000 study minumum seg.mean
+
+  # Remove chr23 (chrX) due to patients are male
+  # 1 copy will be treated as deletions
+  if (rm_X) {
+    seqz_CNV <- subset(seqz_CNV, chrom != 23)
+  }
+
+  if (!is.null(rm_samps)) {
+    seqz_CNV <- subset(seqz_CNV, !ID %in% rm_samps)
+  }
+
+  write.table(seqz_CNV, target_path, sep = "\t", quote = FALSE, row.names = F)
+}
+
+
 # FUN: extract purity and ploidy from Sequenza results ---------------------
 
 extract_seqz_purity_and_ploidy <- function(target_dir, target_path) {
@@ -162,6 +205,7 @@ extract_seqz_purity_and_ploidy <- function(target_dir, target_path) {
   })
   readr::write_tsv(res, path = target_path)
 }
+
 
 # FUN: open directory ---------------------
 # from rvcheck package

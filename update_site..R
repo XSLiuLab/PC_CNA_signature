@@ -13,9 +13,9 @@ if (!dir.exists("analysis")) {
   ## FILE PATH
   index_html = "analysis/index.html"
   index_files = "analysis/index_files"
-  fig_files = c("analysis/fig/", "analysis/corrr_network.pdf")
+  fig_files = c("analysis/fig/")#, "analysis/corrr_network.pdf")
 
   file.copy(c(index_html, index_files, fig_files), to = output_dir, recursive = TRUE)
   #file.remove(index_html)
-  unlink(x = c(index_html, index_files), recursive = TRUE)
+  unlink(x = c(index_html, index_files, "analysis/index_cache"), recursive = TRUE)
 }

@@ -32,6 +32,9 @@ opts_chunk$set(
 opts_knit$set(width = 75)
 ```
 
+This part has been divided into four parts to show the differences across sample groups defined by signature exposure.
+It provides insight into the heterogeneity of prostate cancers and relative importance of two types of genomic variation signatures.
+
 
 Load packages.
 
@@ -158,6 +161,59 @@ show_group_mapping(df.map,
                    col_to_flow = "Sample type", 
                    cols_to_map = setdiff(colnames(df.map), "Sample type"),
                    fill_na = "NA", include_sig = TRUE)
+```
+
+## Grouped signature exposure profile
+
+We have showed the exposure profiles, here we add group annotation to them.
+
+```{r}
+load("../output/Sig.PRAD_TCGA_plus_dbGap_Maf.RData")
+load("../output/Sig.CNV.seqz.W.RData")
+```
+
+### Copy number signatures
+
+```{r}
+map_df = df.seqz %>% 
+  dplyr::select(cnv_enrich_sig, CNV_ID) %>% 
+  dplyr::filter(!is.na(CNV_ID))
+
+groups = map_df$cnv_enrich_sig
+names(groups) = map_df$CNV_ID
+
+show_sig_exposure(Sig.CNV.seqz.W,
+                  groups = groups, 
+                  #grp_order = , 
+                  rm_space = TRUE, 
+                  style = "cosmic",
+                  rm_grid_line = FALSE,
+                  rm_panel_border = TRUE,
+                  grp_size = 7)
+```
+
+### SBS signatures
+
+```{r}
+map_df = df.seqz %>% 
+  dplyr::select(tumor_Run, snv_enrich_sig) %>% 
+  dplyr::filter(!is.na(tumor_Run))
+
+groups = map_df$snv_enrich_sig
+names(groups) = map_df$tumor_Run
+
+Sig.SNV2 = Sig.SNV
+
+TCGA_INDEX = startsWith(colnames(Sig.SNV2$Exposure), "TCGA")
+colnames(Sig.SNV2$Exposure)[TCGA_INDEX] = substr(colnames(Sig.SNV2$Exposure)[TCGA_INDEX], 1, 15)
+
+show_sig_exposure(Sig.SNV2,
+                  groups = groups,
+                  cutoff = 2000,
+                  rm_space = TRUE, 
+                  style = "cosmic",
+                  rm_grid_line = FALSE,
+                  rm_panel_border = TRUE)
 ```
 
 ## Copy number profile of different groups
@@ -289,5 +345,16 @@ samps_to_show
 show_cn_profile(
   data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
   samples = samps_to_show
+)
+```
+
+### Selected cases
+
+Select one sample for one case above.
+
+```{r fig.height=12, fig.width=7}
+show_cn_profile(
+  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 6, ncol = 1, show_title = T,
+  samples = c("5115056-SRR8311885", "5115615-SRR8311749", "TCGA-KK-A7B4-01", "TCGA-KK-A59X-01", "TCGA-KC-A7FE-01", "1115265-SRR8304838")
 )
 ```

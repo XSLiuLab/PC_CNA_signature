@@ -30,3 +30,158 @@ opts_chunk$set(
 )
 opts_knit$set(width = 75)
 ```
+
+This part discribes some big pictures of genomic variations in prostate cancers.
+They are not directly related to the core analyses previously reported.
+
+```{r}
+library(sigminer)
+library(maftools)
+
+load("../output/CNV.seqz.RData")
+load("../output/CNV.seqz.tally.W.RData")
+load("../output/PRAD_TCGA_plus_dbGap_Maf.RData")
+```
+
+
+## Oncoplot
+
+A simple oncoplot.
+
+```{r}
+oncoplot(maf = Maf, top = 10)
+```
+
+> Refernce Maftools vignette: <http://bioconductor.org/packages/release/bioc/vignettes/maftools/inst/doc/oncoplots.html>
+
+To get a comprehensive and meaningful oncoplot (not affected by passagers), here we include
+GISTIC2, MutSig and MAF information together.
+
+Before plotting, I will go to modify a result file from GISTIC2, this file uses a different sample ID
+system as MAF, so we must keep them same.
+
+```{r, eval=FALSE}
+all.lesions <- "../data/all_lesions.conf_99.txt"
+dt = data.table::fread(all.lesions)
+dt_names = colnames(dt)
+
+dt_names2 = dt_names
+dt_names = ifelse(
+  stringr::str_detect(dt_names, "SRR"),
+  stringr::str_extract(dt_names, "SRR[0-9]+$"),
+  dt_names
+)
+names(dt_names) = dt_names2
+
+maf_names = maftools::getSampleSummary(Maf)$Tumor_Sample_Barcode %>% as.character()
+tcga_names = maf_names[startsWith(maf_names, "TCGA")]
+names(tcga_names) = substr(tcga_names, 1, 15)
+
+dt_names[startsWith(dt_names, "TCGA")] = tcga_names[dt_names[startsWith(dt_names, "TCGA")]]
+dt_names[is.na(dt_names)] = names(dt_names[is.na(dt_names)])
+
+
+colnames(dt) = dt_names %>% as.character()
+data.table::fwrite(dt, file = "../data/all_lesions.conf_99_v2.txt", sep = "\t")
+```
+
+
+
+```{r}
+# GISTIC2 data
+all.lesions <- "../data/all_lesions.conf_99_v2.txt"
+amp.genes <- "../data/amp_genes.conf_99.txt"
+del.genes <- "../data/del_genes.conf_99.txt"
+scores.gis <- "../data/scores.gistic"
+
+# MutSig2CV data
+mutsig <- "../data/PRAD.sig_genes.txt"
+
+maf_plus_gistic <- read.maf(
+  maf = rbind(Maf@data, Maf@maf.silent),
+  gisticAllLesionsFile = all.lesions,
+  gisticAmpGenesFile = amp.genes, gisticDelGenesFile = del.genes,
+  gisticScoresFile = scores.gis, isTCGA = FALSE, verbose = FALSE
+)
+
+```
+
+```{r, fig.height=12, fig.width=8}
+oncoplot(maf_plus_gistic,
+  mutsig = mutsig, mutsigQval = 0.05, sortByMutation = TRUE,
+  logColBar = TRUE, sepwd_samples = 0, draw_titv = TRUE
+)
+```
+
+
+Remove GISTIC2 data from oncoplot.
+
+```{r, fig.height=12, fig.width=8}
+oncoplot(Maf,
+  mutsig = mutsig, mutsigQval = 0.05, sortByMutation = TRUE,
+  logColBar = TRUE, sepwd_samples = 0, draw_titv = TRUE
+)
+```
+
+## Summary plots
+
+### SBS
+
+
+```{r}
+library(maftools)
+```
+
+#### MAF summary
+
+```{r}
+plotmafSummary(maf = Maf, rmOutlier = TRUE, addStat = 'median', dashboard = TRUE, titvRaw = FALSE, log_scale = TRUE)
+```
+
+#### Transition and Transversions
+
+```{r}
+maf.titv = titv(maf = Maf, plot = FALSE, useSyn = TRUE)
+#plot titv summary
+plotTiTv(res = maf.titv)
+```
+
+#### Somatic Interactions
+
+```{r}
+somaticInteractions(maf = Maf, top = 25, pvalue = c(0.05, 0.1))
+```
+
+
+### Copy number
+
+#### Copy number segment distribution
+
+
+```{r}
+show_cn_distribution(CNV.seqz, mode = "ld")
+```
+
+```{r}
+show_cn_distribution(CNV.seqz, mode = "cd")
+```
+
+#### Feature distribution
+
+```{r, fig.width=10, fig.height=6}
+show_cn_features(CNV.seqz.tally.W$features, method = "W", log_y = TRUE)
+```
+
+#### Component distribution
+
+```{r, fig.width=10, fig.height=6}
+show_cn_components(CNV.seqz.tally.W$parameters, method = "W", log_y = TRUE)
+```
+
+Data details can be viewed as a table:
+
+```{r}
+DT::datatable(CNV.seqz.tally.W$parameters)
+```
+
+> `n_obs` column indicates the number of event of corresponding copy number component.
