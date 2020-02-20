@@ -296,7 +296,7 @@ The result `bam` files were then used for copy number calling and mutation calli
 
 Somatic mutations were detected by following GATK best practice with Mutect2 [@van2013fastq]. 
 
-#### 8.1call somatic short variants and indel
+#### 8.1 call somatic short variants and indel
 
 ```bash
 #PBS -N call-<sample>
