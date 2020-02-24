@@ -149,10 +149,11 @@ load(file = "output/CNV.facets.tally.M.ref.seqz.RData")
 
 
 Sig.CNV.seqz.W <- sig_extract(CNV.seqz.tally.W$nmf_matrix, n_sig = 5, nrun = 50, cores = ncores)
-Sig.CNV.facets.W <- sig_extract(CNV.facets.tally.W$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores, pConstant = 1e-9)
-Sig.CNV.seqz.M <- sig_extract(CNV.seqz.tally.M$nmf_matrix, n_sig = 4, nrun = 50, cores = ncores)
-Sig.CNV.facets.M <- sig_extract(CNV.facets.tally.M$nmf_matrix, n_sig = 6, nrun = 50, cores = ncores)
-Sig.CNV.facets.M.ref.seqz <- sig_extract(CNV.facets.tally.M.ref.seqz$nmf_matrix, n_sig = 4, nrun = 50, cores = ncores)
+## Keep in line with 5 signatures
+Sig.CNV.facets.W <- sig_extract(CNV.facets.tally.W$nmf_matrix, n_sig = 5, nrun = 50, cores = ncores, pConstant = 1e-9)
+Sig.CNV.seqz.M <- sig_extract(CNV.seqz.tally.M$nmf_matrix, n_sig = 5, nrun = 50, cores = ncores)
+Sig.CNV.facets.M <- sig_extract(CNV.facets.tally.M$nmf_matrix, n_sig = 5, nrun = 50, cores = ncores)
+Sig.CNV.facets.M.ref.seqz <- sig_extract(CNV.facets.tally.M.ref.seqz$nmf_matrix, n_sig = 5, nrun = 50, cores = ncores)
 
 save(Sig.CNV.seqz.W, file = "output/Sig.CNV.seqz.W.RData")
 save(Sig.CNV.facets.W, file = "output/Sig.CNV.facets.W.RData")
