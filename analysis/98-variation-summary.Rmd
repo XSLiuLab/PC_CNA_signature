@@ -123,10 +123,49 @@ oncoplot(Maf,
 )
 ```
 
+## Sample summary
+
+Here we summarize variations for each sample with table.
+
+
+### Copy number data
+
+
+```{r}
+DT::datatable(CNV.seqz@summary.per.sample)
+```
+
+```{r}
+library(dplyr)
+
+tb_cnv = CNV.seqz@summary.per.sample %>%
+ dplyr::select(-sample) %>%
+ psych::describe(quant=c(.25,.75)) %>% 
+ as_tibble(rownames="rowname")   
+
+DT::datatable(tb_cnv)
+```
+
+### MAF data
+
+```{r}
+DT::datatable(Maf@variant.type.summary)
+```
+
+```{r}
+library(dplyr)
+
+tb_maf = Maf@variant.type.summary %>%
+ dplyr::select(-Tumor_Sample_Barcode) %>%
+ psych::describe(quant=c(.25,.75)) %>% 
+ as_tibble(rownames="rowname")   
+
+DT::datatable(tb_cnv)
+```
+
 ## Summary plots
 
-### SBS
-
+### MAF
 
 ```{r}
 library(maftools)
@@ -157,10 +196,27 @@ somaticInteractions(maf = Maf, top = 25, pvalue = c(0.05, 0.1))
 
 #### Copy number segment distribution
 
+The distribution can be viewed as a histgram of segment length.
 
 ```{r}
 show_cn_distribution(CNV.seqz, mode = "ld")
 ```
+
+Length summary is:
+
+```{r}
+summary(CNV.seqz@annotation$fraction)
+```
+
+If we treat SCNA with length > 0.7 as chromosome arm level or whole chromosome level alterations.
+
+The fraction is:
+
+```{r}
+print(nrow(CNV.seqz@annotation[fraction > 0.7]) / nrow(CNV.seqz@annotation))
+```
+
+The distribution can also be viewed from the alteration load across chromosomes.
 
 ```{r}
 show_cn_distribution(CNV.seqz, mode = "cd")

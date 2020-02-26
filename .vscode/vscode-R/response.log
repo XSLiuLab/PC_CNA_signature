@@ -1,0 +1,10 @@
+{"time":"2020-02-26 13:16:11","pid":1203,"command":"attach","tempdir":"/home/wsx/tmp/RtmpH5qQPC"} 
+{"time":"2020-02-26 13:29:55","pid":8748,"command":"attach","tempdir":"/home/wsx/tmp/Rtmpti8sW3"} 
+{"time":"2020-02-26 13:36:16","pid":11586,"command":"attach","tempdir":"/home/wsx/tmp/RtmpFG1hHy"} 
+{"time":"2020-02-26 13:47:34","pid":16622,"command":"attach","tempdir":"/home/wsx/tmp/RtmpCMKXxu"} 
+{"time":"2020-02-26 14:15:15","pid":31731,"command":"attach","tempdir":"/home/wsx/tmp/RtmpxhSfHK"} 
+{"time":"2020-02-26 17:23:37","pid":8273,"command":"attach","tempdir":"/home/wsx/tmp/RtmpE0JGDD"} 
+{"time":"2020-02-26 17:55:31","pid":8273,"command":"webview","file":"/home/wsx/tmp/RtmpE0JGDD/viewhtml205151a1fc89/index.html","height":{},"viewColumn":"Two"} 
+{"time":"2020-02-26 17:56:07","pid":8273,"command":"webview","file":"/home/wsx/tmp/RtmpE0JGDD/viewhtml205143be9adc/index.html","height":{},"viewColumn":"Two"} 
+{"time":"2020-02-26 18:09:48","pid":8273,"command":"browser","url":"http://127.0.0.1:18215/library/psych/html/describe.html"} 
+{"time":"2020-02-26 18:09:56","pid":8273,"command":"browser","url":"http://127.0.0.1:18215/library/psych/html/describe.html"} 

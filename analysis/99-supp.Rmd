@@ -148,15 +148,7 @@ Next section, I will talk more problems raised by method "M" from the visualizat
 
 ### Copy number signatures from "M" method
 
-
-We still use the cophenetic plot for deciding on the signature number.
-
-```{r, fig.height=3, fig.width=4}
-p = show_sig_number_survey(EST.seqz.M, right_y = NULL)
-add_h_arrow(p, x = 4.2, y = 0.991, seg_len = 0.5, space = 0.2)
-```
-
-We selected 4 signatures. Let's see their signature profile.
+We extracted 5 signatures like method "W". Let's see their signature profile.
 
 
 ```{r}
@@ -172,11 +164,11 @@ This plot raises some issues.
 
 The matrix used to generate the plot is column normalized, so **the heights of bar cannot be compared with each other**.
 
-For example, firstly we see the **Sig1**, we may conclude that **component "bp10MB2" has more contributions than component "bp10MB1"**. But if we see the raw matrix, we can see that this is wrong!
+For example, firstly we see the **Sig3**, we may conclude that **component "bp10MB2" has more contributions than component "bp10MB1"**. But if we see the raw matrix, we can see that this is wrong!
 
 We cannot compare two or more componets in a row when we normalize the data by column! The plot above may misguide the readers.
 For the plot above, we can only compare the same component across all signatures. For example,
-we can conclude that **Sig4** captures the majority of component **"segsize12"** and **"segsize11"**. 
+we can conclude that **Sig5** captures the majority of component **"segsize12"** and **"segsize11"**. 
 
 
 ```{r}
