@@ -160,7 +160,7 @@ tb_maf = Maf@variant.type.summary %>%
  psych::describe(quant=c(.25,.75)) %>% 
  as_tibble(rownames="rowname")   
 
-DT::datatable(tb_cnv)
+DT::datatable(tb_maf)
 ```
 
 ## Summary plots
@@ -213,7 +213,7 @@ If we treat SCNA with length > 0.7 as chromosome arm level or whole chromosome l
 The fraction is:
 
 ```{r}
-print(nrow(CNV.seqz@annotation[fraction > 0.7]) / nrow(CNV.seqz@annotation))
+print(nrow(CNV.seqz@annotation[fraction > 0.7 & segVal != 2]) / nrow(CNV.seqz@annotation[segVal != 2]))
 ```
 
 The distribution can also be viewed from the alteration load across chromosomes.

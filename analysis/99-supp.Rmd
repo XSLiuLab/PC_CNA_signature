@@ -231,3 +231,72 @@ Naturally we can divide them into categories and get a fixed number of component
 It would be easy to read, understand and compare.
 Look back this part, why we choose a complicated method with many drawbacks instead of a simple one?
 
+
+## Some validation analysis in other datasets
+
+We selected 2 PC datasets with copy number segmentation data from cBioPortal:
+
+- http://www.cbioportal.org/study/summary?id=prad_su2c_2019 (Metastatic tumors)
+- http://www.cbioportal.org/study/summary?id=prad_mskcc_2020 (Primary and metastatic tumors)
+
+
+The segmentation data were converted into absolute copy number data by ABSOLUTE method [@carter2012absolute] with [DoAbsolute](https://github.com/ShixiangWang/DoAbsolute). Signatures were extracted with "W" method.
+
+```{r}
+library(sigminer)
+load("../output/Sig.CNV.su2c.RData")
+load("../output/Sig.CNV.mskcc.RData")
+```
+
+### Profile
+
+```{r, fig.width=12, fig.height=7}
+show_sig_profile(Sig.CNV.su2c, style = "cosmic", method = "W", normalize = "feature")
+```
+
+```{r, fig.width=12, fig.height=7}
+show_sig_profile(Sig.CNV.mskcc, style = "cosmic", method = "W", normalize = "feature")
+```
+
+### Exposure
+
+```{r}
+show_sig_exposure(Sig.CNV.su2c, rm_space = TRUE, style = "cosmic")
+```
+
+```{r}
+show_sig_exposure(Sig.CNV.mskcc, rm_space = TRUE, style = "cosmic")
+```
+
+### Similarity matrix
+
+Here show results of similarity calculation signatures.
+
+```{r}
+load("../output/Sig.CNV.seqz.W.RData")
+```
+
+
+```{r}
+## Use major result as reference
+## BoChr feature is removed because it is variable in profile
+## and affect the judgement
+sim_su2c = get_sig_similarity(Sig.CNV.su2c, Sig.CNV.seqz.W, normalize = "feature", pattern_to_rm = "BoChr")
+sim_mskcc = get_sig_similarity(Sig.CNV.mskcc, Sig.CNV.seqz.W, normalize = "feature",  pattern_to_rm = "BoChr")
+
+rownames(sim_su2c$similarity) = paste(rownames(sim_su2c$similarity), "(SU2C)")
+rownames(sim_mskcc$similarity) = paste(rownames(sim_mskcc$similarity), "(MSKCC)")
+```
+
+
+```{r}
+pheatmap::pheatmap(sim_su2c$similarity, cluster_cols = F, cluster_rows = F, display_numbers = TRUE)
+```
+
+
+```{r}
+pheatmap::pheatmap(sim_mskcc$similarity, cluster_cols = F, cluster_rows = F, display_numbers = TRUE)
+```
+
+There are some confusions here, we need further visual inspection to correctly understand the
+meaning of signatures.
