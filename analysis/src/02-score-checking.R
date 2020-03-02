@@ -4,8 +4,8 @@ score_df = scoring(CNV.seqz)
 score_df
 
 ## check
-pdf("score_density_checking.pdf", width = 10)
-layout(matrix(1:12, nrow=3, ncol=4, byrow = TRUE))
+pdf("score_density_checking.pdf", width = 7, height = 6)
+layout(matrix(1:9, nrow=3, ncol=3, byrow = TRUE))
 plot(score_df$TDP, score_df$TD,
      xlab = "TDP score (method from PNAS)",
      ylab = "TD score (my definition)",
@@ -19,9 +19,9 @@ plot(density(score_df$TD, na.rm = T), main = "TD score")
 plot(density(score_df$sTD, na.rm = T), main = "short TD score")
 plot(density(score_df$lTD, na.rm = T), main = "long TD score")
 plot(density(score_df$cnaBurden, na.rm = T), main = "CNA burden score")
-plot(density(score_df$cnaLoad, na.rm = T), main = "CNA load score")
-plot(density(score_df$MACN, na.rm = T), main = "MACN score")
-plot(density(score_df$weightedMACN, na.rm = T), main = "Weighted MACN score")
+# plot(density(score_df$cnaLoad, na.rm = T), main = "CNA load score")
+# plot(density(score_df$MACN, na.rm = T), main = "MACN score")
+# plot(density(score_df$weightedMACN, na.rm = T), main = "Weighted MACN score")
 plot(density(score_df$Ploidy, na.rm = T), main = " ploidy score")
 plot(density(log2(score_df$Chromothripisis), na.rm = T), "log2 Chromothripisis score")
 dev.off()
@@ -42,19 +42,19 @@ plot_circos = function(object, data, col, text = "", decreasing = TRUE,
 }
 
 
-pdf("score_circos_heatmap.pdf", width = 10, height = 14)
-layout(matrix(1:20, nrow=5, ncol=4, byrow = TRUE))
+pdf("score_circos_heatmap.pdf", width = 10, height = 11)
+layout(matrix(1:16, nrow=4, ncol=4, byrow = TRUE))
 plot_circos(CNV.seqz, score_df, col = "cnaBurden", text = "CNA burden",
             color = circlize::colorRamp2(c(1, 2, 6), c("blue", "white", "red")))
 plot_circos(CNV.seqz, score_df, col = "cnaBurden", text = "CNA burden", decreasing = FALSE)
-plot_circos(CNV.seqz, score_df, col = "cnaLoad", text = "CNA load")
-plot_circos(CNV.seqz, score_df, col = "cnaLoad", text = "CNA load", decreasing = FALSE)
+plot_circos(CNV.seqz, score_df, col = "cnaLoad", text = "CNA number")
+plot_circos(CNV.seqz, score_df, col = "cnaLoad", text = "CNA number", decreasing = FALSE)
 
-cor(score_df$MACN, score_df$weightedMACN, use = "pairwise.complete.obs")
-plot_circos(CNV.seqz, score_df, col = "MACN", text = "MACN")
-plot_circos(CNV.seqz, score_df, col = "MACN", text = "MACN", decreasing = FALSE)
-plot_circos(CNV.seqz, score_df, col = "weightedMACN", text = "Weighted MACN")
-plot_circos(CNV.seqz, score_df, col = "weightedMACN", text = "Weighted MACN", decreasing = FALSE)
+# cor(score_df$MACN, score_df$weightedMACN, use = "pairwise.complete.obs")
+# plot_circos(CNV.seqz, score_df, col = "MACN", text = "MACN")
+# plot_circos(CNV.seqz, score_df, col = "MACN", text = "MACN", decreasing = FALSE)
+# plot_circos(CNV.seqz, score_df, col = "weightedMACN", text = "Weighted MACN")
+# plot_circos(CNV.seqz, score_df, col = "weightedMACN", text = "Weighted MACN", decreasing = FALSE)
 
 plot_circos(CNV.seqz, score_df, col = "Ploidy", text = "Ploidy",
             color = circlize::colorRamp2(c(1, 2, 6), c("blue", "white", "red")))
