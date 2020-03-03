@@ -6,7 +6,7 @@ library(maftools)
 # Loading clinical related data -------------------------------------------
 
 Info <- readRDS("data/PRAD_CLINICAL.rds")
-# Purity and ploidy info from sequenza
+# Purity and ploidy info from facets
 PurityInfo <- read_tsv("data/PRAD_Purity_and_Ploidy_CVAL150.tsv")
 
 # Processing CNV data -----------------------------------------------------

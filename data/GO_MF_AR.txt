@@ -1,0 +1,50 @@
+MGI Gene/Marker ID	Symbol	Name	Chr	Qualifier	Annotated Term	Context	Proteoform	Evidence	Inferred From	Reference(s)
+MGI:88064	Ar	androgen receptor	X		activation of prostate induction by androgen receptor signaling pathway	happens in prostate gland		IMP	MGI:3716756 	J:122327 	
+MGI:88064	Ar	androgen receptor	X		androgen receptor signaling pathway			IDA		J:91599 J:96238 J:240274 	
+MGI:88064	Ar	androgen receptor	X		androgen receptor signaling pathway			ISO	RGD:2147 	J:155856 	
+MGI:88064	Ar	androgen receptor	X		androgen receptor signaling pathway			ISO	P10275 	J:164563 	
+MGI:1935147	Arid1a	AT rich interactive domain 1A (SWI-like)	4		androgen receptor signaling pathway			ISO	O14497 	J:164563 	
+MGI:99474	Arrb2	arrestin, beta 2	11		regulation of androgen receptor signaling pathway			ISO	P32121 	J:164563 	
+MGI:109175	Dab2	disabled 2, mitogen-responsive phosphoprotein	15		negative regulation of androgen receptor signaling pathway			ISO	P98082 	J:164563 	
+MGI:1197015	Daxx	Fas death domain-associated protein	17		androgen receptor signaling pathway			ISO	Q9UER7 	J:164563 	
+MGI:105037	Ddx5	DEAD (Asp-Glu-Ala-Asp) box polypeptide 5	11		androgen receptor signaling pathway			ISO	P17844 	J:164563 	
+MGI:105037	Ddx5	DEAD (Asp-Glu-Ala-Asp) box polypeptide 5	11		regulation of androgen receptor signaling pathway			ISO	P17844 	J:164563 	
+MGI:1914290	Ddx17	DEAD (Asp-Glu-Ala-Asp) box polypeptide 17	15		androgen receptor signaling pathway			ISO	Q92841 	J:164563 	
+MGI:1270129	Dnaja1	DnaJ heat shock protein family (Hsp40) member A1	4		androgen receptor signaling pathway			IMP	MGI:3573790 	J:96238 	
+MGI:1276116	Ep300	E1A binding protein p300	15		regulation of androgen receptor signaling pathway			ISO	Q09472 	J:164563 	
+MGI:109392	Esr2	estrogen receptor 2 (beta)	12		negative regulation of androgen receptor signaling pathway	regulates a function/process that happens in prostate gland epithelium,regulates a function/process that happens in epithelial cell|regulates a function/process that happens in ventral prostate gland,regulates a function/process that happens in epithelial cell		IMP	MGI:2152217 	J:126711 	
+MGI:95543	Fkbp4	FK506 binding protein 4	6		androgen receptor signaling pathway			IMP	MGI:3690438 	J:120960 	
+MGI:1347465	Foxh1	forkhead box H1	15		negative regulation of androgen receptor signaling pathway			ISO	O75593 	J:164563 	
+MGI:108086	Hdac1	histone deacetylase 1	4		negative regulation of androgen receptor signaling pathway			ISO	Q13547 	J:164563 	
+MGI:1860511	Heyl	hairy/enhancer-of-split related with YRPW motif-like	4		negative regulation of androgen receptor signaling pathway			ISO	Q9NQ87 	J:164563 	
+MGI:96432	Igf1	insulin-like growth factor 1	10		negative regulation of androgen receptor signaling pathway	regulates a function/process that happens in prostate gland epithelium,regulates a function/process that happens in epithelial cell		IMP	MGI:2152423 	J:142809 	
+MGI:98847	Kdm3a	lysine (K)-specific demethylase 3A	6		androgen receptor signaling pathway			ISO	Q9Y4C1 	J:164563 	
+MGI:99780	Kdm5d	lysine (K)-specific demethylase 5D	Y		regulation of androgen receptor signaling pathway			ISO	Q9BY66 	J:164563 	
+MGI:1349717	Ncor1	nuclear receptor co-repressor 1	11		negative regulation of androgen receptor signaling pathway			ISO	O75376 	J:164563 	
+MGI:1337080	Ncor2	nuclear receptor co-repressor 2	5		negative regulation of androgen receptor signaling pathway			ISO	Q9Y618 	J:164563 	
+MGI:97352	Nkx3-1	NK3 homeobox 1	14		androgen receptor signaling pathway			ISO	Q99801 	J:164563 	
+MGI:97359	Nodal	nodal	10		negative regulation of androgen receptor signaling pathway			ISO	Q96S42 	J:164563 	
+MGI:2135637	Park7	Parkinson disease (autosomal recessive, early onset) 7	4		regulation of androgen receptor signaling pathway			ISO	Q99497 	J:164563 	
+MGI:97572	Phb	prohibitin	11		negative regulation of androgen receptor signaling pathway			ISO	P35232 	J:164563 	
+MGI:1096566	Pias2	protein inhibitor of activated STAT 2	18		androgen receptor signaling pathway			ISO	RGD:71056 	J:155856 	
+MGI:1096566	Pias2	protein inhibitor of activated STAT 2	18		negative regulation of androgen receptor signaling pathway			ISO	O75928 	J:164563 	
+MGI:1096566	Pias2	protein inhibitor of activated STAT 2	18		regulation of androgen receptor signaling pathway			ISO	Q6AZ28 	J:52591 	
+MGI:1316652	Prmt2	protein arginine N-methyltransferase 2	10		regulation of androgen receptor signaling pathway			ISO	P55345 	J:164563 	
+MGI:1096342	Rhoa	ras homolog family member A	9		androgen receptor signaling pathway			IDA		J:105872 	
+MGI:1921382	Rnf6	ring finger protein (C3H2C3 type) 6	5		regulation of androgen receptor signaling pathway			IBA	PTN000366056 	J:265628 	
+MGI:1921382	Rnf6	ring finger protein (C3H2C3 type) 6	5		regulation of androgen receptor signaling pathway			ISO	Q9Y252 	J:164563 	
+MGI:1929668	Rnf14	ring finger protein 14	18		regulation of androgen receptor signaling pathway			ISO	Q9UBS8 	J:164563 	
+MGI:1913771	Rwdd1	RWD domain containing 1	10		androgen receptor signaling pathway			IMP		J:240274 	
+MGI:2146808	Safb2	scaffold attachment factor B2	17		regulation of androgen receptor signaling pathway			IBA	PTN000750570 	J:265628 	
+MGI:2146808	Safb2	scaffold attachment factor B2	17		regulation of androgen receptor signaling pathway			IDA		J:225512 	
+MGI:2146808	Safb2	scaffold attachment factor B2	17		regulation of androgen receptor signaling pathway	happens in testis		IMP	MGI:5695073 	J:225512 	
+MGI:3780828	Scgb2a2	secretoglobin, family 2A, member 2	19		androgen receptor signaling pathway			IBA	PTN000361706 	J:265628 	
+MGI:892014	Sfrp1	secreted frizzled-related protein 1	8		negative regulation of androgen receptor signaling pathway			ISO	Q8N474 	J:164563 	
+MGI:2135607	Sirt1	sirtuin 1	10		negative regulation of androgen receptor signaling pathway			ISO	Q96EB6 	J:164563 	
+MGI:88192	Smarca4	SWI/SNF related, matrix associated, actin dependent regulator of chromatin, subfamily a, member 4	9		negative regulation of androgen receptor signaling pathway			ISO	P51532 	J:164563 	
+MGI:1202715	Tcf21	transcription factor 21	10		negative regulation of androgen receptor signaling pathway			IDA		J:100397 	
+MGI:2142077	Trim68	tripartite motif-containing 68	7		regulation of androgen receptor signaling pathway			ISO	Q6AZZ1 	J:164563 	
+MGI:105098	Ube3a	ubiquitin protein ligase E3A	7		androgen receptor signaling pathway			IPI	P19091 	J:105872 	
+MGI:1335091	Zbtb7a	zinc finger and BTB domain containing 7a	10		negative regulation of androgen receptor signaling pathway			ISO	O95365 	J:164563 	
+MGI:3040693	Zmiz1	zinc finger, MIZ-type containing 1	14		androgen receptor signaling pathway			ISO	Q9ULJ6 	J:164563 	
+
