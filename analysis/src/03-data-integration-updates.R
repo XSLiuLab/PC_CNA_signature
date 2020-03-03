@@ -297,7 +297,7 @@ PurityInfo
 colnames(CNVGroupInfo) <- c("sample", "cnv_group", "cnv_weight", "cnv_enrich_sig")
 CNVInfo
 
-colnames(CNVExposureInfo) <- c("sample", paste0("CNV-", colnames(CNVExposureInfo)[-1]))
+colnames(CNVExposureInfo) <- c("sample", paste0("CN-", colnames(CNVExposureInfo)[-1]))
 colnames(TMBInfo)[1] <- "sample"
 TMBInfo[, sample := as.character(sample)][, sample := ifelse(startsWith(sample, "TCGA"),
                                                              substr(sample, 1, 15),

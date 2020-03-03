@@ -46,21 +46,22 @@ library(sigminer)
 Load the data.
 
 ```{r}
-df.seqz = readRDS(file = "../output/PRAD_Merge_Info_CNV_from_sequenza.RData")
+df.seqz = readRDS(file = "../output/df.seqz.RDS")
 ```
 
 ## Group comparison
 
 ```{r}
 cols_to_features <- c(
-  "IsMetastatic", "HasFusion", "Stage", "GleasonScore",
+  "IsMetastatic", "Stage", "GleasonScore",
   "Age", 
-  "total_mutation", "INDELs", "n_driver", "Ti_fraction", "Tv_fraction",
-  "n_of_cnv", "n_of_amp", "n_of_del", "n_of_vchr", "cna_burden",
-  "MATH", "cluster", "purity", "ploidy"
+  "n_SNV", "n_driver", "n_INDEL", "Ti_fraction", "Tv_fraction",
+  "cnaBurden", "n_CNV", "n_Amp", "n_Del", "ploidy",
+  "TD score", "sTD score", "lTD score", "Chromothripisis score",
+  "MATH", "n_mutation_cluster", "purity"
 )
 
-feature_type <- c(rep("ca", 4), rep("co", 15))
+feature_type <- c(rep("ca", 3L), rep("co", length(cols_to_features) - 3L))
 ```
 
 ```{r}
@@ -102,8 +103,8 @@ cowplot::plot_grid(plotlist = plot.cnv$ca, align = "hv", ncol = 2)
 ```
 
 
-```{r, fig.width=10, fig.height=12}
-cowplot::plot_grid(plotlist = plot.cnv$co, align = "hv", ncol = 3)
+```{r, fig.width=12, fig.height=12}
+cowplot::plot_grid(plotlist = plot.cnv$co, align = "hv", ncol = 4)
 ```
 
 
@@ -137,13 +138,13 @@ plot.snv <- show_group_comparison(
 )
 ```
 
-```{r, fig.width=9, fig.height=6}
+```{r, fig.width=7, fig.height=6}
 cowplot::plot_grid(plotlist = plot.snv$ca, align = "hv", ncol = 2)
 ```
 
 
-```{r, fig.width=10, fig.height=12}
-cowplot::plot_grid(plotlist = plot.snv$co, align = "hv", ncol = 3)
+```{r, fig.width=12, fig.height=12}
+cowplot::plot_grid(plotlist = plot.snv$co, align = "hv", ncol = 4)
 ```
 
 ## Group mapping
@@ -258,7 +259,7 @@ samps_to_show = df %>%
 samps_to_show
                                                                                                                                                                                                                                
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
+  data = CNV.seqz, nrow = 3, ncol = 2, show_title = T,
   samples = samps_to_show 
 )
 ```
@@ -276,7 +277,7 @@ samps_to_show = df %>%
 samps_to_show
 
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
+  data = CNV.seqz, nrow = 3, ncol = 2, show_title = T,
   samples = samps_to_show
 )
 ```
@@ -292,7 +293,7 @@ samps_to_show = df %>%
 samps_to_show
 
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
+  data = CNV.seqz, nrow = 3, ncol = 2, show_title = T,
   samples = samps_to_show
 )
 ```
@@ -308,7 +309,7 @@ samps_to_show = df %>%
 samps_to_show
 
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
+  data = CNV.seqz, nrow = 3, ncol = 2, show_title = T,
   samples = samps_to_show
 )
 ```
@@ -324,11 +325,12 @@ samps_to_show = df %>%
 samps_to_show
 
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
+  data = CNV.seqz, nrow = 3, ncol = 2, show_title = T,
   samples = samps_to_show
 )
 ```
 
+Sig5 enriched case with alterations.
 
 ```{r fig.height=6, fig.width=14}
 samps_to_show = df %>%
@@ -343,7 +345,7 @@ samps_to_show = df %>%
 samps_to_show
 
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 3, ncol = 2, show_title = T,
+  data = CNV.seqz, nrow = 3, ncol = 2, show_title = T,
   samples = samps_to_show
 )
 ```
@@ -355,6 +357,6 @@ Select one sample for one case above.
 ```{r fig.height=12, fig.width=7}
 show_cn_profile(
   data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 6, ncol = 1, show_title = T,
-  samples = c("5115056-SRR8311885", "5115615-SRR8311749", "TCGA-KK-A7B4-01", "TCGA-KK-A59X-01", "TCGA-KC-A7FE-01", "1115265-SRR8304838")
+  samples = c("5115056-SRR8311885", "5115615-SRR8311749", "TCGA-KK-A7B4-01", "TCGA-KK-A59X-01", "TCGA-KC-A7FE-01")
 )
 ```

@@ -45,7 +45,7 @@ library(ezcox)
 Load the data.
 
 ```{r, eval=FALSE}
-df.seqz = readRDS(file = "../output/PRAD_Merge_Info_CNV_from_sequenza.RData")
+df.seqz = readRDS(file = "../output/df.seqz.RDS")
 surv_df <- readRDS(file = "../data/PRAD_Survival.rds")
 ```
 
@@ -57,7 +57,7 @@ range01 <- function(x, ...) {
   (x - min(x, ...)) / (max(x, ...) - min(x, ...))
 }
 
-cols_to_sigs.seqz <- c(paste0("CN_Sig", 1:5), paste0("SBS_Sig", 1:3))
+cols_to_sigs.seqz <- c(paste0("CN-Sig", 1:5), paste0("SBS-Sig", 1:3))
 
 
 surv_dt <- dplyr::inner_join(df.seqz %>%
@@ -76,7 +76,7 @@ surv_dt = surv_dt[-dup_ids, ]
 #
 # Scale the CNA burden to 0-20.
 surv_dt = surv_dt %>%
-  dplyr::mutate(cna_burden = 20 * cna_burden,
+  dplyr::mutate(cnaBurden = 20 * cnaBurden,
                 Stage = as.character(Stage) %>% factor(levels = c("T2", "T3", "T4"))) %>%
   dplyr::mutate_at(cols_to_sigs.seqz, ~ 20 * range01(., na.rm = TRUE))
 
@@ -88,7 +88,7 @@ saveRDS(surv_dt, file = "../output/PRAD_merged_survival_dt_seqz.rds")
 ```{r}
 ############
 surv_dt <- readRDS(file = "../output/PRAD_merged_survival_dt_seqz.rds")
-cols_to_sigs.seqz <- c(paste0("CN_Sig", 1:5), paste0("SBS_Sig", 1:3))
+cols_to_sigs.seqz <- c(paste0("CN-Sig", 1:5), paste0("SBS-Sig", 1:3))
 
 # Unvariable analysis
 show_forest(surv_dt, covariates = cols_to_sigs.seqz,
@@ -109,9 +109,10 @@ show_forest(surv_dt, covariates = cols_to_sigs.seqz,
 ```{r}
 cols_to_features <- c(
   "Age", "Stage", "GleasonScore",
-  "total_mutation", "INDELs", "n_driver", "Ti_fraction", "Tv_fraction",
-  "n_of_cnv", "n_of_amp", "n_of_del", "n_of_vchr", "cna_burden",
-  "MATH", "cluster", "purity", "ploidy"
+  "n_SNV", "n_driver", "n_INDEL", "Ti_fraction", "Tv_fraction",
+  "cnaBurden", "n_CNV", "n_Amp", "n_Del", "ploidy",
+  "TD score", "sTD score", "lTD score", "Chromothripisis score",
+  "MATH", "n_mutation_cluster", "purity"
 )
 
 show_forest(surv_dt,

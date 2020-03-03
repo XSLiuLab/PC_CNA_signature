@@ -9,6 +9,7 @@ output:
     mathjax: true
     lightbox: true
     gallery: true
+    toc: 3
 # knit: (function(inputFile, encoding) {
 #   rmarkdown::render(inputFile, encoding = encoding, output_dir = "../docs") })
 bibliography: ref.bib
