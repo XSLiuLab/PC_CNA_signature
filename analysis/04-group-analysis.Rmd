@@ -354,7 +354,7 @@ show_cn_profile(
 
 Select one sample for one case above.
 
-```{r fig.height=12, fig.width=7}
+```{r fig.height=10, fig.width=7}
 show_cn_profile(
   data = CNV.seqz, nrow = 6, ncol = 1, show_title = T,
   samples = c("5115056-SRR8311885", "5115615-SRR8311749", "TCGA-KK-A7B4-01", "TCGA-KK-A59X-01", "TCGA-KC-A7FE-01")

@@ -1,0 +1,434 @@
+#Patient Identifier	Chemo Regimen Category	Age at Diagnosis	Prostate-specific antigen	Overall Survival Status	Overall Survival (Months)
+#Identifier to uniquely specify a patient.	Chemo Regimen Category	Age at Diagnosis	Prostate-specific antigen (ng/ml)	Overall patient survival status.	Overall survival in months since initial diagonosis.
+#STRING	STRING	NUMBER	STRING	STRING	NUMBER
+#1	1	1	1	9	9
+PATIENT_ID	CHEMO_REGIMEN_CATEGORY	AGE_AT_DIAGNOSIS	PSA	OS_STATUS	OS_MONTHS
+1115015	abiraterone+Dutasteride	71.0	1252		
+1115016	abiraterone+Dutasteride	83.1	46.21	DECEASED	11.99080158
+1115019	Standard of care abiraterone	54.0	0.8	DECEASED	3.153745072
+1115020	Standard of care enzalutamide	53.7	10.7	DECEASED	8.442838371
+1115021	Standard of care enzalutamide	50.8	878		
+1115082	abiraterone+Dutasteride	61.0			
+1115083	abiraterone+Dutasteride	58.8			
+1115085	abiraterone+Dutasteride	69.1			
+1115087	abiraterone+Dutasteride	61.1			
+1115089	abiraterone+Dutasteride	64.5			
+1115090	abiraterone+Dutasteride	64.1	112.89		
+1115091	abiraterone+Dutasteride	63.8			
+1115092	abiraterone+Dutasteride	69.5			
+1115093	abiraterone+Dutasteride	58.8	299.8	DECEASED	28.8107753
+1115150	Trial 2 abiraterone +/- ARN509 (+ARN509)	67.7	228.75		
+1115153	Enzalutamide with Correlative Assessments	39.6			
+1115154	Standard of care enzalutamide	44.6	8.9		
+1115156	Enzalutamide with Correlative Assessments			DECEASED	29.82917214
+1115157	Enzalutamide with Correlative Assessments		5.5		
+1115161	Enzalutamide with Correlative Assessments	65.0	1000	DECEASED	4.533508541
+1115183	Trial 2 abiraterone +/- ARN509 (+ARN509)		5.7	DECEASED	22.99605782
+1115190	abiraterone+Dutasteride	59.7			
+1115200	Enzalutamide with Correlative Assessments		9.6		
+1115202	Trial 2 abiraterone +/- ARN509 (+ARN509)		15	LIVING	28.31800263
+1115244	Enzalutamide with Correlative Assessments	62.9	1713		
+1115245	Standard of care enzalutamide	58.9	166		
+1115249	Enzalutamide with Correlative Assessments	71.3	183		
+1115257	Enzalutamide with Correlative Assessments	55.9	3118		
+1115263	Abiraterone no steroids	69.0	288	LIVING	16.59001314
+1115264	Abiraterone no steroids	67.1	4.7	DECEASED	26.1826544
+1115265	Enzalutamide with Correlative Assessments	76.3	13.4	DECEASED	14.29040736
+1115284	Enzalutamide with Correlative Assessments	73.0	46	DECEASED	20.56504599
+1115303	abiraterone+Dutasteride	61.7			
+1115304	abiraterone+Dutasteride	62.6			
+1115305	abiraterone+Dutasteride	55.8		LIVING	44.18528252
+1115306	abiraterone+Dutasteride	65.8			
+1115307	abiraterone+Dutasteride	68.3		DECEASED	33.8370565
+1115308	abiraterone+Dutasteride	53.1		DECEASED	68.98817346
+1115309	abiraterone+Dutasteride	57.1	14.5		
+1115310	abiraterone+Dutasteride	59.1		DECEASED	29.66491459
+1115311	abiraterone+Dutasteride	59.5		LIVING	33.8370565
+1115312	abiraterone+Dutasteride	55.9			
+1115313	abiraterone+Dutasteride	60.8		LIVING	52.46386334
+1115314	abiraterone+Dutasteride	52.3	7.58		
+1115342	Enzalutamide with Correlative Assessments	64.0	3.64	DECEASED	37.91064389
+1115343	Enzalutamide with Correlative Assessments	64.7	15.3		
+1115362	Enzalutamide with Correlative Assessments	70.7	10.9	LIVING	20.17082786
+1115372	Enzalutamide with Correlative Assessments	55.4	3.7	DECEASED	23.06176084
+1115378	Other: Carbo/Taxol	67.2	9.02		
+1115442	Abiraterone no steroids	60.3	1.53	LIVING	22.07621551
+1115444	Enzalutamide with Correlative Assessments	61.2	47.8	DECEASED	17.70696452
+1115463	Standard of care enzalutamide	58.8	6		
+1115466	Abiraterone no steroids	58.1	8.57		
+1115467	Enzalutamide with Correlative Assessments	57.6		LIVING	19.48094612
+1115468	Standard of care enzalutamide	73.1	47	DECEASED	9.986859396
+1115503	Enzalutamide with Correlative Assessments	60.7			
+1115525	Standard of care abiraterone	60.8	10		
+1115526	Enzalutamide with Correlative Assessments	65.5	3.71	LIVING	24.83574244
+1115527	Alliance (Arm B-enzalutamide + abiraterone)	56.6	320.2		
+1115531	Enzalutamide with Correlative Assessments	55.5	3.4		
+1115544	Abiraterone no steroids	62.1	57.07		
+1115549	Enzalutamide with Correlative Assessments	54.5	4.4	LIVING	7.424441524
+1115550	Abiraterone no steroids	56.4	13.6	LIVING	1.839684625
+1115554	Abiraterone no steroids	56.3	45.4	DECEASED	15.17739816
+1115556	Standard of care enzalutamide	69.5			
+1115569	Radium-223 (Xofigo)	48.8	52.84		
+1115574	Abiraterone no steroids	46.8	4.9		
+1115576	Standard of care abiraterone	64.7	5.28		
+1115577	Standard of care enzalutamide	59.8	18.88		
+1115578	Enzalutamide with Correlative Assessments	64.8	2.6		
+1115581	Standard of care enzalutamide	62.6	18		
+5115022	Standard of care enzalutamide	44.5	1049.6		
+5115023	Standard of care abiraterone	64.6	7.2		
+5115024	Other:Docetaxel	60.7	6.6		
+5115026	Trial 1 abiraterone +/- ABT888 (+ABT)	50.5	23.6		
+5115027	Screen Failure	44.8	9.1		
+5115028	Other: Docetaxel	49.2	2.8		
+5115029	Standard of care abiraterone	58.2			
+5115030	Trial 1 abiraterone +/- ABT888 (+ABT)	63.1		LIVING	1.67542707
+5115031	Standard of care abiraterone	66.2	2.4	LIVING	20.20367937
+5115032	Other: Cabo in CRPC	69.8	48.6		
+5115033	Trial 1 abiraterone +/- ABT888 (abi only)	66.7	203.8		
+5115034	Other: Cabo in CRPC	56.0	2.8	DECEASED	17.67411301
+5115057	Trial 1 abiraterone +/- ABT888 (+ABT)	58.7	9.63		
+5115058	Trial 1 abiraterone +/- ABT888 (+ABT)	42.3		DECEASED	13.14060447
+5115073	Standard of care enzalutamide	53.4	4.4		
+5115075	Standard of care abiraterone	59.7	7.7	DECEASED	10.74244415
+5115076	Standard of care abiraterone	52.5	19.3		
+5115077	Standard of care enzalutamide	52.4	56.2		
+5115078	Standard of care enzalutamide	59.7	15		
+5115098	Other: Cabozantinib	57.4			
+5115127	Standard of care abiraterone	51.5	467		
+5115128	Trial 1 abiraterone +/- ABT888 (+ABT)	55.7	20	DECEASED	39.32325887
+5115129	Trial 1 abiraterone +/- ABT888 (+ABT)	70.0	3.75	DECEASED	9.231274639
+5115130	Trial 1 abiraterone +/- ABT888 (+ABT)	67.1		LIVING	36.56373193
+5115152	Other: PSMA ADC	41.2	18.1		
+5115158	Standard of care abiraterone	53.9	5.5		
+5115160	Trial 1 abiraterone +/- ABT888 (+ABT)	74.6	45.4	DECEASED	4.270696452
+5115186	Trial 1 abiraterone +/- ABT888 (abi only)	55.2		LIVING	8.278580815
+5115187	Trial 1 abiraterone +/- ABT888 (+ABT)	47.1	15.7		
+5115193	Other: Docetaxel	67.8	8.5		
+5115194	Other: CC115	50.1	362.7		
+5115195	Other: PSMA ADC	60.7	4.86		
+5115196	Standard of care abiraterone	56.4	28.1		
+5115197	Other: Docetaxel	50.3			
+5115198	Other:  PSMA-ADC	55.1	24.5		
+5115199	N/E	49.7	15.93		
+5115203	Trial 1 abiraterone +/- ABT888 (+ABT)	65.9	16.3	DECEASED	12.87779238
+5115254	Trial 1 abiraterone +/- ABT888 (+ABT)	67.3	6	LIVING	11.89224704
+5115255	Trial 1 abiraterone +/- ABT888 (+ABT)	60.6	11.66	DECEASED	14.84888305
+5115256	Other:  Cabazitaxel	54.8	4.7		
+5115258	Other:  Carboplatin+Etopside	69.5	8.14		
+5115259	Standard of care enzalutamide	63.7	320		
+5115260	Standard of care abiraterone	57.6		LIVING	6.504599212
+5115261	Standard of care abiraterone	45.8	3.2		
+5115276	Trial 1 abiraterone +/- ABT888 (abi only)	70.7	29.4	DECEASED	6.044678055
+5115290	Other: Docetaxel	77.1	19		
+5115291	Trial 1 abiraterone +/- ABT888 (+ABT)	59.9			
+5115327	Trial 1 abiraterone +/- ABT888 (abi only)	62.5	23	LIVING	13.92904074
+5115359	Standard of care abiraterone	63.4	34.7	DECEASED	2.923784494
+5115405	Trial 1 abiraterone +/- ABT888 (abi only)	63.4	24.37	LIVING	10.5781866
+5115406	Standard of care enzalutamide	59.6	52.7		
+5115407	Enzalutamide with Correlative Assessments	54.0	5.26		
+5115408	Trial 1 abiraterone +/- ABT888 (+ABT)	57.2	46.74	LIVING	22.01051248
+5115409	Trial 1 abiraterone +/- ABT888 (+ABT)			LIVING	11.66228647
+5115410	Trial 1 abiraterone +/- ABT888 (+ABT)			LIVING	2.726675427
+5115411	N/E				
+5115412	Trial 1 abiraterone +/- ABT888 (+ABT)	58.2	29.36	LIVING	6.73455979
+5115501	N/E	61.5	4.8		
+5115505	N/E				
+5115506	Trial 1 abiraterone +/- ABT888 (+ABT)				
+5115528	Other: Docetaxel	63.0	3.5		
+5115545	Other: UNK				
+5115546	Other: Bicalutamide				
+5115547	Other: Cabozantinib				
+5115548	Other				
+5115608	Other: DLL4/VEGF antibody OMP-305B83				
+5115609	Standard of care abiraterone			LIVING	1.97109067
+5115610	Standard of care abiraterone			LIVING	9.921156373
+5115611	Other: Docetaxel				
+5115612	Other				
+5115613	Standard of care abiraterone				
+5115614	Standard of care abiraterone				
+5115615	Standard of care abiraterone			DECEASED	10.34822602
+5115648	Standard of care abiraterone				
+5115650	Standard of care abiraterone			DECEASED	5.880420499
+5115651	Other: Casodex				
+6115012	Other: Taxol	64.1	27.4		
+6115013	Standard of care abiraterone	50.1	20		
+6115014	Other: Post Abiraterone Acetate vs. Placebo	61.1	8.3		
+6115114	Standard of care abiraterone	59.3	0.6	DECEASED	16.42575558
+6115115	Standard of care enzalutamide	71.6	4.1		
+6115116	Standard of care enzalutamide		0.2	DECEASED	2.759526938
+6115117	Standard of care enzalutamide	55.1	6.5		
+6115118	Standard of care abiraterone	65.6	6.5		
+6115119	Standard of care enzalutamide	66.0	5.6		
+6115120	Standard of care abiraterone	63.6	28.4	DECEASED	16.62286465
+6115121	Standard of care enzalutamide	49.8	8	DECEASED	20.72930355
+6115122	Standard of care abiraterone	53.0	33.5		
+6115123	Standard of care enzalutamide	53.8	57		
+6115124	Other: Abiraterone acetate + ipilimumab	69.1	5.2	LIVING	35.8738502
+6115219	ARN509	55.2	2.5		
+6115224	Standard of care abiraterone	71.8	5.7		
+6115227	Other: Enzalutamide + Docetaxel	62.9	28		
+6115233	Standard of care abiraterone	67.3	>10		
+6115234	Standard of care enzalutamide	56.3	10.3	LIVING	32.81865966
+6115235	Standard of care enzalutamide	59.3	5.3	LIVING	34.55978975
+6115236	Other: Casodex	68.2	14.1	DECEASED	3.94218134
+6115237	Other: carbo + etoposide		<0.05		
+6115242	Standard of care abiraterone	64.5	32.67	DECEASED	17.57555848
+6115247	Standard of care abiraterone	50.6	5.2	DECEASED	44.05387648
+6115250	ARN509	64.3	256.04		
+6115251	Standard of care enzalutamide	69.0	53.6	DECEASED	3.64651774
+6115285	Standard of care enzalutamide	64.2	24.43		
+6115286	Standard of care abiraterone	66.0	4.58		
+6115288	Alliance (Arm A- enzalutamide only)	54.9	159.28	LIVING	16.03153745
+6115295	Standard of care abiraterone	44.9	12.13		
+6115296	Standard of care enzalutamide	65.8	3.7		
+6115317	Standard of care abiraterone	55.2	4.9		
+6115319	Standard of care abiraterone	85.7	29		
+6115320	Other: Casodex	63.8	81.21		
+6115321	Standard of care abiraterone	64.5			
+6115322	Alliance (Arm A- enzalutamide only)		13.73	LIVING	14.48751643
+6115323	Standard of care enzalutamide	64.0	10	DECEASED	4.270696452
+6115381	Other: Carbo + docetaxel	52.2	4.2		
+6115382	Standard of care enzalutamide	59.3	5.9		
+6115383	Alliance (Arm B-enzalutamide + abiraterone)	58.2		DECEASED	29.66491459
+6115385	Standard of care abiraterone	59.7	219.19		
+6115386	Trial 3 post-abiraterone ARN 509 + everolimus	50.6	7		
+6115387	Standard of care enzalutamide	73.9	9.89		
+6115388	Other: Post-Docetaxel	72.8	2.9		
+6115389	Standard of care abiraterone	78.7	97.3		
+6115390	Standard of care enzalutamide	54.3	9.6		
+6115391	Standard of care abiraterone	57.9	5.595		
+6115392	AbiCabazi (Arm 1- abiraterone alone)	60.7	4.9	DECEASED	9.00131406
+6115393	Standard of care abiraterone	65.0	7.54		
+6115394	Other: Abiraterone acetate + ipilimumab	64.1	14.01		
+6115395	Standard of care abiraterone	58.9	90.9	LIVING	35.24967148
+6115396	Trial 3 post-abiraterone ARN 509 + everolimus	53.2	9.47		
+6115397	Standard of care abiraterone		11.31		
+6115398	Standard of care abiraterone	75.1	19.6		
+6115399	AbiCabazi (Arm 1- abiraterone alone)	53.4		LIVING	25.49277267
+6115400	Other: MLN0128 (mTORi)	62.7	14.04		
+6115401	AbiCabazi (Arm 1- abiraterone alone)	84.4	18.85		
+6115402	Standard of care abiraterone		16,275.14		
+6115403	Other: MLN0128 (mTORi)	61.6	31.7		
+6115427	Trial 3 post-abiraterone ARN 509 + everolimus	55.6	4		
+6115590	Alliance (Arm A-enzalutamide only)		4.4	LIVING	33.47568988
+6115592	Standard of care abiraterone		6.5		
+6115593	Standard of care abiraterone		3.77		
+6115594	Standard of care enzalutamide		182.7	DECEASED	32.12877792
+6115595	Abiraterone no steroids			DECEASED	29.50065703
+6115596	Trial 3 post-abiraterone ARN 509 + everolimus				
+6115597	Trial 2 abiraterone +/- ARN509 (+ARN509)		12.57		
+6115598	Other: VT-464	53.6	8		
+6115599	Trial 3 post-abiraterone ARN 509 + everolimus		6.4		
+6115600	Alliance (Arm B-enzalutamide+abiraterone)		10.49		
+6115601	Standard of care enzalutamide		10.4		
+6115603	Other: VT-464		9.89		
+6115604	Alliance (Arm A-enzalutamide only)		1.82		
+6115605	Trial 2 abiraterone +/- ARN509 (Abi only)		28.5	DECEASED	14.15900131
+9115035	Screen Failure				
+9115036	Screen Failure				
+9115037	Screen Failure				
+9115040	Standard of care abiraterone	42.6	39		
+9115041	Standard of care enzalutamide	60.4			
+9115042	abiraterone+Dutasteride	49.7			
+9115045	abiraterone+Dutasteride	74.9	>10		
+9115046	other - hospice	67.1	0.68		
+9115047	pharmacodynamic abiraterone	67.1	298	DECEASED	41.22864652
+9115048	Standard of care enzalutamide	68.7	4.4		
+9115049	Standard of care abiraterone	53.0	4.08		
+9115050	Standard of care enzalutamide	61.2	9.3		
+9115051	Standard of care abiraterone	66.4	5.5	DECEASED	29.4021025
+9115052	pharmacodynamic abiraterone	62.5	5.2		
+9115055	Other: Docetaxel	65.2	57.9		
+9115059	Standard of care abiraterone	49.3	2	DECEASED	30.71616294
+9115060	Pharmacodynamic abiraterone	62.0	182	LIVING	24.83574244
+9115061	Other: surveillance	65.0	20		
+9115062	Other: Ketoconazole	60.8	16		
+9115063	pharmacodynamic abiraterone	69.2	10		
+9115064	pharmacodynamic abiraterone	59.1	1915.08		
+9115065	pharmacodynamic abiraterone	68.6	54.71	DECEASED	33.08147175
+9115066	Other: Docetaxel	64.9	28.7		
+9115067	pharmacodynamic abiraterone	71.2	446.5	DECEASED	28.05519054
+9115068	Standard of care enzalutamide	64.4	2.4		
+9115069	pharmacodynamic abiraterone	62.9	50.7	DECEASED	22.20762155
+9115070	Standard of care abiraterone	63.5	325.58	DECEASED	23.39027595
+9115102	abiraterone+Dutasteride	58.9	8.22	DECEASED	47.76609724
+9115104	Trial 1 abiraterone +/- ABT888 (+ABT)	52.6		LIVING	2.431011827
+9115107	Standard of care abiraterone	71.4	185		
+9115108	pharmacodynamic abiraterone		46	DECEASED	18.72536137
+9115109	Standard of care abiraterone	54.5	13.4	DECEASED	12.81208936
+9115111	Trial 1 abiraterone +/- ABT888 (+ABT)	72.2	1.5	DECEASED	33.73850197
+9115171	pharmacodynamic abiraterone	68.1	31.9		
+9115173	pharmacodynamic abiraterone	42.5	120.58	LIVING	23.32457293
+9115174	pharmacodynamic abiraterone	75.9	85.5	DECEASED	25.62417871
+9115175	pharmacodynamic abiraterone	69.8	184	DECEASED	22.14191853
+9115180	Trial 1 abiraterone +/- ABT888 (+ABT)	68.3	10		
+9115181	Trial 1 abiraterone +/- ABT888 (abi only)	61.5	30	DECEASED	28.87647832
+9115182	Trial 1 abiraterone +/- ABT888 (abi only)	64.8	8.59	DECEASED	45.03942181
+9115184	Standard of care abiraterone	62.0	851.98		
+9115185	Standard of care enzalutamide	62.0	14		
+9115324	pharmacodynamic abiraterone	72.5	41.97	DECEASED	12.25361367
+9115325	pharmacodynamic abiraterone	48.1	57	DECEASED	17.60840999
+9115338	Standard of care enzalutamide	52.5		DECEASED	33.01576873
+9115339	Standard of care abiraterone	69.2	2	DECEASED	12.02365309
+9115340	Standard of care enzalutamide	60.8	95		
+9115341	Trial 1 abiraterone +/- ABT888 (+ABT)	60.5	2.1	DECEASED	20.72930355
+9115415	pharmacodynamic abiraterone	75.2	58.2		
+9115416	pharmacodynamic abiraterone	41.6	38.9	DECEASED	28.48226018
+9115418	Standard of care enzalutamide	63.8	13		
+9115420	Standard of care enzalutamide	59.3	222		
+9115422	Standard of care abiraterone	63.9	5.1	DECEASED	31.53745072
+9115423	Standard of care enzalutamide	45.8	410		
+9115425	Standard of care abiraterone	61.0	28	LIVING	17.83837057
+9115515	Standard of care enzalutamide	75.5	50		
+9115516	Standard of care enzalutamide	60.3	4.3		
+9115517	Standard of care abiraterone	68.3	11	DECEASED	12.12220762
+9115519	Standard of care enzalutamide	63.9	5		
+9115520	Standard of care enzalutamide	53.2	3.7		
+9115521	Standard of care enzalutamide	64.3	13		
+9115522	Standard of care abiraterone	58.7	20	LIVING	10.5781866
+9115524	Standard of care enzalutamide	54.7	2150	DECEASED	3.515111695
+9115538	pharmacodynamic abiraterone	58.3	1200		
+9115539	Standard of care abiraterone	64.7	16	DECEASED	18.42969777
+9115540	Standard of care enzalutamide	54.5	3.3		
+9115541	Standard of care abiraterone	69.1	0.95		
+9115551	pharmacodynamic abiraterone	73.0	21.9	LIVING	16.52431012
+9115552	pharmacodynamic abiraterone	54.2	104.7	LIVING	6.373193167
+9115553	pharmacodynamic abiraterone	62.3	306.3		
+9115555	Standard of care enzalutamide	66.5	13.8	LIVING	4.566360053
+9115566	pharmacodynamic abiraterone	63.2	80	DECEASED	23.32457293
+9115567	Standard of care enzalutamide	55.7	8.3		
+9115568	Standard of care enzalutamide	61.4	8.8		
+9115570	Enzalutamide with Correlative Assessments	61.2		LIVING	25
+9115571	pharmacodynamic abiraterone	56.9	380		
+9115572	Standard of care abiraterone	64.4	177	DECEASED	18.13403417
+9115575	Standard of care enzalutamide	55.5	55	LIVING	26.70827858
+9115580	Standard of care abiraterone	53.3	23		
+9115585	Standard of care enzalutamide	63.8	16.1		
+9115586	Standard of care abiraterone	65.3	190	DECEASED	15.37450723
+13115262	Other: Provenge	59.3	80		
+13115277	Other: Cabo in CRPC	54.4	7.1		
+13115379	Other: Provenge	43.6	15.4		
+13115404	Other: BAY1161909, paclitaxel	50.5			
+13115443	Other: Bicalutamide	55.0	410.55		
+13115464	Other: Provenge	50.8	6.6		
+13115465	Standard of care abiraterone	58.0	4.6	LIVING	27.10249671
+96115135	Standard of care abiraterone	62.1	19.87	DECEASED	57.26018397
+96115137	Standard of care enzalutamide	71.5	4.1		
+96115138	Standard of care abiraterone	65.4	18		
+96115139	Standard of care abiraterone	58.8	26		
+96115140	Standard of care abiraterone	89.0	53.6	DECEASED	20.86070959
+96115141	Standard of care abiraterone	60.5	1.8		
+96115142	Standard of care enzalutamide	59.1	5.2		
+96115143	MLN8237	84.0	12		
+96115144	MLN8237	53.7			
+96115145	MLN8237	70.3	16		
+96115146	MLN8237	75.7	9.8		
+96115163	Standard of care abiraterone	62.7	15.84		
+96115164	MLN8237	78.7	1.9		
+96115165	MLN8237	86.1	0.9		
+96115204	Standard of care enzalutamide	72.1	20		
+96115206	MLN8237	61.2	2.5		
+96115207	Standard of care enzalutamide	54.5	7	LIVING	30.5847569
+96115208	Standard of care abiraterone	62.2	1000		
+96115209	Standard of care abiraterone	56.9	19		
+96115210	Standard of care abiraterone	64.2	141		
+96115211	Standard of care abiraterone	66.5	6.5		
+96115213	Standard of care abiraterone	64.4	7.4		
+96115214	Standard of care abiraterone	80.3	6		
+96115215	Standard of care enzalutamide	55.8	11		
+96115266	Standard of care abiraterone	66.9	968.7		
+96115269	Standard of care abiraterone	64.4	2.3		
+96115272	MLN8237	62.3	1.5		
+96115273	MLN8237	58.4			
+96115274	MLN8237	66.5	57.9		
+96115275	MLN8237	59.9	3.3		
+96115292	MLN8237	67.3	19.69		
+96115294	MLN8237	62.7	15.8		
+96115472	Standard of care enzalutamide	57.4	75	LIVING	32.78580815
+96115473	Standard of care enzalutamide	58.1	4.3	LIVING	29.66491459
+96115474	Standard of care enzalutamide	57.4	8.6		
+96115475	Standard of care abiraterone	60.4	8		
+96115476	Standard of care abiraterone	65.6			
+96115479	MLN8237	67.2	104.82		
+96115480	MLN8237	67.0	4.5		
+96115482	MLN8237	56.5	17		
+96115485	MLN8237	67.0	512.6		
+96115487	MLN8237	52.8	47.6		
+96115489	MLN8237	62.6	6.6		
+96115490	Other: carbo/etoposide	39.7			
+96115491	MLN8237	60.7	10		
+96115493	MLN8237	57.2	9		
+96115494	Other: Abiraterone +/- GDC0068/Placebo	62.8	8.22		
+96115495	Standard of care enzalutamide	49.3			
+96115496	Standard of care enzalutamide	62.0	8.568		
+96115497	Standard of care enzalutamide	49.7		LIVING	8.311432326
+96115498	Standard of care enzalutamide	49.3	2.8	LIVING	28.35085414
+96115500	Standard of care enzalutamide	52.1	3.7		
+96115508	MLN8237	58.8	9.5		
+96115509	MLN8237	57.9			
+96115513	Standard of care abiraterone	66.9	4.3	DECEASED	16.62286465
+96115616	MLN8237	58.8	6.9		
+96115617	MLN8237	66.9	1.15		
+96115619	MLN8237	58.7	8.24		
+96115622	MLN8237	67.3	0.44		
+96115623	MLN8237	65.9	28.4		
+96115624	MLN8237	60.6	11.1		
+96115626	MLN8237	67.4	0.8		
+96115629	MLN8237	64.5	72.84		
+96115630	MLN8237	61.3	10.7		
+96115631	MLN8237	64.3	26.4		
+96115638	MLN8237	62.2	6.3		
+96115639	MLN8237	56.4	4.61	DECEASED	8.935611038
+96115640	MLN8237	62.6	4.38		
+96115641	MLN8237	65.5	92		
+96115642	MLN8237	63.3	67		
+96115643	MLN8237	67.7	5.16		
+96115645	Standard of care enzalutamide	64.4	4.2		
+96115646	MLN8237	67.2	2.626		
+97115001	Standard of care abiraterone	57.5	4.7		
+97115002	Other: Bicalutamide	68.3			
+97115003	Standard of care abiraterone	59.9	21		
+97115005	Standard of care abiraterone	57.3	137		
+97115006	Other: Bicalutamide	38.6	57		
+97115007	Trial 4 post-abiraterone Olaparib	64.3	10		
+97115009	Standard of care abiraterone	71.3	>1000		
+97115071	Trial 4 post-abiraterone Olaparib	60.6	2800		
+97115074	Standard of care abiraterone	68.4	100.9		
+97115079	Olaparib	68.4	2.2		
+97115095	Trial 4 post-abiraterone Olaparib	62.8	32		
+97115125	Standard of care abiraterone	55.0	17	LIVING	3.94218134
+97115131	Trial 4 post-abiraterone Olaparib	50.7	190		
+97115147	Trial 4 post-abiraterone Olaparib	66.4	100.9		
+97115148	Trial 4 post-abiraterone Olaparib	49.7	42		
+97115151	Standard of care abiraterone	58.6	28.7		
+97115166	Trial 4 post-abiraterone Olaparib	53.4	13		
+97115167	Trial 4 post-abiraterone Olaparib	61.4	>2000		
+97115188	Trial 4 post-abiraterone Olaparib	65.3	400		
+97115278	Trial 4 post-abiraterone Olaparib	55.2	166		
+97115280	Standard of care enzalutamide	80.6	160		
+97115281	Trial 4 post-abiraterone Olaparib	67.3	152		
+97115315	Olaparib	68.0	152		
+97115316	Olaparib	64.1	43		
+97115330	Trial 4 post-abiraterone Olaparib	60.0	8.7		
+97115331	Trial 4 post-abiraterone Olaparib	61.5	14		
+97115333	Olaparib	67.3	766		
+97115335	Trial 4 post-abiraterone Olaparib	59.3	43		
+97115337	Trial 4 post-abiraterone Olaparib	49.3			
+97115358	Trial 4 post-abiraterone Olaparib	52.5			
+97115363	Standard of care enzalutamide	53.1	20.8	LIVING	20.17082786
+97115365	Standard of care enzalutamide	47.2	11.24		
+97115368	Standard of care enzalutamide	54.4	27	LIVING	30.38764783
+97115374	N/E				
+97115375	N/E				
+97115376	N/E				
+97115447	Standard of care abiraterone	52.6	45		
+97115448	Standard of care abiraterone	75.1	180		
+97115449	Standard of care abiraterone	71.1	4,005		
+97115453	Standard of care enzalutamide	73.3			
+97115454	Standard of care enzalutamide	66.9	95		
+97115456	Olaparib	61.5	9.1		
+97115558	Other: Cabazitaxel	60.7	70		
+97115560	Other: Cabazitaxel	57.1	13		
+97115561	Standard of care enzalutamide	64.0			
+97115563	Standard of care abiraterone	60.9	75.5		
+97115564	Standard of care abiraterone	60.1	105.7		

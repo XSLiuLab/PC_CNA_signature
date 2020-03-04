@@ -298,5 +298,121 @@ pheatmap::pheatmap(sim_su2c$similarity, cluster_cols = F, cluster_rows = F, disp
 pheatmap::pheatmap(sim_mskcc$similarity, cluster_cols = F, cluster_rows = F, display_numbers = TRUE)
 ```
 
-There are some confusions here, we need further visual inspection to correctly understand the
+There are some confusions here, we need further analysis and visual inspection to correctly understand the
 meaning of signatures.
+
+
+### Survival analysis
+
+To better understand the signatures, here we evaluate the association between signature exposure and prognosis. 
+
+Firstly, get the signature exposure.
+
+```{r}
+expo_mskcc = get_sig_exposure(Sig.CNV.mskcc)
+expo_su2c = get_sig_exposure(Sig.CNV.su2c)
+```
+
+Then we get survival status, patient IDs, sample IDs etc.
+
+```{r, message=FALSE}
+mskcc_patient = readr::read_tsv("../data/mskcc_2020/data_clinical_patient.txt", comment = "#")
+mskcc_sample  = readr::read_tsv("../data/mskcc_2020/data_clinical_sample.txt", comment = "#")
+
+su2c_patient = readr::read_tsv("../data/prad_su2c/data_clinical_patient.txt", comment = "#")
+su2c_sample  = readr::read_tsv("../data/prad_su2c/data_clinical_sample.txt", comment = "#")
+```
+
+
+Merge data before doing survival analysis with **ezcox** package.
+
+```{r}
+dat_mskcc = expo_mskcc %>% 
+  dplyr::as_tibble() %>% 
+  dplyr::left_join(
+    mskcc_sample %>% dplyr::select(SAMPLE_ID, PATIENT_ID, SAMPLE_TYPE),
+    by = c("sample" = "SAMPLE_ID")
+  ) %>% 
+  dplyr::left_join(
+    mskcc_patient,
+    by = "PATIENT_ID"
+  )
+
+dat_su2c = expo_su2c %>% 
+  dplyr::as_tibble() %>% 
+  dplyr::left_join(
+    su2c_sample,
+    by = c("sample" = "SAMPLE_ID")
+  ) %>% 
+  dplyr::left_join(
+    su2c_patient,
+    by = "PATIENT_ID"
+  )
+```
+
+Clean. Still scale exposure to 1-20 for indicating HR per 5% exposure increase.
+
+```{r}
+cols_to_sig = paste0("Sig", 1:5)
+
+range01 <- function(x, ...) {
+  (x - min(x, ...)) / (max(x, ...) - min(x, ...))
+}
+
+dat_mskcc2 = dat_mskcc %>% 
+  dplyr::select(sample:SAMPLE_TYPE, OS_STATUS, OS_MONTHS) %>% 
+  dplyr::mutate(
+    OS_STATUS = ifelse(OS_STATUS == "LIVING", 0, 1)
+  ) %>% 
+  na.omit() %>% 
+  dplyr::mutate_at(
+    cols_to_sig,
+    ~ 20 * range01(., na.rm = TRUE)
+  )
+
+dat_su2c2 = dat_su2c %>% 
+  dplyr::select(sample:PATIENT_ID, OS_STATUS, OS_MONTHS) %>% 
+  dplyr::mutate(
+    OS_STATUS = ifelse(OS_STATUS == "LIVING", 0, 1)
+  ) %>% 
+  na.omit() %>% 
+  dplyr::mutate_at(
+    cols_to_sig,
+    ~ 20 * range01(., na.rm = TRUE)
+  )
+```
+
+Now we do survival analysis.
+
+```{r}
+library(ezcox)
+```
+
+```{r}
+# Unvariable analysis
+show_forest(dat_mskcc2, covariates = cols_to_sig,
+            time = "OS_MONTHS", status = "OS_STATUS", merge_models = TRUE)
+```
+
+> Of note, here we does not confirm that `Sig1` is `CN-Sig1`,
+> Sig2` is `CN-Sig2`, ..., and Sig5` is `CN-Sig5` shown in major result part. 
+
+```{r}
+show_forest(dat_su2c2, covariates = cols_to_sig,
+            time = "OS_MONTHS", status = "OS_STATUS", merge_models = TRUE)
+```
+
+All samples in su2c dataset are metastatic, the result seems to show that exposure is not relavant to prognosis of metastatic samples. Here we check it with mskcc dataset by splitting it into group 'primary' and 'metastatic'.
+
+
+```{r}
+show_forest(dat_mskcc2 %>% dplyr::filter(SAMPLE_TYPE == "Primary"), covariates = cols_to_sig,
+            time = "OS_MONTHS", status = "OS_STATUS", merge_models = TRUE)
+```
+
+```{r}
+show_forest(dat_mskcc2 %>% dplyr::filter(SAMPLE_TYPE != "Primary"), covariates = cols_to_sig,
+            time = "OS_MONTHS", status = "OS_STATUS", merge_models = TRUE)
+```
+
+Based on the result from mskcc dataset, overall survival status of primary and metastatic samples roughly have consistent relationship with copy number signatures. However, `Sig4` specially functions in primary tumors and `Sig3` tends to function in metastatic tumors. Furthermore, from the view of HR comparison between two plots above, copy number signatures have more clinical effects on primary tumors rather than metastatic tumors.
