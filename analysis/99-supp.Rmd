@@ -395,7 +395,7 @@ show_forest(dat_mskcc2, covariates = cols_to_sig,
 ```
 
 > Of note, here we does not confirm that `Sig1` is `CN-Sig1`,
-> Sig2` is `CN-Sig2`, ..., and Sig5` is `CN-Sig5` shown in major result part. 
+> `Sig2` is `CN-Sig2`, ..., and `Sig5` is `CN-Sig5` shown in major result part. 
 
 ```{r}
 show_forest(dat_su2c2, covariates = cols_to_sig,
