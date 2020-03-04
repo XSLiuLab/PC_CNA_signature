@@ -1,3 +1,4 @@
+library(sigminer)
 load("output/CNV.seqz.RData")
 
 score_df = scoring(CNV.seqz)
