@@ -356,7 +356,54 @@ Select one sample for one case above.
 
 ```{r fig.height=12, fig.width=7}
 show_cn_profile(
-  data = CNV.seqz, chrs = paste0("chr", c(1:22, "X")), nrow = 6, ncol = 1, show_title = T,
+  data = CNV.seqz, nrow = 6, ncol = 1, show_title = T,
   samples = c("5115056-SRR8311885", "5115615-SRR8311749", "TCGA-KK-A7B4-01", "TCGA-KK-A59X-01", "TCGA-KC-A7FE-01")
 )
 ```
+
+```{r, eval=FALSE}
+pdf("Selected_cases_circos_heatmap.pdf", width = 2.5, height = 13)
+samps = c("5115056-SRR8311885", "5115615-SRR8311749", "TCGA-KK-A7B4-01", "TCGA-KK-A59X-01", "TCGA-KC-A7FE-01")
+
+opar = par(no.readonly = TRUE)
+print(par("mar"))
+par(mar = rep(0, 4))
+
+layout(matrix(1:5, ncol = 1))
+for (samp in samps) {
+  circlize::circos.par(track.margin=c(0,0)) 
+  show_cn_circos(CNV.seqz, samples = samp, show_title = FALSE, 
+               col = circlize::colorRamp2(c(1, 2, 4), c("blue", "white", "red")),
+               line_lwd = par("lwd") / 4)
+}
+layout(1)
+par(opar)
+dev.off()
+```
+
+
+```{r fig.height=12, fig.width=8}
+# p_gg = show_cn_profile(
+#   data = CNV.seqz, nrow = 6, ncol = 1, show_title = T,
+#   samples = samps
+# )
+# 
+# p_base = function() {
+#   opar = par(no.readonly = TRUE)
+#   par(mar = c(0, 0, 0, 0))
+#   on.exit(par(opar))
+#   
+#   layout(matrix(1:5, ncol = 1))
+#   show_cn_circos(CNV.seqz, samples = samps, show_title = FALSE, line_lwd = par("lwd") / 4)
+#   layout(1)
+# }
+
+# cowplot::plot_grid(
+#   p_gg,
+#   p_base,
+#   rel_widths = c(3, 1),
+#   scale = c(1.0, 0.9)
+# )
+```
+
+
