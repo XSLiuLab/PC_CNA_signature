@@ -322,26 +322,7 @@ show_sig_profile(Sig.CNV.seqz.W, style = "cosmic", method = "W", normalize = "fe
 > unlike @macintyre2018copy did column normalization (this method is easy to mislead readers),
 > so the bar height can be compared within/between features.
 
-There is no reference database for copy number signatures, we cannot get aetiologies of the 5 signatures by similarity computation. By reading the description of previous reports [@macintyre2018copy;@yi2018patterns] and studying the signature profile carefully, we determine or limite aetiologies of the 5 signatures with also the downstream analyses supported.
-
-- Sig1 - Focal amplification due to failure of cell cyle control
-  - large copy number changes resulting high copy number states
-- Sig2 - HRD;MMBIR;Tandem duplication through CDK12 inactivation
-  - match the pattern of MMBIR (microhomology mediated break-induced replication): many long **OsCN** with copy gains
-  - related to CDK12 mutation
-  - high number of breakpoints
-  - small segment size
-  - related to COSMIC 5 (v2) (from @macintyre2018copy)
-- Sig3 - Whole-genome duplication (due to failure of cell cycle control)
-  - high segment copy number
-  - few OsCN
-  - global CNV distribution
-- Sig4 - Chromothripsis
-  - 1 copy number deletions resulting considerable small OsCN
-  - large segment size
-- Sig5 -  BFB and copy number neutral like events including Chromoplexy, translocation, and etc. (these may be early driver events)
-  - few CNV with focal distribution
-  - positively associated with gene fusion
+There is no reference database for copy number signatures, we cannot get aetiologies of the 5 signatures by similarity computation. By reading the description of previous reports [@macintyre2018copy;@yi2018patterns] and studying the signature profile carefully, we determine or limite aetiologies of the 5 signatures with also the downstream analyses supported. Please see our manuscript (**TODO**) for details.
 
 The exposure of signatures in each sample is plotted as the below.
 
