@@ -55,9 +55,13 @@ df.seqz = readRDS(file = "../output/df.seqz.RDS")
 cols_to_features <- c(
   "IsMetastatic", "Stage", "GleasonScore",
   "Age", 
-  "n_SNV", "n_driver", "n_INDEL", "Ti_fraction", "Tv_fraction",
+  "n_SNV", "n_driver",
+  # "n_INDEL", 
+  "Ti_fraction", "Tv_fraction",
   "cnaBurden", "n_CNV", "n_Amp", "n_Del", "ploidy",
-  "TD score", "sTD score", "lTD score", "Chromothripisis score",
+  "TD score", 
+  # "sTD score", "lTD score",
+  "Chromothripisis score", "MACN score",
   "MATH", "n_mutation_cluster", "purity"
 )
 
@@ -103,7 +107,7 @@ cowplot::plot_grid(plotlist = plot.cnv$ca, align = "hv", ncol = 2)
 ```
 
 
-```{r, fig.width=12, fig.height=12}
+```{r, fig.width=12, fig.height=10}
 cowplot::plot_grid(plotlist = plot.cnv$co, align = "hv", ncol = 4)
 ```
 
@@ -138,12 +142,12 @@ plot.snv <- show_group_comparison(
 )
 ```
 
-```{r, fig.width=7, fig.height=6}
+```{r, fig.width=9, fig.height=6}
 cowplot::plot_grid(plotlist = plot.snv$ca, align = "hv", ncol = 2)
 ```
 
 
-```{r, fig.width=12, fig.height=12}
+```{r, fig.width=12, fig.height=10}
 cowplot::plot_grid(plotlist = plot.snv$co, align = "hv", ncol = 4)
 ```
 

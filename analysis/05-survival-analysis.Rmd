@@ -44,7 +44,7 @@ library(ezcox)
 
 Load the data.
 
-```{r, eval=FALSE}
+```{r}
 df.seqz = readRDS(file = "../output/df.seqz.RDS")
 surv_df <- readRDS(file = "../data/PRAD_Survival.rds")
 ```
@@ -52,7 +52,7 @@ surv_df <- readRDS(file = "../data/PRAD_Survival.rds")
 Clean the data to generate a data table for survival analysis.
 
 
-```{r, eval=FALSE}
+```{r}
 range01 <- function(x, ...) {
   (x - min(x, ...)) / (max(x, ...) - min(x, ...))
 }
@@ -109,9 +109,13 @@ show_forest(surv_dt, covariates = cols_to_sigs.seqz,
 ```{r}
 cols_to_features <- c(
   "Age", "Stage", "GleasonScore",
-  "n_SNV", "n_driver", "n_INDEL", "Ti_fraction", "Tv_fraction",
+  "n_SNV", "n_driver", 
+  # "n_INDEL",
+  "Ti_fraction", "Tv_fraction",
   "cnaBurden", "n_CNV", "n_Amp", "n_Del", "ploidy",
-  "TD score", "sTD score", "lTD score", "Chromothripisis score",
+  "TD score",
+  # "sTD score", "lTD score", 
+  "Chromothripisis score", "MACN score",
   "MATH", "n_mutation_cluster", "purity"
 )
 
