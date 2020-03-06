@@ -421,3 +421,33 @@ show_forest(dat_mskcc2 %>% dplyr::filter(SAMPLE_TYPE != "Primary"), covariates =
 Based on the result from mskcc dataset, overall survival status of primary and metastatic samples roughly have consistent relationship with copy number signatures. However, `Sig4` specially functions in primary tumors and `Sig3` tends to function in metastatic tumors. Furthermore, from the view of HR comparison between two plots above, copy number signatures have more clinical effects on primary tumors rather than metastatic tumors.
 
 
+```{r}
+groups = get_groups(Sig.CNV.mskcc, method = "consensus", match_consensus = TRUE)
+```
+
+```{r}
+df.map = dplyr::left_join(
+  dat_mskcc, groups,
+  by = "sample"
+) %>% 
+  dplyr::select("SAMPLE_TYPE", "enrich_sig") %>% 
+  na.omit()
+```
+
+
+```{r}
+names(df.map) = c("Sample type", "Enriched signature")
+show_group_mapping(df.map, 
+                   col_to_flow = "Sample type", 
+                   cols_to_map = setdiff(colnames(df.map), "Sample type"),
+                   fill_na = "NA", include_sig = TRUE)
+```
+
+Test the correlation with fisher test.
+
+```{r}
+zz = table(df.map$`Sample type`, df.map$`Enriched signature`)
+fisher.test(zz, simulate.p.value = T)
+```
+
+
