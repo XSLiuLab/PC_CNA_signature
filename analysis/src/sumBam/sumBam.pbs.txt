@@ -1,0 +1,16 @@
+#PBS -l walltime=1000:00:00  # Set maximum running time
+#PBS -l nodes=1:ppn=28       # Set the number of node and CPU per node
+#PBS -S /bin/bash            # Set shell
+#PBS -l mem=50gb             # Set memory size
+#PBS -j oe                   # Output std/sterr to the same file
+#PBS -q normal_8             # Set queue name
+
+# Please set PBS arguments above
+
+# Set this job's working directory
+# Use `cd your_working_dir` 
+# Default is user directory
+cd ~
+
+source activate python3
+python ~/sumBam/sumBAMdepth.py
