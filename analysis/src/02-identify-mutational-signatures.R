@@ -9,6 +9,8 @@ library(NMF)
 Maf <- data.table::fread("/public/data/maf/all.maf")
 # Remove all NA columns
 Maf <- Maf[, which(unlist(lapply(Maf, function(x) !all(is.na(x))))), with = F]
+# openxlsx::write.xlsx(Maf, file = "output/PRAD_MAF.xlsx")
+
 Maf <- read_maf(Maf)
 save(Maf, file = "output/PRAD_TCGA_plus_dbGap_Maf.RData")
 
