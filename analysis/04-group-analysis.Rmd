@@ -151,6 +151,65 @@ cowplot::plot_grid(plotlist = plot.snv$ca, align = "hv", ncol = 2)
 cowplot::plot_grid(plotlist = plot.snv$co, align = "hv", ncol = 4)
 ```
 
+
+What if there are 5 SBS signatures and samples are divided into 5 groups?
+
+
+```{r, message=FALSE}
+load("../output/Sig5.Maf.RData")
+sbs_grp = get_groups(Sig.SNV5, method = "consensus", match_consensus = TRUE)
+sbs_grp$sample = ifelse(startsWith(sbs_grp$sample, "TCGA"),
+                        substr(sbs_grp$sample, 1, 15),
+                        sbs_grp$sample)
+```
+
+```{r}
+df.seqz3 = dplyr::left_join(
+  sbs_grp,
+  df.seqz2,
+  by = c("sample" = "tumor_Run")
+)
+
+df.seqz3$enrich_sig = ifelse(
+  !is.na(df.seqz3$enrich_sig),
+  paste(df.seqz3$enrich_sig, "enriched"),
+  NA
+)
+
+grp.snv2 <- get_group_comparison(
+  df.seqz3,
+  col_group = "enrich_sig", # or "snv_group"
+  cols_to_compare = cols_to_features,
+  type = feature_type
+)
+```
+
+
+
+```{r}
+plot.snv2 <- show_group_comparison(
+  grp.snv2,
+  xlab = NA,
+  method = "anova",
+  text_angle_x = 60,
+  text_hjust_x = 1,
+  legend_position_ca = "right",
+  label.x.npc = "center", 
+  label.y.npc = "top",
+  label = "p.format",
+  hjust = 0.5
+)
+```
+
+```{r, fig.width=9, fig.height=6}
+cowplot::plot_grid(plotlist = plot.snv2$ca, align = "hv", ncol = 2)
+```
+
+
+```{r, fig.width=12, fig.height=10}
+cowplot::plot_grid(plotlist = plot.snv2$co, align = "hv", ncol = 4)
+```
+
 ## Group mapping
 
 ```{r}
