@@ -50,6 +50,11 @@ save(Sig.SNV, file = "output/Sig.PRAD_TCGA_plus_dbGap_Maf.RData")
 
 get_sig_similarity(Sig.SNV)
 get_sig_similarity(Sig.SNV, sig_db = "SBS")
-# Auto converge to 3
-Sig.SNV.auto = sig_auto_extract(nmf_matrix, nrun = 100, destdir = "output/BayesianNMF_MutSig",
-                                cores = 10, recover = TRUE)
+
+# Extract 5 signatures to compare with copy number signatures
+Sig.SNV5 <- sig_extract(nmf_matrix, n_sig = 5, nrun = 50, cores = 20)
+save(Sig.SNV5, file = "output/Sig5.Maf.RData")
+
+# # Auto converge to 3
+# Sig.SNV.auto = sig_auto_extract(nmf_matrix, nrun = 100, destdir = "output/BayesianNMF_MutSig",
+#                                 cores = 10, recover = TRUE)

@@ -286,8 +286,20 @@ rownames(sim_mskcc$similarity) = paste(rownames(sim_mskcc$similarity), "(MSKCC)"
 pheatmap::pheatmap(sim_mskcc$similarity[c(2,1,3:5), ], cluster_cols = F, cluster_rows = F, display_numbers = TRUE)
 ```
 
-There are some confusions here, we need further analysis and visual inspection to correctly understand the
-meaning of signatures.
+
+```{r, message=TRUE}
+sig.seqz = sig_signature(Sig.CNV.seqz.W, normalize = "feature") %>% as.data.frame()
+sig.mskcc = sig_signature(Sig.CNV.mskcc, normalize = "feature")[, c(2,1,3:5)] %>% as.data.frame()
+
+
+cor.test(sig.seqz$Sig1, sig.mskcc$Sig1)
+cor.test(sig.seqz$Sig2, sig.mskcc$Sig2)
+cor.test(sig.seqz$Sig3, sig.mskcc$Sig3)
+cor.test(sig.seqz$Sig4, sig.mskcc$Sig4)
+cor.test(sig.seqz$Sig5, sig.mskcc$Sig5)
+```
+
+Further validate with heatmap of signature component weight.
 
 ```{r}
 library(NMF)

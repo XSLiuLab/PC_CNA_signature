@@ -211,7 +211,7 @@ MergeInfo <- Info[which(!is.na(Info$tumor_Run)), ] %>%
   mutate(
     Stage = factor(Stage, ordered = TRUE),
     Fusion = ifelse(Fusion == "Negative", "No", "Yes"),
-    sample_type = ifelse(sample_type == "Unknown", NA_character_, sample_type),
+    sample_type = ifelse(sample_type == "Unknown", "Metastatic", sample_type), # phs000909 are metastatic samples, https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs000909.v1.p1
     HasFusion = Fusion,
     HasFusion = ifelse(HasFusion == "Yes", TRUE, FALSE),
     IsMetastatic = ifelse(sample_type == "Metastatic", TRUE, FALSE)
