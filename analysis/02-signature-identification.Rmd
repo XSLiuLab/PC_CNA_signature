@@ -220,12 +220,23 @@ p = show_sig_number_survey(EST.seqz.W.all, right_y = NULL)
 add_h_arrow(p, x = 5.2, y = 0.99, seg_len = 0.5, space = 0.2)
 ```
 
+```{r, include=FALSE}
+p = add_h_arrow(p, x = 5.2, y = 0.99, seg_len = 0.5, space = 0.2)
+ggsave(filename = "../figures/Figure_S4_A.pdf", width = 4, height = 3)
+```
+
+
 Next we take a look at SBS.
 
 
 ```{r, fig.height=3, fig.width=4}
 p = show_sig_number_survey(EST.Maf, right_y = NULL)
 add_h_arrow(p, x = 3.2, y = 0.982, seg_len = 0.5, space = 0.2)
+```
+
+```{r, include=FALSE}
+p = add_h_arrow(p, x = 3.2, y = 0.982, seg_len = 0.5, space = 0.2)
+ggsave(filename = "../figures/Figure_S4_B.pdf", width = 4, height = 3)
 ```
 
 For SBS, we select `3`. We have the knowledge that `3` mutational signatures from TCGA prostate cancers are recorded in COSMIC database (COSMIC 1, 5, 6), and the cophenetic has a sharp decrease after `3` indicating that substantially less stability is achieved using more than `3` clusters.
@@ -339,9 +350,27 @@ pheatmap::pheatmap(sim_v2$similarity,
 )
 ```
 
+```{r, include=FALSE}
+pheatmap::pheatmap(sim_v2$similarity,
+  cluster_rows = F,
+  filename = "../figures/Figure_cosine_SBS_v2.pdf",
+  display_numbers = TRUE,
+  width = 11, height = 6
+)
+```
+
+
 ```{r, fig.width=15, fig.height=6}
 pheatmap::pheatmap(sim_v3$similarity,
   cluster_rows = F
+)
+```
+
+```{r, include=FALSE}
+pheatmap::pheatmap(sim_v3$similarity,
+  cluster_rows = F,
+  filename = "../figures/Figure_cosine_SBS_v3.pdf",
+  width = 15, height = 6
 )
 ```
 

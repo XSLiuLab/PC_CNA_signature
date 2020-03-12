@@ -106,11 +106,22 @@ plot.cnv <- show_group_comparison(
 cowplot::plot_grid(plotlist = plot.cnv$ca, align = "hv", ncol = 2)
 ```
 
+```{r, include=FALSE}
+p = cowplot::plot_grid(plotlist = plot.cnv$ca, align = "hv", ncol = 2)
+ggsave(filename = "../figures/Figure5B.pdf", plot = p,
+       width = 9, height = 6)
+```
+
 
 ```{r, fig.width=12, fig.height=10}
 cowplot::plot_grid(plotlist = plot.cnv$co, align = "hv", ncol = 4)
 ```
 
+```{r, include=FALSE}
+p = cowplot::plot_grid(plotlist = plot.cnv$co, align = "hv", ncol = 4)
+ggsave(filename = "../figures/Figure_group_boxplot_cn.pdf", plot = p,
+       width = 12, height = 10)
+```
 
 ```{r}
 df.seqz2$snv_enrich_sig = ifelse(
@@ -146,11 +157,22 @@ plot.snv <- show_group_comparison(
 cowplot::plot_grid(plotlist = plot.snv$ca, align = "hv", ncol = 2)
 ```
 
+```{r, include=FALSE}
+p = cowplot::plot_grid(plotlist = plot.snv$ca, align = "hv", ncol = 2)
+ggsave(filename = "../figures/Figure5C.pdf", plot = p,
+       width = 9, height = 6)
+```
+
 
 ```{r, fig.width=12, fig.height=10}
 cowplot::plot_grid(plotlist = plot.snv$co, align = "hv", ncol = 4)
 ```
 
+```{r, include=FALSE}
+p = cowplot::plot_grid(plotlist = plot.snv$co, align = "hv", ncol = 4)
+ggsave(filename = "../figures/Figure_group_boxplot_sbs.pdf", plot = p,
+       width = 12, height = 10)
+```
 
 What if there are 5 SBS signatures and samples are divided into 5 groups?
 
@@ -221,11 +243,18 @@ names(df.map) = c("Sample type", "Enriched CN signature", "Enriched SBS signatur
 ```
 
 ```{r}
-show_group_mapping(df.map, 
+p = show_group_mapping(df.map, 
                    col_to_flow = "Sample type", 
                    cols_to_map = setdiff(colnames(df.map), "Sample type"),
                    fill_na = "NA", include_sig = TRUE)
+p
 ```
+
+```{r, include=FALSE}
+ggsave(filename = "../figures/Figure5A.pdf", plot = p,
+       width = 9, height = 7)
+```
+
 
 ## Grouped signature exposure profile
 
@@ -246,7 +275,7 @@ map_df = df.seqz %>%
 groups = map_df$cnv_enrich_sig
 names(groups) = map_df$CNV_ID
 
-show_sig_exposure(Sig.CNV.seqz.W,
+p = show_sig_exposure(Sig.CNV.seqz.W,
                   groups = groups, 
                   #grp_order = , 
                   rm_space = TRUE, 
@@ -254,6 +283,12 @@ show_sig_exposure(Sig.CNV.seqz.W,
                   rm_grid_line = FALSE,
                   rm_panel_border = TRUE,
                   grp_size = 7)
+p
+```
+
+```{r, include=FALSE}
+ggsave(filename = "../figures/Figure_grp_exposure_cn.pdf", plot = p,
+       width = 12, height = 7)
 ```
 
 ### SBS signatures
@@ -271,13 +306,19 @@ Sig.SNV2 = Sig.SNV
 TCGA_INDEX = startsWith(colnames(Sig.SNV2$Exposure), "TCGA")
 colnames(Sig.SNV2$Exposure)[TCGA_INDEX] = substr(colnames(Sig.SNV2$Exposure)[TCGA_INDEX], 1, 15)
 
-show_sig_exposure(Sig.SNV2,
+p = show_sig_exposure(Sig.SNV2,
                   groups = groups,
                   cutoff = 2000,
                   rm_space = TRUE, 
                   style = "cosmic",
                   rm_grid_line = FALSE,
                   rm_panel_border = TRUE)
+p
+```
+
+```{r, include=FALSE}
+ggsave(filename = "../figures/Figure_grp_exposure_sbs.pdf", plot = p,
+       width = 12, height = 7)
 ```
 
 ## Copy number profile of different groups
@@ -418,11 +459,19 @@ show_cn_profile(
 Select one sample for one case above.
 
 ```{r fig.height=10, fig.width=7}
-show_cn_profile(
-  data = CNV.seqz, nrow = 6, ncol = 1, show_title = T,
+p = show_cn_profile(
+  data = CNV.seqz, nrow = 5, ncol = 1, show_title = T,
   samples = c("5115056-SRR8311885", "5115615-SRR8311749", "TCGA-KK-A7B4-01", "TCGA-KK-A59X-01", "TCGA-KC-A7FE-01")
 )
+p
 ```
+
+
+```{r, include=FALSE}
+ggsave(filename = "../figures/Figure_cn_profile_for_selected_cases.pdf", plot = p,
+       width = 8, height = 10)
+```
+
 
 ```{r, eval=FALSE}
 pdf("Selected_cases_circos_heatmap.pdf", width = 2.5, height = 13)

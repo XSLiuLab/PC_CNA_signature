@@ -243,6 +243,7 @@ The segmentation data were converted into absolute copy number data by ABSOLUTE 
 ```{r}
 library(sigminer)
 library(RColorBrewer)
+library(ggplot2)
 
 load("../output/Sig.CNV.mskcc.RData")
 
@@ -253,14 +254,26 @@ Sig.CNV.mskcc = sig_modify_names(Sig.CNV.mskcc, new_names = paste0("Sig", c(2,1,
 ### Profile
 
 ```{r, fig.width=12, fig.height=7}
-show_sig_profile(Sig.CNV.mskcc, style = "cosmic", method = "W", normalize = "feature")
+p = show_sig_profile(Sig.CNV.mskcc, style = "cosmic", method = "W", normalize = "feature")
+p
+```
+
+```{r, include=FALSE}
+ggsave(filename = "../figures/mskcc_cn_signatures.pdf", plot = p,
+       width = 12, height = 7)
 ```
 
 ### Exposure
 
 
 ```{r}
-show_sig_exposure(Sig.CNV.mskcc, rm_space = TRUE, style = "cosmic")
+p = show_sig_exposure(Sig.CNV.mskcc, rm_space = TRUE, style = "cosmic")
+p
+```
+
+```{r, include=FALSE}
+ggsave(filename = "../figures/mskcc_cn_expos.pdf", plot = p,
+       width = 8, height = 5)
 ```
 
 ### Similarity matrix
@@ -304,6 +317,24 @@ Further validate with heatmap of signature component weight.
 ```{r}
 library(NMF)
 ```
+```{r, eval=FALSE, include=FALSE, fig.height=6, fig.width=2, out.width='.49\\linewidth', fig.show='hold'}
+pheatmap::pheatmap(sig_signature(Sig.CNV.seqz.W, normalize = "feature"),
+                   cluster_rows = F, cluster_cols = F, 
+                   fontsize_row = 5,
+                   color = colorRampPalette(brewer.pal(n = 7, name =
+                                                         "OrRd"))(100),
+                   border_color = NA)
+
+pheatmap::pheatmap(sig_signature(Sig.CNV.mskcc, normalize = "feature"),
+                   cluster_rows = F, cluster_cols = F, 
+                   fontsize_row = 5,
+                   color = colorRampPalette(brewer.pal(n = 7, name =
+                                                         "OrRd"))(100),
+                   border_color = NA)
+```
+
+
+
 
 ```{r}
 pheatmap::pheatmap(sig_signature(Sig.CNV.seqz.W, normalize = "feature"),
@@ -312,7 +343,7 @@ pheatmap::pheatmap(sig_signature(Sig.CNV.seqz.W, normalize = "feature"),
                    color = colorRampPalette(brewer.pal(n = 7, name =
                                                          "OrRd"))(100),
                    border_color = NA,
-                   filename = "../Heatmap_cnv_our_cohort.pdf")
+                   filename = "../figures/Heatmap_cnv_our_cohort.pdf")
 ```
 
 
@@ -323,7 +354,7 @@ pheatmap::pheatmap(sig_signature(Sig.CNV.mskcc, normalize = "feature")[, c(2,1,3
                    color = colorRampPalette(brewer.pal(n = 7, name =
                                                          "OrRd"))(100),
                    border_color = NA,
-                   filename = "../Heatmap_cnv_mskcc_cohort.pdf")
+                   filename = "../figures/Heatmap_cnv_mskcc_cohort.pdf")
 ```
 
 
@@ -346,8 +377,15 @@ expo_df = tidyr::pivot_longer(expo,
 ```{r}
 library(ggpubr)
 
-ggboxplot(expo_df, x = "Signature", y = "Exposure", fill = "Cohort") + 
+p = ggboxplot(expo_df, x = "Signature", y = "Exposure", fill = "Cohort") + 
   stat_compare_means(aes(group=Cohort), label = "p.format")
+p
+```
+
+
+```{r, include=FALSE}
+ggsave(filename = "../figures/mskcc_expo_comparison.pdf", plot = p,
+       width = 8, height = 5)
 ```
 
 

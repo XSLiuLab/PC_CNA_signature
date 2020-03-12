@@ -312,6 +312,13 @@ show_sig_feature_corrplot(tidy_data.seqz.feature, p_val = 0.05)
 > All shown circles are statistically significant results (FDR < 0.05). A feature will be chopped off from
 > the plot if has no correlation with any signatures. Same for the similar plots below.
 
+```{r, include=FALSE}
+p = show_sig_feature_corrplot(tidy_data.seqz.feature, p_val = 0.05)
+ggsave(filename = "../figures/Figure3A.pdf", plot = p,
+       width = 9, height = 8)
+```
+
+
 The result table:
 
 ```{r}
@@ -362,6 +369,15 @@ show_sig_feature_corrplot(tidy_data.seqz.gene,
                           ca_gradient_colors = sc,
                           p_val = 0.05) # p_val needs to keep in line with the sum_genes p <= 0.05
 
+```
+
+```{r, include=FALSE}
+p = show_sig_feature_corrplot(tidy_data.seqz.gene, 
+                          ylab = "Mutated genes",
+                          ca_gradient_colors = sc,
+                          p_val = 0.05)
+ggsave(filename = "../figures/Figure3B.pdf", plot = p,
+       width = 8, height = 5)
 ```
 
 
@@ -417,6 +433,14 @@ show_sig_feature_corrplot(tidy_data.seqz.pathways,
 ```
 
 
+```{r, include=FALSE}
+p = show_sig_feature_corrplot(tidy_data.seqz.pathways,
+                          ylab = "Mutated pathways",
+                          ca_gradient_colors = sc,
+                          p_val = 0.05)
+ggsave(filename = "../figures/Figure3C.pdf", plot = p,
+       width = 9, height = 5)
+```
 
 The result table:
 
@@ -463,9 +487,13 @@ p + scale_size(range=c(0.1, 2))
 #dev.off()
 ```
 
-~~[click here to see the plot](corrr_network.pdf)~~
-
 > variables that are more highly correlated appear closer together and are joined by stronger paths. Paths are also colored by their sign. The proximity of the points are determined using multidimensional clustering.
+
+```{r, include=FALSE}
+p = p + scale_size(range=c(0.1, 2))
+ggsave(filename = "../figures/corrr_network.pdf", plot = p, width = 7, height = 6)
+```
+
 
 
 ### Signatures & PSA
