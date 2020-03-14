@@ -249,7 +249,8 @@ df.seqz = readRDS(file = "../output/PRAD_Merge_Info_CNV_from_sequenza_update.RDS
 Set the coloumns used for analysis.
 
 ```{r}
-colnames(df.seqz)[c(19, 23:26)] = c("MACN score", "TD score", "sTD score", "lTD score", "Chromothripisis score")
+colnames(df.seqz)[c(19, 23:26)] = c("MACN score", "TD score", "sTD score", "lTD score", "OsCN deletion score")
+colnames(df.seqz)[69] = "n_SBS"
 
 # Just use ploidy from sequenza
 df.seqz$Ploidy = NULL
@@ -273,13 +274,12 @@ cols_to_mutated_pathways <- colnames(df.seqz)[55:66]
 # Exclude PSA
 cols_to_features <- c(
   "IsMetastatic", "HasFusion",
-  "Age", "Stage", "GleasonScore",
-  "n_SNV", "n_driver", "n_INDEL", "Ti_fraction", "Tv_fraction",
-  "cnaBurden", "n_CNV", "n_Amp", "n_Del", "ploidy",
-  "TD score", 
-  # "sTD score", "lTD score", 
-  "Chromothripisis score", "MACN score",
-  "MATH", "n_mutation_cluster", "purity"
+  sort(c("Age", "Stage", "GleasonScore",
+       "n_SBS", "MATH", "n_INDEL", "Ti_fraction", "Tv_fraction",
+       "cnaBurden", "n_CNV", "n_Amp", "n_Del", "ploidy",
+       "TD score", 
+       "OsCN deletion score",
+       "purity"))
 )
 
 feature_type <- c(rep("ca", 2L), rep("co", length(cols_to_features) - 2L))

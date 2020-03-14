@@ -76,10 +76,15 @@ surv_dt = surv_dt[-dup_ids, ]
 # here we scale them into range 0-20. 1 increase means 5% increase of signature exposure.
 #
 # Scale the CNA burden to 0-20.
+#
+# keep only ti_fraction, tv result will be 1/ti_result
+# also scale it to 0-20
+# also scale purity to 0-20
 surv_dt = surv_dt %>%
+  dplyr::select(-Tv_fraction) %>% 
   dplyr::mutate(cnaBurden = 20 * cnaBurden,
                 Stage = as.character(Stage) %>% factor(levels = c("T2", "T3", "T4"))) %>%
-  dplyr::mutate_at(cols_to_sigs.seqz, ~ 20 * range01(., na.rm = TRUE))
+  dplyr::mutate_at(c(cols_to_sigs.seqz, "Ti_fraction", "purity"), ~ 20 * range01(., na.rm = TRUE))
 
 saveRDS(surv_dt, file = "../output/PRAD_merged_survival_dt_seqz.rds")
 ```
@@ -122,14 +127,16 @@ ggsave(filename = "../figures/Figure_PFS_sig.pdf", plot = p,
 ```{r}
 cols_to_features <- c(
   "Age", "Stage", "GleasonScore",
-  "n_SNV", "n_driver", 
-  # "n_INDEL",
-  "Ti_fraction", "Tv_fraction",
-  "cnaBurden", "n_CNV", "n_Amp", "n_Del", "ploidy",
+  "n_SBS", 
+  "n_INDEL",
+  "n_CNV", "n_Amp", "n_Del", 
+  "cnaBurden",
+  "Ti_fraction",
   "TD score",
-  # "sTD score", "lTD score", 
-  "Chromothripisis score", "MACN score",
-  "MATH", "n_mutation_cluster", "purity"
+  "OsCN deletion score", 
+  "MATH",
+  "purity",
+  "ploidy"
 )
 
 p = show_forest(surv_dt,

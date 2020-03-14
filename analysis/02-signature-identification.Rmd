@@ -36,14 +36,14 @@ This part has been divided into 4 sections as the following, it describes how to
 genomic variation (or instability) signatures from mutation profile (including copy number profile
 and single base substitution (SBS) profile).
 
-- [Tally variation records](#tally-variation-records)
+- [Tally variation components](#tally-variation-components)
 - [Estimate signature number](#estimate-signature-number)
 - [Extract signatures](#extract-signatures)
 - [Show signature profile and aetiology](#show-signature-profile-and-aetiology)
 
 All the processes have been implemented in R package [**sigminer**](https://github.com/ShixiangWang/sigminer).
 
-## Tally variation records
+## Tally variation components
 
 ### Methods
 
@@ -91,7 +91,7 @@ I talk more about No.1-4 in an individual section (["Method comparison between M
 
 We will generate sample-by-component matrix using the methods above and treate the result as the input of nonnegative matrix decomposition (NMF) algorithm for extracting signatures.
 
-### Tally records
+### Tally components
 
 #### Copy number
 
@@ -122,7 +122,7 @@ CNV.seqz <- subset(CNV.seqz, subset = !sample %in% "WCMC160-SRR3146971")
 save(CNV.seqz, file = "../output/CNV.seqz.RData")
 ```
 
-Tally the alteration records.
+Tally the alteration components.
 
 ```{r, eval=FALSE}
 ncores <- 20 # Set a proper number of thread
@@ -147,7 +147,7 @@ save(Maf, file = "../output/PRAD_TCGA_plus_dbGap_Maf.RData")
 
 The result `MAF` object can be used in any analysis provided by R package **maftools** [@mayakonda2016maftools].
 
-Tally the SBS records.
+Tally the SBS components.
 
 ```{r, eval=FALSE}
 Maf.tally <- sig_tally(Maf,

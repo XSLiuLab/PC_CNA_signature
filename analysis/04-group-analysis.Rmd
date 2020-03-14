@@ -54,15 +54,14 @@ df.seqz = readRDS(file = "../output/df.seqz.RDS")
 ```{r}
 cols_to_features <- c(
   "IsMetastatic", "Stage", "GleasonScore",
-  "Age", 
-  "n_SNV", "n_driver",
-  # "n_INDEL", 
+  sort(c("Age", 
+  "n_SBS",
+  "n_INDEL", 
   "Ti_fraction", "Tv_fraction",
   "cnaBurden", "n_CNV", "n_Amp", "n_Del", "ploidy",
   "TD score", 
-  # "sTD score", "lTD score",
-  "Chromothripisis score", "MACN score",
-  "MATH", "n_mutation_cluster", "purity"
+  "OsCN deletion score",
+  "MATH", "purity"))
 )
 
 feature_type <- c(rep("ca", 3L), rep("co", length(cols_to_features) - 3L))
