@@ -216,8 +216,10 @@ MergeInfo <- Info[which(!is.na(Info$tumor_Run)), ] %>%
     HasFusion = ifelse(HasFusion == "Yes", TRUE, FALSE),
     IsMetastatic = ifelse(sample_type == "Metastatic", TRUE, FALSE)
   ) %>% 
-  select(-sTDP, -lTDP)
+  select(-sTDP, -lTDP, -sTDP_size, -lTDP_size, -TDP_pnas)
 
+
+MergeInfo$TDP = MergeInfo$TDP * MergeInfo$TDP_size
 
 saveRDS(MergeInfo, file = "../output/PRAD_Merge_Info_CNV_from_sequenza_update.RDS")
 ```
@@ -249,8 +251,8 @@ df.seqz = readRDS(file = "../output/PRAD_Merge_Info_CNV_from_sequenza_update.RDS
 Set the coloumns used for analysis.
 
 ```{r}
-colnames(df.seqz)[c(19, 23:26)] = c("MACN score", "TD score", "sTD score", "lTD score", "OsCN deletion score")
-colnames(df.seqz)[69] = "n_SBS"
+colnames(df.seqz)[c(22:23)] = c("TD count", "TDP score")
+colnames(df.seqz)[68] = "n_SBS"
 
 # Just use ploidy from sequenza
 df.seqz$Ploidy = NULL
@@ -267,9 +269,9 @@ saveRDS(df.seqz, file = "../output/df.seqz.RDS")
 
 cols_to_sigs.seqz <- c(paste0("CN-Sig", 1:5), paste0("SBS-Sig", 1:3))
 # genes
-cols_to_mutated_genes <- c(colnames(df.seqz)[c(38:41, 44:54)], "BRCA1/2", "PIK3CA/B")
+cols_to_mutated_genes <- c(colnames(df.seqz)[c(37:40, 43:53)], "BRCA1/2", "PIK3CA/B")
 # pathways
-cols_to_mutated_pathways <- colnames(df.seqz)[55:66]
+cols_to_mutated_pathways <- colnames(df.seqz)[54:65]
 
 # Exclude PSA
 cols_to_features <- c(
@@ -277,8 +279,8 @@ cols_to_features <- c(
   sort(c("Age", "Stage", "GleasonScore",
        "n_SBS", "MATH", "n_INDEL", "Ti_fraction", "Tv_fraction",
        "cnaBurden", "n_CNV", "n_Amp", "n_Del", "ploidy",
-       "TD score", 
-       "OsCN deletion score",
+       "TDP score", 
+       "Chromoth_state",
        "purity"))
 )
 

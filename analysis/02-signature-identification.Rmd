@@ -324,7 +324,9 @@ We can clearly see that
 ### Copy number signature profile
 
 ```{r, fig.width=12, fig.height=7}
-show_sig_profile(Sig.CNV.seqz.W, style = "cosmic", method = "W", normalize = "feature")
+show_sig_profile(Sig.CNV.seqz.W,
+                 mode = "copynumber",
+                 style = "cosmic", method = "W", normalize = "feature")
 ```
 
 > Similar to SBS signatures, copy number signatures are displayed based on the observed component frequency of the human genome.

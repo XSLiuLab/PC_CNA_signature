@@ -61,7 +61,9 @@ add_h_arrow(p, x = 6.2, y = 0.986, seg_len = 0.5, space = 0.2)
 The result signatures are shown as the below.
 
 ```{r fig.width=12, fig.height=7}
-show_sig_profile(Sig.CNV.facets.W, style = "cosmic", method = "W", normalize = "feature") +
+show_sig_profile(Sig.CNV.facets.W, 
+                 mode = "copynumber",
+                 style = "cosmic", method = "W", normalize = "feature") +
   labs(caption = "Signatures from FACETS")
 ```
 
@@ -152,7 +154,10 @@ We extracted 5 signatures like method "W". Let's see their signature profile.
 
 
 ```{r}
-show_sig_profile(Sig.CNV.seqz.M, normalize = "column", style = "cosmic", 
+show_sig_profile(Sig.CNV.seqz.M,
+                 mode = "copynumber",
+                 method = "M",
+                 normalize = "column", style = "cosmic", 
                  paint_axis_text = FALSE)
 ```
 
@@ -172,7 +177,10 @@ we can conclude that **Sig5** captures the majority of component **"segsize12"**
 
 
 ```{r}
-show_sig_profile(Sig.CNV.seqz.M, normalize = "raw", style = "cosmic", 
+show_sig_profile(Sig.CNV.seqz.M,
+                 mode = "copynumber",
+                 method = "M",
+                 normalize = "raw", style = "cosmic", 
                  paint_axis_text = FALSE)
 ```
 
@@ -180,7 +188,9 @@ To avoid misguiding readers, gradient colors may work. Also, we must tell reader
 we should compare one component in a column insteads two or more componets in a row.
 
 ```{r}
-show_sig_profile(Sig.CNV.seqz.M, normalize = "column", style = "cosmic", 
+show_sig_profile(Sig.CNV.seqz.M, 
+                 mode = "copynumber", method = "M",
+                 normalize = "column", style = "cosmic", 
                  paint_axis_text = FALSE, set_gradient_color = TRUE)
 ```
 
@@ -194,7 +204,9 @@ the key parameter value in the plot.
 
 
 ```{r}
-show_sig_profile(Sig.CNV.seqz.M, normalize = "column", style = "cosmic", 
+show_sig_profile(Sig.CNV.seqz.M, 
+                 mode = "copynumber", method = "M",
+                 normalize = "column", style = "cosmic", 
                  paint_axis_text = FALSE, set_gradient_color = TRUE, 
                  params = CNV.seqz.tally.M$parameters, y_expand = 1.5)
 ```
@@ -254,7 +266,9 @@ Sig.CNV.mskcc = sig_modify_names(Sig.CNV.mskcc, new_names = paste0("Sig", c(2,1,
 ### Profile
 
 ```{r, fig.width=12, fig.height=7}
-p = show_sig_profile(Sig.CNV.mskcc, style = "cosmic", method = "W", normalize = "feature")
+p = show_sig_profile(Sig.CNV.mskcc, 
+                     mode = "copynumber",
+                     style = "cosmic", method = "W", normalize = "feature")
 p
 ```
 

@@ -59,8 +59,8 @@ cols_to_features <- c(
   "n_INDEL", 
   "Ti_fraction", "Tv_fraction",
   "cnaBurden", "n_CNV", "n_Amp", "n_Del", "ploidy",
-  "TD score", 
-  "OsCN deletion score",
+  "TDP score",
+  "Chromoth_state",
   "MATH", "purity"))
 )
 

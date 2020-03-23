@@ -132,8 +132,8 @@ cols_to_features <- c(
   "n_CNV", "n_Amp", "n_Del", 
   "cnaBurden",
   "Ti_fraction",
-  "TD score",
-  "OsCN deletion score", 
+  "TDP score",
+  "Chromoth_state",
   "MATH",
   "purity",
   "ploidy"
