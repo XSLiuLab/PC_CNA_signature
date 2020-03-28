@@ -6,9 +6,9 @@ load("output/Sig.CNV.mskcc.RData")
 load("output/CNV.mskcc.tally.W.RData")
 
 # Switch Sig1 and Sig2 to make the signature consistent
+# See https://shixiangwang.github.io/prad_signature/#method-comparison-between-macintyre-et-al-and-our-study
 Sig.CNV.mskcc = sig_modify_names(Sig.CNV.mskcc, new_names = paste0("Sig", c(2,1,3:5)))
 
-# expo_mskcc_actual = get_sig_exposure(Sig.CNV.mskcc)
 expo_mskcc_actual = sig_fit(t(CNV.mskcc.tally.W$nmf_matrix), sig = Sig.CNV.mskcc,
                               mode = "copynumber",
                               return_class = "data.table")
