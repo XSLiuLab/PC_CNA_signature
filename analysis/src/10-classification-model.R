@@ -160,6 +160,7 @@ modeling = function(param1, param2, param3, param4, x_train, y_train, x_test, y_
     save_model_hdf5(model, filepath = model_file)
     dplyr::tibble(
       model_file = model_file,
+      history = list(history),
       n_param = count_params(model),
       param1 = param1,
       param2 = param2,
@@ -303,6 +304,14 @@ saveRDS(mskcc_pf, file = "output/keras_model_performance_for_mskcc_cohort_202004
 model = load_model_hdf5(mskcc_pf$model_file)
 model %>% predict_classes(res_mskcc$x_train[1, , drop = FALSE])
 model %>% predict_proba(res_mskcc$x_train[1, , drop = FALSE])
+# just use numeric vector
+model %>% predict_proba(res_mskcc$x_train[1, ] %>% as.numeric() %>% matrix(nrow = 1))
+
+pf = list()
+pf$all = readRDS("output/keras_model_performance_for_all_cohorts_20200409.rds")
+pf$wang = readRDS("output/keras_model_performance_for_wang_cohort_20200409.rds")
+pf$mskcc = readRDS("output/keras_model_performance_for_mskcc_cohort_20200409.rds")
+
 
 library(deepviz)
 deepviz::plot_model(model)
