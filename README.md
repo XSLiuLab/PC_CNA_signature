@@ -1,4 +1,9 @@
-# Prostate Cancer Variation Signature Analysis Report
+# Prostate Cancer Alteration Signature Analysis Report
+
+Read online analysis report at <https://shixiangwang.github.io/prad_signature/>.
+
+* tool **sigminer**: https://shixiangwang.github.io/sigminer-doc/
+* manuscript: ***Copy number signature analyses in prostate cancer reveal distinct etiologies and clinical outcomes, under submission***
 
 ## LICENSE
 
