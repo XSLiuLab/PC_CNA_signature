@@ -108,6 +108,14 @@ ggsave(filename = "../figures/Figure_OS_sig.pdf", plot = p,
 ```
 
 
+```{r}
+# Multivariable analysis
+p = show_forest(surv_dt, covariates = cols_to_sigs.seqz, controls = c("GleasonScore", "purity", "Stage"),
+            time = "OS.time", status = "OS", merge_models = TRUE, drop_controls = TRUE)
+p
+```
+
+
 ## PFS analysis for signatures
 
 

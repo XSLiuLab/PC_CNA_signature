@@ -146,3 +146,8 @@ ggsave(filename = "figures_new/signature_profile_m.pdf", plot = p_m, device = ca
        width = 10, height = 7)
 ggsave(filename = "figures_new/signature_profile_w.pdf", plot = p_w, device = cairo_pdf,
        width = 12, height = 4)
+
+
+# Multivariable cox analysis ----------------------------------------------
+
+# directly editing rmd
