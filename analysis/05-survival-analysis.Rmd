@@ -110,8 +110,10 @@ ggsave(filename = "../figures/Figure_OS_sig.pdf", plot = p,
 
 ```{r}
 # Multivariable analysis
-p = show_forest(surv_dt, covariates = cols_to_sigs.seqz, controls = c("GleasonScore", "purity", "Stage"),
-            time = "OS.time", status = "OS", merge_models = TRUE, drop_controls = TRUE)
+# p = show_forest(surv_dt, covariates = cols_to_sigs.seqz, controls = c("GleasonScore", "purity", "Stage"),
+#             time = "OS.time", status = "OS", merge_models = TRUE, drop_controls = TRUE)
+p = show_forest(surv_dt, covariates = cols_to_sigs.seqz[1], controls = cols_to_sigs.seqz[-1],
+            time = "OS.time", status = "OS")
 p
 ```
 
@@ -128,6 +130,13 @@ p
 ```{r, include=FALSE}
 ggsave(filename = "../figures/Figure_PFS_sig.pdf", plot = p,
        width = 7, height = 5)
+```
+
+```{r}
+# Multivariable analysis
+p = show_forest(surv_dt, covariates = cols_to_sigs.seqz, controls = c("GleasonScore", "purity", "Stage"),
+            time = "PFI.time", status = "PFI", merge_models = TRUE, drop_controls = TRUE)
+p
 ```
 
 ## OS analysis for features
