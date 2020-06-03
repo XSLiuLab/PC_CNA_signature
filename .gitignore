@@ -28,3 +28,5 @@ output/BayesianNMF_MutSig/
 analysis/0*/
 output/DoAbsolute_*
 PRAD_MAF.xlsx
+bootstrap/
+bootstrap_w.RData
