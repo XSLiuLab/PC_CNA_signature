@@ -403,6 +403,35 @@ ggsave(filename = "../figures/mskcc_expo_comparison.pdf", plot = p,
 ```
 
 
+```{r}
+expo_ours2 = get_sig_exposure(Sig.CNV.seqz.W)
+expo_mskcc2 = get_sig_exposure(Sig.CNV.mskcc)
+
+expo2 = rbind(expo_ours[, Cohort:="Our"],
+             expo_mskcc[, Cohort:="MSKCC2020"])
+
+expo_df2 = tidyr::pivot_longer(expo2,
+                              cols = dplyr::starts_with("Sig"),
+                              names_prefix = "Sig",
+                              names_to = "Signature", values_to = "Exposure")
+```
+
+
+```{r}
+ggpubr::gghistogram(
+  expo_df2,
+  x = "Exposure",
+  y = "..density..",
+  color = "Cohort",
+  rug = TRUE,
+  facet.by = "Signature",
+  scales = "free",
+  bins = 50
+)
+
+```
+
+
 ### Survival analysis
 
 To better understand the signatures, here we evaluate the association between signature exposure and prognosis. 
@@ -411,6 +440,10 @@ Firstly, get the signature exposure.
 
 ```{r}
 expo_mskcc = get_sig_exposure(Sig.CNV.mskcc)
+```
+
+```{r}
+groups = get_groups(Sig.CNV.mskcc, method = "consensus", match_consensus = TRUE)
 ```
 
 Then we get survival status, patient IDs, sample IDs etc.
@@ -436,14 +469,25 @@ dat_mskcc = expo_mskcc %>%
   )
 ```
 
-Clean. Still scale exposure to 1-20 for indicating HR per 5% exposure increase.
+Clean. Still scale exposure by dividing 10. (Keep consistent with scaling method for previous dataset.)
 
 ```{r}
 cols_to_sig = paste0("Sig", 1:5)
 
-range01 <- function(x, ...) {
-  (x - min(x, ...)) / (max(x, ...) - min(x, ...))
-}
+# range01 <- function(x, ...) {
+#   (x - min(x, ...)) / (max(x, ...) - min(x, ...))
+# }
+# 
+# dat_mskcc2 = dat_mskcc %>% 
+#   dplyr::select(sample:SAMPLE_TYPE, OS_STATUS, OS_MONTHS) %>% 
+#   dplyr::mutate(
+#     OS_STATUS = ifelse(OS_STATUS == "LIVING", 0, 1)
+#   ) %>% 
+#   na.omit() %>% 
+#   dplyr::mutate_at(
+#     cols_to_sig,
+#     ~ 20 * range01(., na.rm = TRUE)
+#   )
 
 dat_mskcc2 = dat_mskcc %>% 
   dplyr::select(sample:SAMPLE_TYPE, OS_STATUS, OS_MONTHS) %>% 
@@ -453,9 +497,17 @@ dat_mskcc2 = dat_mskcc %>%
   na.omit() %>% 
   dplyr::mutate_at(
     cols_to_sig,
-    ~ 20 * range01(., na.rm = TRUE)
+    ~ ./10
   )
 ```
+
+```{r}
+dat_mskcc2 = dplyr::left_join(
+  dat_mskcc2, groups,
+  by = "sample"
+)
+```
+
 
 Now we do survival analysis.
 
@@ -482,11 +534,50 @@ show_forest(dat_mskcc2 %>% dplyr::filter(SAMPLE_TYPE != "Primary"), covariates =
             time = "OS_MONTHS", status = "OS_STATUS", merge_models = TRUE)
 ```
 
-Based on the result from mskcc dataset, overall survival status of primary and metastatic samples roughly have consistent relationship with copy number signatures. However, `Sig4` specially functions in primary tumors and `Sig3` tends to function in metastatic tumors. Furthermore, from the view of HR comparison between two plots above, copy number signatures have more clinical effects on primary tumors rather than metastatic tumors.
-
 
 ```{r}
-groups = get_groups(Sig.CNV.mskcc, method = "consensus", match_consensus = TRUE)
+library(survival)
+library(survminer)
+
+legend_2 <- ggplot2::guides(color = ggplot2::guide_legend(nrow = 2, byrow = TRUE))
+```
+
+```{r}
+fit <- survfit(Surv(OS_MONTHS, OS_STATUS) ~ 1, data = dat_mskcc2)
+ggsurvplot(fit, palette = "aaas", xlab = "Time (months)")$plot
+```
+
+```{r}
+fit <- survfit(Surv(OS_MONTHS, OS_STATUS) ~ 1, subset(dat_mskcc2, SAMPLE_TYPE == "Primary"))
+ggsurvplot(fit, palette = "aaas", xlab = "Time (months)")$plot
+```
+
+```{r}
+fit <- survfit(Surv(OS_MONTHS, OS_STATUS) ~ 1, subset(dat_mskcc2, SAMPLE_TYPE != "Primary"))
+ggsurvplot(fit, palette = "aaas", xlab = "Time (months)")$plot
+```
+
+```{r}
+fit <- survfit(Surv(OS_MONTHS, OS_STATUS) ~ 1, data = dat_mskcc2)
+ggsurvplot(fit, palette = "aaas", xlab = "Time (months)")$plot
+```
+
+```{r}
+fit <- survfit(Surv(OS_MONTHS, OS_STATUS) ~ enrich_sig, data = dat_mskcc2)
+ggsurvplot(fit, palette = "aaas", xlab = "Time (months)",
+           pval = TRUE)$plot + legend_2
+```
+
+```{r}
+fit <- survfit(Surv(OS_MONTHS, OS_STATUS) ~ enrich_sig, data = subset(dat_mskcc2, SAMPLE_TYPE == "Primary"))
+ggsurvplot(fit, palette = "aaas", xlab = "Time (months)",
+           pval = TRUE)$plot + legend_2
+```
+
+```{r}
+fit <- survfit(Surv(OS_MONTHS, OS_STATUS) ~ enrich_sig, data = subset(dat_mskcc2, SAMPLE_TYPE != "Primary"))
+ggsurvplot(fit, palette = "aaas", xlab = "Time (months)",
+           pval = TRUE)$plot + legend_2
 ```
 
 ```{r}
