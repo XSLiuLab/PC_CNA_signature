@@ -407,8 +407,8 @@ ggsave(filename = "../figures/mskcc_expo_comparison.pdf", plot = p,
 expo_ours2 = get_sig_exposure(Sig.CNV.seqz.W)
 expo_mskcc2 = get_sig_exposure(Sig.CNV.mskcc)
 
-expo2 = rbind(expo_ours[, Cohort:="Our"],
-             expo_mskcc[, Cohort:="MSKCC2020"])
+expo2 = rbind(expo_ours2[, Cohort:="Our"],
+             expo_mskcc2[, Cohort:="MSKCC2020"])
 
 expo_df2 = tidyr::pivot_longer(expo2,
                               cols = dplyr::starts_with("Sig"),
@@ -426,9 +426,46 @@ ggpubr::gghistogram(
   rug = TRUE,
   facet.by = "Signature",
   scales = "free",
-  bins = 50
+  bins = 50,
+  alpha = 0.1
 )
 
+```
+
+```{r}
+## Only those samples with PFS/OS available
+expo2 = rbind(expo_ours2[startsWith(sample, "TCGA")],
+             expo_mskcc2[, Cohort:="MSKCC2020"])
+
+expo_df2 = tidyr::pivot_longer(expo2,
+                              cols = dplyr::starts_with("Sig"),
+                              names_prefix = "Sig",
+                              names_to = "Signature", values_to = "Exposure")
+
+ggpubr::gghistogram(
+  expo_df2,
+  x = "Exposure",
+  y = "..density..",
+  color = "Cohort",
+  rug = TRUE,
+  facet.by = "Signature",
+  scales = "free",
+  bins = 50,
+  alpha = 0.1
+)
+```
+
+```{r}
+ggpubr::ggdensity(
+  expo_df2,
+  x = "Exposure",
+  color = "Cohort",
+  rug = TRUE,
+  facet.by = "Signature",
+  scales = "free",
+  bins = 50,
+  alpha = 0.1
+)
 ```
 
 
