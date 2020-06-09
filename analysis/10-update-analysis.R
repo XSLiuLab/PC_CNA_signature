@@ -24,7 +24,7 @@ save(bt_w, file = "data/bootstrap_w.RData")
 
 load("data/bootstrap_w.RData")
 
-p1 <- show_sig_bootstrap_stability(bt_w, add.params = list(alpha = 0.1), ylab = "Signature instability (MRSE)") +
+p1 <- show_sig_bootstrap_stability(bt_w, add.params = list(alpha = 0.1), ylab = "Signature instability (RMSE)") +
   ggplot2::theme(legend.position = "none") +
   scale_labels
 p2 <- show_sig_bootstrap_exposure(bt_w, add.params = list(alpha = 0.1), highlight = "red", sample = "5115615-SRR8311749") +
@@ -148,6 +148,75 @@ ggsave(filename = "figures_new/signature_profile_w.pdf", plot = p_w, device = ca
        width = 12, height = 4)
 
 
-# Multivariable cox analysis ----------------------------------------------
 
-# directly editing rmd
+# Survival analysis exploration -------------------------------------------
+
+library(ezcox)
+library(ggplot2)
+
+df.seqz = readRDS(file = "output/df.seqz.RDS")
+surv_df <- readRDS(file = "data/PRAD_Survival.rds")
+
+surv_dt <- dplyr::inner_join(df.seqz %>%
+                               dplyr::select(-c("Study", "subject_id", "tumor_body_site",
+                                                "tumor_Run", "normal_Run", "CNV_ID",
+                                                "Fusion")),
+                             surv_df, by = c("PatientID" = "sample"))
+
+dup_ids = which(duplicated(surv_dt$PatientID))
+# Remove duplicated records
+surv_dt = surv_dt[-dup_ids, ]
+
+# Scale the signature exposure by dividing 10
+# Scale some variables to 0-20.
+cols_to_sigs.seqz <- c(paste0("CN-Sig", 1:5), paste0("SBS-Sig", 1:3))
+
+surv_dt2 = surv_dt %>%
+  dplyr::select(-Tv_fraction) %>%
+  dplyr::mutate(cnaBurden = 20 * cnaBurden,
+                Stage = as.character(Stage) %>% factor(levels = c("T2", "T3", "T4"))) %>%
+  dplyr::mutate_at(cols_to_sigs.seqz, ~ cut(., breaks = quantile(., probs = c(0, 0.5, 1), na.rm = TRUE),
+                                            labels = c("low", "high"),
+                                            include.lowest = TRUE)) %>%
+  dplyr::mutate(OS.time = OS.time / 30.5,
+                PFI.time = PFI.time / 30.5)
+
+
+# Unvariable analysis
+p = show_forest(surv_dt2,
+                covariates = cols_to_sigs.seqz ,
+                time = "OS.time", status = "OS", merge_models = TRUE)
+p
+
+
+## Run from 99-supp.Rmd
+# ggpubr::ggboxplot(dat_mskcc2, x = "SAMPLE_TYPE", y = "Sig1")
+# ggpubr::ggboxplot(dat_mskcc2, x = "SAMPLE_TYPE", y = "Sig2")
+# ggpubr::ggboxplot(dat_mskcc2, x = "SAMPLE_TYPE", y = "Sig3")
+# ggpubr::ggboxplot(dat_mskcc2, x = "SAMPLE_TYPE", y = "Sig4")
+# ggpubr::ggboxplot(dat_mskcc2, x = "SAMPLE_TYPE", y = "Sig5")
+
+dat_mskcc3 = dat_mskcc2 %>%
+  dplyr::mutate_at(paste0("Sig", 1:5), ~ cut(., breaks = quantile(., probs = c(0, 0.5, 1), na.rm = TRUE),
+                                            labels = c("low", "high"),
+                                            include.lowest = TRUE))
+p2 = show_forest(dat_mskcc3,
+                covariates = paste0("Sig", 1:5),
+                time = "OS_MONTHS", status = "OS_STATUS", merge_models = TRUE)
+p2
+
+coxph(Surv(OS.time, OS) ~ `CN-Sig1` + `CN-Sig2` + `CN-Sig3` + `CN-Sig4` + `CN-Sig5`, data = surv_dt2)
+coxph(Surv(OS_MONTHS, OS_STATUS) ~ Sig1 + Sig2 + Sig3 + Sig4 + Sig5, data = dat_mskcc3)
+# copy number signature exposure is related to GleasonScore, purity
+# and CN-Sig1 and CN-Sig2 is most related to survival
+
+# p2 = show_forest(surv_dt2,
+#                 covariates = cols_to_sigs.seqz,
+#                 time = "PFI.time", status = "PFI", merge_models = TRUE)
+# p2
+#
+#
+# library(survival)
+# library(survminer)
+# ggsurvplot(survfit(Surv(OS.time, OS) ~ `CN-Sig1`, data = surv_dt2), palette = "aaas", xlab = "Time (months)")$plot
+
