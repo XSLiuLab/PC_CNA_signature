@@ -134,11 +134,77 @@ options(sigminer.sex = "female", sigminer.copynumber.max = 20L)
 
 CNV.tcga_ov <- read_copynumber(tcga_ov,
                                seg_cols = c("Chromosome", "Start", "End", "Copy_Number"),
+                               samp_col = "sample_submitter_id",
                                genome_build = "hg38",
                                complement = FALSE,
                                verbose = TRUE
 )
 
 library(NMF)
-tally_W_ov = sig_tally(CNV.tcga_ov, method = "W", cores = 6)
-Sig.OV_SNP <- sig_auto_extract(tally_W$nmf_matrix, nrun = 10, cores = 5, K0 = 15)
+
+# Pick up 50 samples
+# generate subset 10, 25, and 50
+# and see how method "W" and "M" would work for the components
+set.seed(1234)
+test_samples = sample(CNV.tcga_ov@summary.per.sample$sample, 50)
+test_samples25 = sample(test_samples, 25)
+test_samples10 = sample(test_samples25, 10)
+
+test_list <- list(test_samples, test_samples25, test_samples10)
+
+tally_W_list <- list()
+tally_M_list <- list()
+for (i in seq_along(test_list)) {
+  CNV.test <- subset(CNV.tcga_ov, sample %in% test_list[[i]])
+  tally_W_list[[i]] = sig_tally(CNV.test, method = "W", cores = 6)
+  tally_M_list[[i]] = sig_tally(CNV.test, method = "M", cores = 6)
+}
+
+tally_W_list[[3]]$nmf_matrix %>% dim()
+tally_M_list[[3]]$nmf_matrix %>% dim()
+
+
+est_W <- sig_estimate(tally_W_list[[1]]$nmf_matrix, range = 2:10, nrun = 30, pConstant = 1e-9, verbose = TRUE)
+show_sig_number_survey(est_W$survey)
+
+est_M <- sig_estimate(tally_M_list[[1]]$nmf_matrix, range = 2:10, nrun = 30, pConstant = 1e-9, verbose = TRUE)
+show_sig_number_survey(est_M$survey)
+
+# Just take 4 signatures
+sigs_W_list <- list()
+sigs_M_list <- list()
+for (i in seq_along(tally_W_list)) {
+  sigs_W_list[[i]] = sig_extract(tally_W_list[[i]]$nmf_matrix, n_sig = 4, nrun = 30, cores = 6, pConstant = 1e-9)
+  sigs_M_list[[i]] = sig_extract(tally_M_list[[i]]$nmf_matrix, n_sig = 4, nrun = 30, cores = 6, pConstant = 1e-9)
+}
+
+p11 <- show_sig_profile(sigs_W_list[[1]], mode = "copynumber", method = "W", normalize = "feature", style = "cosmic")
+p12 <- show_sig_profile(sigs_W_list[[2]], mode = "copynumber", method = "W", normalize = "feature", style = "cosmic")
+p13 <- show_sig_profile(sigs_W_list[[3]], mode = "copynumber", method = "W", normalize = "feature", style = "cosmic")
+
+get_sig_similarity(sigs_W_list[[2]], sigs_W_list[[1]])
+get_sig_similarity(sigs_W_list[[3]], sigs_W_list[[1]])
+
+p21 <- show_sig_profile(sigs_M_list[[1]], mode = "copynumber", method = "M", params = tally_M_list[[1]]$parameters,
+                 normalize = "feature", style = "cosmic", paint_axis_text = F, y_expand = 1.5)
+p22 <- show_sig_profile(sigs_M_list[[2]], mode = "copynumber", method = "M", params = tally_M_list[[2]]$parameters,
+                 normalize = "feature", style = "cosmic", paint_axis_text = F, y_expand = 1.5)
+p23 <- show_sig_profile(sigs_M_list[[3]], mode = "copynumber", method = "M", params = tally_M_list[[3]]$parameters,
+                 normalize = "feature", style = "cosmic", paint_axis_text = F, y_expand = 1.5)
+
+library(patchwork)
+p1 <- (p11 / p12 / p13)
+p2 <- (p21 / p22 / p23)
+
+ggsave("additional-analysis/ovary_sigprofile_W.pdf", plot = p1, width = 14, height = 12)
+ggsave("additional-analysis/ovary_sigprofile_M.pdf", plot = p2, width = 6, height = 12, device = cairo_pdf)
+
+sim1 <- get_sig_similarity(sigs_W_list[[2]], sigs_W_list[[1]])
+sim2 <- get_sig_similarity(sigs_W_list[[3]], sigs_W_list[[1]])
+
+pheatmap::pheatmap(sim1$similarity, display_numbers = TRUE,
+                   width = 3, height = 3,
+                   filename = "additional-analysis/25-vs-50-similarity.pdf")
+pheatmap::pheatmap(sim2$similarity, display_numbers = TRUE,
+                   width = 3, height = 3,
+                   filename = "additional-analysis/10-vs-50-similarity.pdf")
