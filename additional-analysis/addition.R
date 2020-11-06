@@ -1,4 +1,5 @@
 library(sigminer)
+library(ggplot2)
 load("output/CNV.seqz.RData")
 df.seqz <- readRDS("output/df.seqz.RDS")
 tcga_prad <- readRDS("additional-analysis/prad.rds")
@@ -6,15 +7,17 @@ tcga_ov <- readRDS("additional-analysis/OV.rds")
 
 # Compare CNA across cohorts ---------------------------------
 # 包括 profile 汇总，signature 贡献
-show_group_distribution(data = df.seqz %>%
+p1 <- show_group_distribution(data = df.seqz %>%
                           dplyr::select(c("Study", "n_CNV")) %>%
                           na.omit, gvar = "Study", dvar = "n_CNV", order_by_fun = TRUE, ylab = "Number of CNA")
+ggsave("additional-analysis/study-cna-dist.pdf", plot = p1, width = 6, height = 3)
 
 table(df.seqz$Study, df.seqz$sample_type)
 
-show_group_distribution(data = df.seqz %>%
+p2 <- show_group_distribution(data = df.seqz %>%
                           dplyr::select(c("sample_type", "CN-Sig2")) %>%
                           na.omit, gvar = "sample_type", dvar = "CN-Sig2", order_by_fun = TRUE, ylab = "Exposure of CN-Sig2")
+# show it or not?
 
 # Chromothripsis score checking --------------------------------------------------
 
@@ -160,9 +163,10 @@ for (i in seq_along(test_list)) {
   tally_M_list[[i]] = sig_tally(CNV.test, method = "M", cores = 6)
 }
 
-tally_W_list[[3]]$nmf_matrix %>% dim()
-tally_M_list[[3]]$nmf_matrix %>% dim()
 
+tally_M_list[[1]]$nmf_matrix %>% dim()
+tally_M_list[[2]]$nmf_matrix %>% dim()
+tally_M_list[[3]]$nmf_matrix %>% dim()
 
 est_W <- sig_estimate(tally_W_list[[1]]$nmf_matrix, range = 2:10, nrun = 30, pConstant = 1e-9, verbose = TRUE)
 show_sig_number_survey(est_W$survey)
