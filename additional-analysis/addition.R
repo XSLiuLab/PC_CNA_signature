@@ -5,6 +5,23 @@ df.seqz <- readRDS("output/df.seqz.RDS")
 tcga_prad <- readRDS("additional-analysis/prad.rds")
 tcga_ov <- readRDS("additional-analysis/OV.rds")
 
+# Show CNA frequency plot for different studies ---------------------------
+df.seqz %>%
+  dplyr::select(Study, CNV_ID) %>%
+  dplyr::group_split(Study) %>%
+  purrr::map(.f = function(df) {
+    study = df$Study[1]
+    samps = df$CNV_ID
+    obj <- subset(CNV.seqz, sample %in% samps)
+    p <- show_cn_group_profile(obj) + ggplot2::labs(title = study)
+  }) -> p_list
+
+p <- cowplot::plot_grid(plotlist = p_list[c(6,1:5)], align = "hv", ncol = 2)
+ggplot2::ggsave(filename = "additional-analysis/study_group_profile.pdf",
+                plot = p,
+                width = 10,
+                height = 8)
+
 # Compare CNA across cohorts ---------------------------------
 # 包括 profile 汇总，signature 贡献
 p1 <- show_group_distribution(data = df.seqz %>%
