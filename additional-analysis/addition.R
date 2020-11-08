@@ -229,3 +229,24 @@ pheatmap::pheatmap(sim1$similarity, display_numbers = TRUE,
 pheatmap::pheatmap(sim2$similarity, display_numbers = TRUE,
                    width = 3, height = 3,
                    filename = "additional-analysis/10-vs-50-similarity.pdf")
+
+
+# Simple immune association -----------------------------------------------
+
+immune <- readRDS("additional-analysis/PRAD_cibersort.rds")
+immune$cancer <- NULL
+colnames(immune)[1] <- "sample"
+
+immune2 <- dplyr::left_join(immune, df.seqz, by = c("sample" = "CNV_ID"))
+colnames(immune2) <- sub("_CIBERSORT", "", colnames(immune2))
+
+immune_types <- colnames(immune2)[2:23]
+sig_types <- c("CN-Sig1", "CN-Sig2", "CN-Sig3", "CN-Sig4", "CN-Sig5")
+
+p <- show_cor(immune2, x_vars = sig_types, y_vars = immune_types,
+              cor_method = "pearson",
+              legend.title = "Pearson\nCorr")
+ggplot2::ggsave(filename = "additional-analysis/immune.pdf",
+                plot = p,
+                width = 12,
+                height = 10)
