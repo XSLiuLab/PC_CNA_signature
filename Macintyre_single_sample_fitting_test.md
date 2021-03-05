@@ -48,7 +48,7 @@ generateSampleByComponentMatrix(fts)
 
 ## Benchmark
 
-To better understand how the code works, I write a function to return `1` if the analysis process is sucessess and `0` for failure.
+To better understand how well the code works, I write a function to return `1` if the analysis process is sucessessful and `0` for failure.
 
 ```R
 run_one = function(samples) {
