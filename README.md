@@ -1,9 +1,11 @@
 # Prostate Cancer Alteration Signature Analysis Report
 
-Read online analysis report at <https://shixiangwang.github.io/prad_signature/>.
+Read online analysis report at <https://xsliulab.github.io/PC_CNA_Signature/>.
 
 * tool **sigminer**: https://shixiangwang.github.io/sigminer-doc/
 * manuscript: ***Copy number signature analyses in prostate cancer reveal distinct etiologies and clinical outcomes, under submission***
+
+The both methods ("Wang" and "Macintyre") are available at Sigminer v1.2.5 (https://cran.r-project.org/web/packages/sigminer/index.html).
 
 ## LICENSE
 
