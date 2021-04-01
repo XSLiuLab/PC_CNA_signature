@@ -224,3 +224,56 @@ p3
 ggsave(filename = "check/PFI_features_multivariable.pdf", plot = p3,
        width = 8, height = 6)
 
+
+
+# Check PFS HR for CNA burden ---------------------------------------------
+
+library(ezcox)
+library(ggplot2)
+
+df.seqz = readRDS(file = "output/df.seqz.RDS")
+surv_df <- readRDS(file = "data/PRAD_Survival.rds")
+
+range01 <- function(x, ...) {
+  (x - min(x, ...)) / (max(x, ...) - min(x, ...))
+}
+cols_to_sigs.seqz <- c(paste0("CN-Sig", 1:5), paste0("SBS-Sig", 1:3))
+surv_dt <- dplyr::inner_join(
+  df.seqz %>%
+    dplyr::select(-c("Study", "subject_id",
+                     "tumor_body_site",
+                     "tumor_Run", "normal_Run",
+                     "CNV_ID", "Fusion")),
+  surv_df, by = c("PatientID" = "sample"))
+dup_ids = which(duplicated(surv_dt$PatientID))
+# Remove duplicated records
+surv_dt = surv_dt[-dup_ids, ]
+
+summary(surv_dt$cnaBurden)
+
+p1 <- show_forest(surv_dt %>%
+                    dplyr::mutate(cnaBurden = cnaBurden),
+                  covariates = "cnaBurden",
+                  controls = NULL,
+                  time = "PFI.time", status = "PFI",
+                  add_caption = FALSE, merge_models = TRUE)
+
+p2 <- show_forest(surv_dt %>%
+              dplyr::mutate(cnaBurden = cnaBurden * 5),
+                covariates = "cnaBurden",
+                controls = NULL,
+                time = "PFI.time", status = "PFI",
+                add_caption = FALSE, merge_models = TRUE)
+
+p3 <- show_forest(surv_dt %>%
+                    dplyr::mutate(cnaBurden = cnaBurden * 20),
+                  covariates = "cnaBurden",
+                  controls = NULL,
+                  time = "PFI.time", status = "PFI",
+                  add_caption = FALSE, merge_models = TRUE)
+
+p <- cowplot::plot_grid(p1, p2, p3, nrow = 3)
+p
+
+ggsave(filename = "check/PFI_CNA_burden.pdf", plot = p,
+       width = 8, height = 5)
