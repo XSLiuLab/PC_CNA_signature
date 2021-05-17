@@ -7,6 +7,8 @@ Read online analysis report at <https://xsliulab.github.io/PC_CNA_signature/>.
 
 The both methods ("Wang" and "Macintyre") are available at Sigminer v1.2.5 (https://cran.r-project.org/src/contrib/Archive/sigminer/).
 
+> For reproducing the Cox result shown in manuscript, please refer to [this script](https://github.com/XSLiuLab/PC_CNA_signature/blob/master/survival-analysis-check-and-update.R).
+
 ## LICENSE
 
 MIT &copy;2020 Shixiang Wang, Huimin Li, Xuan Wang, Minfang Song and Xue-Song Liu
